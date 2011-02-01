@@ -1,7 +1,7 @@
 #! /usr/bin/env python
 
 """ 
-Zolotarev array distribution. (not finished yet)
+Zolotarev array distribution. (almost done!)
 
 References:
 [1] McNamara, D. A., "Direct synthesis of optimum difference patterns for 
@@ -9,10 +9,12 @@ References:
     IEE Proceedings H Microwaves, Antennas and Propagation, 1993, 140, 495-500
 [2] Abramowitz and Stegun, "Handbook of Mathematical Functions", Dover, 1964,
     http://people.math.sfu.ca/~cbm/aands/frameindex.htm, Page 577
+[3] Levy, R., "Generalized Rational Function Approximation in Finite Intervals
+    Using Zolotarev Functions", #IEEE_J_MTT#, 1970, 18, 1052-1064
 """
 
 from __future__ import division
-from mpmath import mpf, mp, qfrom, ellipk, ellipe, ellipf, ellipfun, jtheta
+from mpmath import mpf, mp, qfrom, ellipk, ellipe, ellipf, ellipfun, jtheta, plot
 
 #==============================================================================
 # Precision level
@@ -74,21 +76,30 @@ def z_x123from_m(N, m):
     x2 = x3 * mp.sqrt(1 - (cnM * znM) / (snM * dnM))  
     return x1, x2, x3
 
-def z_zolotarev2(N, x, m):
-    """Value of the Zolotarev polynomial in region II [1]."""    
-    # argument (eq.(4),[1])
+def z_zolotarev(N, x, m):
+    """Function to evaluate the Zolotarev polynomial (eq 1, [1])."""
     M = -ellipk(m) / N
-    snM = ellipfun('sn', u=M, m=m)  
-    # evaluation of p (eq 24,[1])
-    p = mp.sqrt((snM ** 2 - x ** 2) / (m * snM ** 2 * (1 - x ** 2))) 
-    p = mp.asin(p) # since the notation used in [1] is a little bit different
-    # evaluation of s
-    s = ellipf(p, m)
-    # evaluation of 'f(M,s,m)'
-    fMsm = mp.log(z_theta(M + s, m) / z_theta(M - s, m))    
-    # finally, the value of the Zolotarev polynomial  (eq 21,[1])
-    f = mp.cos(n * mp.pi) * mp.cosh((n + 0.5) * fMsm)        
+    x3 = ellipfun('sn', u= -M, m=m)  
+    xbar = x3 * mp.sqrt((x ** 2 - 1) / (x ** 2 - x3 ** 2)) # rearranged eq 21, [3]
+    
+#    asin range ? ? ?  
+    u = ellipf(mp.asin(xbar), m) # rearranged eq 20, [3], asn(x) = F(asin(x)|m)     
+    f = mp.cosh((n + 0.5) * mp.log(z_eta(M + u, m) / z_eta(M - u, m)))
+    if (f.imag / f.real > 1e-10):
+        print "imaginary part of the Zolotarev function is not negligible!"
+        print "f_imaginary = ",f.imag
+    else:
+        f = f.real
     return f
+
+def convertStr(s):
+    """Convert string to either int or float."""
+    try:
+        ret = int(s)
+    except ValueError:
+        #Try float.
+        ret = float(s)
+    return ret
 
 #==============================================================================
 # Basic parameters
@@ -96,46 +107,46 @@ def z_zolotarev2(N, x, m):
 
 n = 9
 N = 2 * n + 1
-k = mpf('0.999895316')
-#k = mpf('0.9')
+#k = mpf('0.999895316') # for 25 dB 
+k = mpf('0.999971042') # for 30 dB
 m = k ** 2 # MODULUS 'k' is not convenient, so we use PARAMETER 'm' instead
 
 #==============================================================================
-# Checking SLR value
+# Testing the defined functions
 #==============================================================================
 
-#  x1, x2 and x3 positions [1]
 x1, x2, x3 = z_x123from_m(N, m)
-print x1, '\n', x2, '\n', x3
-x = x2
-# value of Zolotarev polynomial in region II
-R = z_zolotarev2(N, x, m)
+#print x1, '\n', x2, '\n', x3
+x = -0.01
+R = z_zolotarev(N, x, m)
 print R
-print 10 * mp.log10(R ** 2) # SLR depends only on the magnitude of R here
+#print 10 * mp.log10(R ** 2) # SLR depends only on the magnitude of R here
 
 #==============================================================================
-# Checking function f
+# Plotting the actual polynomial
 #==============================================================================
 
-## argument (eq.(4),[1])
-#M = -ellipk(m) / N
-##print M
-### ellipk in-terms of elliprf
-##M = -elliprf(0, 1-m, 1) / N
-##print M
-#snM = ellipfun('sn', u=M, m=m)    
-## evaluation of p (eq.(24),[1])
-#p = mp.sqrt((snM ** 2 - x ** 2) / (m * snM ** 2 * (1 - x ** 2)))    
-#p = mp.acos(p)
-## evaluation of s
-#p = 4
-#m = mpf(2)/3
-#snp = ellipfun('sn', u=p, m=m)   
-#phi_p = 1*mp.pi - mp.asin(snp) # decide what arcsin u need to take
-#print phi_p
-#s = ellipf(p, m)  
-#
-#fMsm = z_f(M, s, m)
-#R = mp.cos(n * mp.pi) * mp.cosh((n + 0.5) * fMsm)        
-#print R
-##print 10 * mp.log10(R ** 2) # SLR depends only on the magnitude of R here
+import numpy as np
+x = np.linspace(-1.01, 1.01, num=100, endpoint=True, retstep=False)
+
+y = []
+for i in range(len(x)):
+    tmp = mp.nstr(z_zolotarev(N, x[i], m), n=6)
+    tmp = convertStr(tmp)
+    y.append(tmp)
+print y
+
+import matplotlib.pyplot as plt
+
+f1 = plt.figure(1)
+p1 = plt.subplot(111)
+
+p1.plot(x, y, linewidth=1.0, label="test1")
+
+p1.axis('tight')
+p1.grid(True)
+
+plt.title('Zolotarev polynomial')
+plt.xlabel('$x$')
+plt.ylabel(r'$y$')
+plt.show()

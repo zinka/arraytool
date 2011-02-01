@@ -12,8 +12,7 @@ References:
 """
 
 from __future__ import division
-from mpmath import mpf, mp, qfrom, ellipk, ellipe, ellipf, ellipfun, jtheta, \
-                   nsum, inf, mpc
+from mpmath import mpf, mp, qfrom, ellipk, ellipe, ellipf, ellipfun, jtheta
 
 #==============================================================================
 # Precision level
@@ -45,10 +44,10 @@ def z_am(u, m):
     """Jacobi amplitude function (eq 16.1.5, [2, p.569])."""
     snM = ellipfun('sn', u=u, m=m)
     cnM = ellipfun('cn', u=u, m=m)
-    if (0<=cnM<=1):
+    if (0 <= cnM <= 1):
         phi = mp.asin(snM)
-    elif (-1<=cnM<0):
-        if (snM>=0):
+    elif (-1 <= cnM < 0):
+        if (snM >= 0):
             phi = mp.pi - mp.asin(snM)
         else:
             phi = mp.asin(snM) - mp.pi
@@ -59,7 +58,7 @@ def z_am(u, m):
 def z_zn(u, m):
     """Jacobi Zeta (zn(u,m)) function (eq 16.26.12, [2, p.576])."""
     phi = z_am(u, m)
-    zn = ellipe(phi, m) - ellipe(m)*u/ellipk(m)
+    zn = ellipe(phi, m) - ellipe(m) * u / ellipk(m)
     return zn
 
 def z_x123from_m(N, m):

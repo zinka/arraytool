@@ -80,21 +80,14 @@ def z_zolotarev2(N, x, m):
     # argument (eq.(4),[1])
     M = -ellipk(m) / N
     snM = ellipfun('sn', u=M, m=m)  
-    
-    
-    # Something WRONG here
-      
-    # evaluation of p (eq.(24),[1])
+    # evaluation of p (eq 24,[1])
     p = mp.sqrt((snM ** 2 - x ** 2) / (m * snM ** 2 * (1 - x ** 2))) 
-    p = mp.acos(p)
-    
-    
-    
+    p = mp.asin(p) # since the notation used in [1] is a little bit different
     # evaluation of s
     s = ellipf(p, m)
     # evaluation of 'f(M,s,m)'
     fMsm = mp.log(z_theta(M + s, m) / z_theta(M - s, m))    
-    # finally, the value of the Zolotarev polynomial  (eq.(21),[1])
+    # finally, the value of the Zolotarev polynomial  (eq 21,[1])
     f = mp.cos(n * mp.pi) * mp.cosh((n + 0.5) * fMsm)        
     return f
 

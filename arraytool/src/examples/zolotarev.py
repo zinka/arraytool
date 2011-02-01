@@ -14,7 +14,7 @@ References:
 """
 
 from __future__ import division
-from mpmath import mpf, mp, qfrom, ellipk, ellipe, ellipf, ellipfun, jtheta, plot
+from mpmath import mpf, mp, qfrom, ellipk, ellipe, ellipf, ellipfun, jtheta
 
 #==============================================================================
 # Precision level
@@ -81,15 +81,16 @@ def z_zolotarev(N, x, m):
     M = -ellipk(m) / N
     x3 = ellipfun('sn', u= -M, m=m)  
     xbar = x3 * mp.sqrt((x ** 2 - 1) / (x ** 2 - x3 ** 2)) # rearranged eq 21, [3]
-    
-#    asin range ? ? ?  
     u = ellipf(mp.asin(xbar), m) # rearranged eq 20, [3], asn(x) = F(asin(x)|m)     
     f = mp.cosh((n + 0.5) * mp.log(z_eta(M + u, m) / z_eta(M - u, m)))
     if (f.imag / f.real > 1e-10):
         print "imaginary part of the Zolotarev function is not negligible!"
         print "f_imaginary = ",f.imag
     else:
-        f = f.real
+        if (x>0): # no idea why I am doing this ... anyhow, it seems working
+            f = -f.real  
+        else:
+            f = f.real        
     return f
 
 def convertStr(s):
@@ -112,15 +113,15 @@ k = mpf('0.999971042') # for 30 dB
 m = k ** 2 # MODULUS 'k' is not convenient, so we use PARAMETER 'm' instead
 
 #==============================================================================
-# Testing the defined functions
+# Testing side-lobe ratio (SLR)
 #==============================================================================
 
 x1, x2, x3 = z_x123from_m(N, m)
 #print x1, '\n', x2, '\n', x3
-x = -0.01
+x = x2
 R = z_zolotarev(N, x, m)
 print R
-#print 10 * mp.log10(R ** 2) # SLR depends only on the magnitude of R here
+print 10 * mp.log10(R ** 2) # SLR depends only on the magnitude of R here
 
 #==============================================================================
 # Plotting the actual polynomial
@@ -128,24 +129,19 @@ print R
 
 import numpy as np
 x = np.linspace(-1.01, 1.01, num=100, endpoint=True, retstep=False)
-
 y = []
 for i in range(len(x)):
     tmp = mp.nstr(z_zolotarev(N, x[i], m), n=6)
     tmp = convertStr(tmp)
     y.append(tmp)
-print y
 
+# Plotting
 import matplotlib.pyplot as plt
-
 f1 = plt.figure(1)
 p1 = plt.subplot(111)
-
-p1.plot(x, y, linewidth=1.0, label="test1")
-
+p1.plot(x, y)
 p1.axis('tight')
 p1.grid(True)
-
 plt.title('Zolotarev polynomial')
 plt.xlabel('$x$')
 plt.ylabel(r'$y$')

@@ -1,5 +1,9 @@
 #! /usr/bin/env python
 
+# Author: Srinivasa Rao Zinka (srinivas . zinka [at] gmail . com)
+# Copyright (c) 2011 Srinivasa Rao Zinka
+# License: New BSD License.
+
 """ 
 Zolotarev array distribution. (almost done!)
 
@@ -93,7 +97,7 @@ def z_zolotarev(N, x, m):
             f = f.real        
     return f
 
-def convertStr(s):
+def z_str2num(s):
     """Convert string to either int or float."""
     try:
         ret = int(s)
@@ -103,46 +107,58 @@ def convertStr(s):
     return ret
 
 #==============================================================================
-# Basic parameters
+# '__main__' function
 #==============================================================================
 
-n = 9
-N = 2 * n + 1
-#k = mpf('0.999895316') # for 25 dB 
-k = mpf('0.999971042') # for 30 dB
-m = k ** 2 # MODULUS 'k' is not convenient, so we use PARAMETER 'm' instead
+if __name__ == '__main__':        
+    
+    #==========================================================================
+    # Basic parameters
+    #==========================================================================
+    
+    n = 5
+    N = 2 * n + 1
+    k = mpf('0.999895316') # for 25 dB 
+#    k = mpf('0.999971042') # for 30 dB
+    m = k ** 2 # MODULUS 'k' is not convenient, so we use PARAMETER 'm' instead
+    
+    #==========================================================================
+    # Testing side-lobe ratio (SLR)
+    #==========================================================================
+    
+    x1, x2, x3 = z_x123from_m(N, m)
+    #print x1, '\n', x2, '\n', x3
 
-#==============================================================================
-# Testing side-lobe ratio (SLR)
-#==============================================================================
-
-x1, x2, x3 = z_x123from_m(N, m)
-#print x1, '\n', x2, '\n', x3
-x = x2
-R = z_zolotarev(N, x, m)
-print R
-print 10 * mp.log10(R ** 2) # SLR depends only on the magnitude of R here
-
-#==============================================================================
-# Plotting the actual polynomial
-#==============================================================================
-
-import numpy as np
-x = np.linspace(-1.01, 1.01, num=100, endpoint=True, retstep=False)
-y = []
-for i in range(len(x)):
-    tmp = mp.nstr(z_zolotarev(N, x[i], m), n=6)
-    tmp = convertStr(tmp)
-    y.append(tmp)
-
-# Plotting
-import matplotlib.pyplot as plt
-f1 = plt.figure(1)
-p1 = plt.subplot(111)
-p1.plot(x, y)
-p1.axis('tight')
-p1.grid(True)
-plt.title('Zolotarev polynomial')
-plt.xlabel('$x$')
-plt.ylabel(r'$y$')
-plt.show()
+    x = x2
+    R = z_zolotarev(N, x, m)
+    print R
+    print 10 * mp.log10(R ** 2) # SLR depends only on the magnitude of R here
+    
+    #==========================================================================
+    # Plotting the actual polynomial
+    #==========================================================================
+    
+    import numpy as np
+    x = np.linspace(-1.04, 1.04, num=100, endpoint=True, retstep=False)
+    y = []
+    for i in range(len(x)):
+        tmp = mp.nstr(z_zolotarev(N, x[i], m), n=6)
+        tmp = z_str2num(tmp)
+        y.append(tmp)
+    
+#    x11 = z_str2num(mp.nstr(x1, n=6))
+#    x22 = z_str2num(mp.nstr(x2, n=6))
+#    x33 = z_str2num(mp.nstr(x3, n=6))
+    
+    # Plotting
+    import matplotlib.pyplot as plt
+    f1 = plt.figure(1)
+    p1 = plt.subplot(111)
+    p1.plot(x, y)
+    p1.axis('tight')
+    p1.grid(True)
+    plt.title(r'$Z_{2n+1}(x)$')
+    plt.xlabel('$x$')
+    plt.ylabel('$y$')
+    p1.axhspan(-1, 1, facecolor='y', alpha=0.5)
+    plt.show()

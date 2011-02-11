@@ -4,12 +4,12 @@
 # Copyright (c) 2011 Srinivasa Rao Zinka
 # License: New BSD License.
 
-""" 
-Module for analysis and design of planar array antennas.
+"""
+Module for analysis and design of (uni-directional) planar phased array
+antennas.
 
-Note:
-Right now, this module contains only some important "basic routines".
-In the near future, I will try to add more functions to this module.
+References:
+[] Will be provided later.
 """
 
 from __future__ import division
@@ -25,14 +25,14 @@ def ip_format(a, b, A, gamma=np.pi / 2, plot=False, mayavi_app=False):
     """
     Function to generate the 'Arraytool' input format.
     
-    a --> separation between elements along the x-axis in meters
-    b --> separation between elements along the y-axis in meters
-    A --> visual excitation matrix
-    gamma --> lattice angle in radians
-    plot --> if True, this function automatically produces a 3D plot. In 
-             order to use this option you need MayaVi library.
-    mayavi_app --> if True, 3D plot will be opened in the MayaVi main 
-                   application itself
+    a            : separation between elements along the x-axis in wavelengths
+    b            : separation between elements along the y-axis in wavelengths
+    A            : visual excitation matrix
+    gamma        : lattice angle in radians
+    plot         : if True, this function automatically produces a 3D plot.
+                     In order to use this option you need MayaVi library.
+    mayavi_app   : if True, the 3D plot will be opened in the MayaVi main
+                     application itself ... so that you can play around with
     """
             
     M = float(A.shape[1]) # no. of elements along the x-axis
@@ -68,9 +68,9 @@ def ip_format(a, b, A, gamma=np.pi / 2, plot=False, mayavi_app=False):
     y = np.reshape(y, (M * N, -1))
     z = np.zeros_like(x) # because only planar arrays are permitted here
     A = np.reshape(A, (M * N, -1))
-    array_ip = np.hstack((x, y, z, A))  # 'Arraytool' input format
+    array_ip = np.hstack((x, y, z, A))  # finally, 'Arraytool' input format
     
-    # plotting the array excitation, if plot option is True
+    # plotting the array excitation, if 'plot' option is True
     if (plot):
         if (mayavi_app): # this option opens the 3D plot in MayaVi Application
             mlab.options.backend = 'envisage'
@@ -82,43 +82,41 @@ def ip_format(a, b, A, gamma=np.pi / 2, plot=False, mayavi_app=False):
         
     return array_ip
 
-def pattern_u(array_ip, freq, u_scan=0, u_min= -1, u_max=1, u_num=50,
-              plot=False, dB_limit= -40, gain=True, normalize=False,
-              lattice=False):
+def pattern_u(array_ip, u_scan=0, u_min= -1, u_max=1, u_num=50, scale="dB", 
+              dB_limit= -40, factor="GF", plot_type="rect", lattice=False):
     """
     Function to evaluate 2d array-factor(AF) or gain-factor(GF) of a 
     linear array in u-domain. By default, this function calculates gain-factor.
     
-    array_ip --> input data in 'Arraytool' input format
-    freq --> frequency of operation in Hzs
-    u_scan --> beam scan position. For example, if you need to scan to 
-               theta=30deg, u_scan = sin(pi/6). By default, 'u_scan' is 0.
-    u_min, u_max --> limits of u-domain, by default they are -1 and +1 which 
-                     correspond to the visible-space
-    u_num --> number of sampling points between 'u_min' and 'u_max', including 
-              boundaries. By default, is 50.
-    plot --> By default, this is False. If 'plot="linear"', this function 
-             produces a 2D plot in linear scale. Similarly, if 'plot="dB"',
-             it produces 2D plot in dB scale. You need 'matplotlib' library
-             to use this option.
-    dB_limit --> when AF/GF/NF is 0, their dB value is -infinity. So, we will
-                 restrict the minimum value to dB_limit. By default, 
-                 'dB_limit' is -40.
-    gain --> This function evaluates gain-factor(GF) by default. If you want,
-             array-factor(AF), choose 'gain' as False. 
-    normalize --> If 'normalize' is chosen as True, then both AF and GF 
-                  become equal to normalized factor(NF) and possible 
-                  maximum value of NF is 1 or 0dB. 
-                  By default, 'normalize' is False.
-    lattice --> by default, is False. If True, it will highlight both 
-                visible-space and lattice period in u-domain.
+    array_ip      : input data in 'Arraytool' input format
+    u_scan        : beam scan position. For example, if you need to scan to
+                    theta=30deg, u_scan = sin(pi/6). By default, 'u_scan' is 0.
+    u_min, u_max  : limits of u-domain, by default they are -1 and +1 which
+                    correspond to the visible-space
+    u_num         : number of sampling points between 'u_min' and 'u_max',
+                    including boundaries. By default, is 50.
+    scale         : By default, this is "dB". If 'scale="linear"', this function
+                    produces a 2D plot in linear scale.                    
+    dB_limit      : when AF/GF/NF is 0, their dB value is -infinity. So, we will
+                    cut-off all the value below some 'dB_limit'. By default,
+                    'dB_limit' is -40(dB).
+    factor        : default value is gain-factor, "GF". If you want 
+                    array-factor or normalized factor, choose "AF" or "NF".
+    plot_type     : by default, is "rect". If you want polar plot, use
+                    'plot_type="polar"'. Finally, if 'plot_type' is False, it
+                    doesn't plot anything. You need 'matplotlib' library to use
+                    this option.
+    lattice       : by default, is False. If True, it will highlight both
+                    visible-space and lattice period in u-domain of
+                    "rectangular pattern" plot mode. Lattice period has meaning
+                    only if the array is "uniformly space".
     """
     
     x = array_ip[:, 0]
     y = array_ip[:, 1]
     z = array_ip[:, 2]
-    A = array_ip[:, 3]
-    k = (2 * np.pi * freq) / 3e8
+    A = array_ip[:, 3] # un-packing "array_ip" finished
+    k = 2 * np.pi # (angular) wave-number, which is 2*pi when lambda = 1
     
     # Making sure all elements in y and z columns of the "array_ip" are zeros
     z_flag = True
@@ -134,6 +132,7 @@ def pattern_u(array_ip, freq, u_scan=0, u_min= -1, u_max=1, u_num=50,
         
         u = np.linspace(u_min, u_max, num=u_num)
         u = np.reshape(u, (u_num, -1))
+        th = np.arcsin(u)
         A = np.reshape(A, (len(A), -1))
         U = np.tile(u - u_scan, len(x))
         X = np.tile(x, (u_num, 1))
@@ -141,96 +140,115 @@ def pattern_u(array_ip, freq, u_scan=0, u_min= -1, u_max=1, u_num=50,
         # Evaluating array-factor of the linear array
         AF = np.dot(np.exp(1j * k * U * X), A)
         
-        # Evaluation of F=(AF or GF or NF) => depending upon the user's choice
-        if(normalize):
-            gain = False # because GF is not need anymore
+        # Evaluation of F = (AF/GF/NF) => depending upon the user's choice
+        if(factor=="AF"):
+            F = AF; n1 = ""; ff = "Array-Factor "; f1 = "AF "
+        elif(factor=="GF"):
+            P_inc = ((abs(A)) ** 2).sum()
+            GF = AF / np.sqrt(P_inc) # Converting the AF to GF
+            F = GF; n1 = ""; ff = "Gain-Factor "; f1 = "GF "
+        elif(factor=="NF"):            
             norm_fact = (abs(A)).sum()
             F = AF / norm_fact
-            ff = "Gain or Array Factor "; f1 = "NF "; n1 = "Normalized "
-        else:
-            if(gain):            
-                P_inc = ((abs(A)) ** 2).sum() # Converting the AF to GF
-                GF = AF / np.sqrt(P_inc)
-                F = GF; ff = "Gain-Factor "; f1 = "GF "; n1 = ""
-            else:
-                F = AF; ff = "Array-Factor "; f1 = "AF "; n1 = ""
-                        
-        # plotting the factor (AF/GF) in either linear or dB scale
-        if(plot):
-            if(plot == "linear"):
-                plt.plot(u, F)
-                plt.title(n1 + ff + "in linear scale")
-            elif(plot == "dB"):
-                F = 20 * np.log10(abs(F))
-                # cutoff the "F" below some limit by using "masked_less"
-                F = np.ma.masked_less(F, dB_limit)
-                plt.plot(u, F) # use "F.data" for unmasked F
-                plt.title(n1 + ff + "in dB scale")
-            if(lattice):
-                plt.axvspan(-1, +1, facecolor='y', alpha=0.2)
-                a = x[2] - x[1]
-                lim = -np.pi / (a * k)                
-                plt.axvspan(-lim, +lim, facecolor='b', alpha=0.2)
-            plt.axis('tight'); plt.grid(True)            
-            plt.xlabel('u, where "u=sin(theta)" in visible-space')
-            plt.ylabel(f1 + '(u)')
+            n1 = "Normalized "; ff = "Factor "; f1 = "NF "
+            
+        # converting 'F' from linear to dB scale, if needed                
+        if(scale == "linear"):
+            ss = "in linear scale"
+        elif(scale == "dB"):
+            F = 20 * np.log10(abs(F))
+            # cutoff the "F" below some limit by using "masked_less"
+            F = np.ma.masked_less(F, dB_limit)
+            ss = "in dB scale"
+
+        # plotting the factor (AF/GF/NF)
+        if(plot_type):
+            if(plot_type=="rect"): # rectangular plot
+                plt.plot(u, F) # use "F.data" for unmasked F, if any exist                
+                if(lattice): # highlighting visible-space and unit-lattice
+                    plt.axvspan(-1, +1, facecolor='y', alpha=0.2)
+                    lim = -np.pi / ((x[2] - x[1]) * k)                
+                    plt.axvspan(-lim, +lim, facecolor='b', alpha=0.2)
+                plt.axis('tight'); plt.grid(True)            
+                plt.xlabel('u, where "u=sin(theta)" in visible-space')
+                plt.ylabel(f1 + '(u)')                
+            if(plot_type=="polar"): # polar plot
+                if(scale == "linear"):
+                    plt.polar(th, F)
+                    plt.polar(np.pi-th, F, '-b')
+                if(scale == "dB"):
+                    plt.polar(th, F-dB_limit)
+                    plt.polar(np.pi-th, F-dB_limit, '-b')                
+            plt.title(n1 + ff + ss)
             plt.show()
                         
     return u, F
 
-def AF_zeros(freq, a, M, R, type="DC"):
+def AF_zeros(a, M, R, type="DC"):
     """
     This function gives array-factor zeros corresponding to different 
     types of array distributions.
+    
+    a         : separation between elements along the x-axis in wavelengths
+    M         : number of elements along the x-axis
+    R         : side-lobe ration in linear scale
+    type      : EXPLANATION for this parameter will be done later
     """
     
-    k = (2 * np.pi * freq) / 3e8
+    k = 2 * np.pi # (angular) wave-number, which is 2*pi when lambda = 1
     m = np.ceil((M - 2) / 2)
     n = np.arange(1, 1 + m, 1)
     if(type == "DC"): # Dolph-Chebyshev zeros        
         c = np.cosh(np.arccosh(R) / (M - 1))
-        K = (2 / a) * np.arccos((np.cos(np.pi * (2 * n - 1) / (2 * M - 2))) / c)
+        U0 = (2 / (a*k)) * np.arccos((np.cos(np.pi * (2 * n - 1) / (2 * M - 2))) / c)
     elif(type == "RC"): # Riblet-Chebyshev zeros
         c1 = np.cosh(np.arccosh(R) / m)
         c = np.sqrt((1 + c1) / (2 + (c1 - 1) * np.cos(k * a / 2) ** 2))
         alph = c * np.cos(k * a / 2)
         xi = (1 / c) * np.sqrt(((1 + alph ** 2) / 2) + ((1 - alph ** 2) / 2) * 
                                np.cos(((2 * n - 1) * np.pi) / (2 * m)))
-        K = (2 / a) * np.arccos(xi)
+        U0 = (2 / (a*k)) * np.arccos(xi)
     elif(type=="MZs"): # McNamara-Zolotarev sum-pattern zeros
-        K = "Yet to be done"
+        U0 = "Yet to be done"
     elif(type=="MZd"): # McNamara-Zolotarev difference-pattern zeros
-        K = "Yet to be done"
-    K = np.reshape(K, (len(K), -1))        
+        U0 = "Yet to be done"
+    U0 = np.reshape(U0, (len(U0), -1))        
 
-    return K
+    return U0
 
-def A_frm_zeros(K, a, M, symmetry=True):
-        """
-        My function description here.
-        """
+def A_frm_zeros(U0, a, M, symmetry=True):
+    """
+    This function gives array excitation coefficients corresponding to the 
+    given array factor zeros.
+    
+    a         : separation between elements along the x-axis in wavelengths
+    M         : number of elements along the x-axis
+    symmetry  : whether array excitation is even or odd. this simplifies the
+                numerical evaluation process.
+    """
+    k = 2 * np.pi # (angular) wave-number, which is 2*pi when lambda = 1
+    sz = len(U0)
+    UU = np.tile(U0, sz)
+    if(symmetry):
+        if(M % 2 == 0):
+            tmp1 = np.arange(1, 1 + sz, 1) + 0.5
+            tmp2 = 2 * np.cos(k * U0 * a / 2)
+        else:
+            tmp1 = np.arange(1, 1 + sz, 1)
+            tmp2 = np.ones_like(U0)
+        tmp1 = np.reshape(tmp1, (-1, sz))
+        TT = np.tile(tmp1, (sz, 1))
+        CC = -np.linalg.inv(2 * np.cos(k * UU * TT * a))
+        A = np.dot(CC, tmp2)
+        A1 = np.flipud(A)            
+        if(M % 2 == 0):
+            A_tot = np.vstack((A1, 1, 1, A))
+        else:
+            A_tot = np.vstack((A1, 1, A))
+    else:
+        A_tot = "yet to be done"
         
-        sz = len(K)
-        KK = np.tile(K, sz)
-        if(symmetry):
-            if(M % 2 == 0):
-                tmp1 = np.arange(1, 1 + sz, 1) + 0.5
-                tmp2 = 2 * np.cos(K * a / 2)
-            else:
-                tmp1 = np.arange(1, 1 + sz, 1)
-                tmp2 = np.ones_like(K)
-            tmp1 = np.reshape(tmp1, (-1, sz))
-            TT = np.tile(tmp1, (sz, 1))
-            CC = -np.linalg.inv(2 * np.cos(KK * TT * a))
-            A = np.dot(CC, tmp2)
-            A1 = np.flipud(A)
-            
-            if(M % 2 == 0):
-                A_tot = np.vstack((A1, 1, 1, A))
-            else:
-                A_tot = np.vstack((A1, 1, A))
-            
-        return A_tot
+    return A_tot
 
 #==============================================================================
 # '__main__' function
@@ -242,12 +260,19 @@ if __name__ == '__main__':
     # frequency and array-arrangement
     #==========================================================================
     
+    # actual values
     freq = 10e9 # frequency of operation in Hzs
+    wav_len = 3e8/freq # wavelength in meters
     M = 7 # no. of elements along the x-axis
-    N = 01 # no. of elements along the y-axis    
-    a = 10e-3 # separation between elements along the x-axis in meters
-    b = 10e-3 # separation between elements along the y-axis in meters
+    N = 01 # no. of elements along the y-axis       
+    a1 = 17e-3 # separation between elements along the x-axis in meters
+    b1 = 10e-3 # separation between elements along the y-axis in meters
     gamma = np.pi / 2.5 # lattice angle in radians
+ 
+    # normalized values   
+    a = a1/wav_len # 'a1' in-terms of lambda (wavelength)
+    b = b1/wav_len # 'b1' in-terms of lambda (wavelength)
+
     
     #==========================================================================
     # Array excitation
@@ -263,8 +288,8 @@ if __name__ == '__main__':
 #    A = np.random.rand(N, M)
 
     # Dolph-Chebyshev type distributions    
-    K = AF_zeros(freq, a, M, R, type="RC") # finding array-factor zeros    
-    A = A_frm_zeros(K, a, M, symmetry=True).T # finding excitation coefficients
+    U0 = AF_zeros(a, M, R, type="DC") # finding array-factor zeros    
+    A = A_frm_zeros(U0, a, M, symmetry=True).T # finding excitation coefficients
     
     #==========================================================================
     # Converting 'excitation & position' info into 'Arraytool' input format
@@ -276,9 +301,9 @@ if __name__ == '__main__':
     # Calling the 'pattern_u' function to evaluate and plot 2D AF/GF/NF
     #==========================================================================
     
-    u_scan = 0
+    u_scan = 0.3
     u_min = -2
     u_max = +2
     u_num = 500     
-    pattern_u(array_ip, freq, u_scan, u_min, u_max, u_num, plot="dB",
-              dB_limit= -40, gain=True, normalize=True, lattice=True)
+    pattern_u(array_ip, u_scan, u_min, u_max, u_num, scale="dB",
+              dB_limit= -40, factor="NF", plot_type="rect", lattice=False)

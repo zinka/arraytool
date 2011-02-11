@@ -82,7 +82,7 @@ def ip_format(a, b, A, gamma=np.pi / 2, plot=False, mayavi_app=False):
         
     return array_ip
 
-def pattern_u(array_ip, u_scan=0, u_min= -1, u_max=1, u_num=50, scale="dB", 
+def pattern_u(array_ip, u_scan=0, u_min= -1, u_max=1, u_num=50, scale="dB",
               dB_limit= -40, factor="GF", plot_type="rect", lattice=False):
     """
     Function to evaluate 2d array-factor(AF) or gain-factor(GF) of a 
@@ -141,13 +141,13 @@ def pattern_u(array_ip, u_scan=0, u_min= -1, u_max=1, u_num=50, scale="dB",
         AF = np.dot(np.exp(1j * k * U * X), A)
         
         # Evaluation of F = (AF/GF/NF) => depending upon the user's choice
-        if(factor=="AF"):
+        if(factor == "AF"):
             F = AF; n1 = ""; ff = "Array-Factor "; f1 = "AF "
-        elif(factor=="GF"):
+        elif(factor == "GF"):
             P_inc = ((abs(A)) ** 2).sum()
             GF = AF / np.sqrt(P_inc) # Converting the AF to GF
             F = GF; n1 = ""; ff = "Gain-Factor "; f1 = "GF "
-        elif(factor=="NF"):            
+        elif(factor == "NF"):            
             norm_fact = (abs(A)).sum()
             F = AF / norm_fact
             n1 = "Normalized "; ff = "Factor "; f1 = "NF "
@@ -163,7 +163,7 @@ def pattern_u(array_ip, u_scan=0, u_min= -1, u_max=1, u_num=50, scale="dB",
 
         # plotting the factor (AF/GF/NF)
         if(plot_type):
-            if(plot_type=="rect"): # rectangular plot
+            if(plot_type == "rect"): # rectangular plot
                 plt.plot(u, F) # use "F.data" for unmasked F, if any exist                
                 if(lattice): # highlighting visible-space and unit-lattice
                     plt.axvspan(-1, +1, facecolor='y', alpha=0.2)
@@ -172,13 +172,13 @@ def pattern_u(array_ip, u_scan=0, u_min= -1, u_max=1, u_num=50, scale="dB",
                 plt.axis('tight'); plt.grid(True)            
                 plt.xlabel('u, where "u=sin(theta)" in visible-space')
                 plt.ylabel(f1 + '(u)')                
-            if(plot_type=="polar"): # polar plot
+            if(plot_type == "polar"): # polar plot
                 if(scale == "linear"):
                     plt.polar(th, F)
-                    plt.polar(np.pi-th, F, '-b')
+                    plt.polar(np.pi - th, F, '-b')
                 if(scale == "dB"):
-                    plt.polar(th, F-dB_limit)
-                    plt.polar(np.pi-th, F-dB_limit, '-b')                
+                    plt.polar(th, F - dB_limit)
+                    plt.polar(np.pi - th, F - dB_limit, '-b')                
             plt.title(n1 + ff + ss)
             plt.show()
                         
@@ -200,17 +200,17 @@ def AF_zeros(a, M, R, type="DC"):
     n = np.arange(1, 1 + m, 1)
     if(type == "DC"): # Dolph-Chebyshev zeros        
         c = np.cosh(np.arccosh(R) / (M - 1))
-        U0 = (2 / (a*k)) * np.arccos((np.cos(np.pi * (2 * n - 1) / (2 * M - 2))) / c)
+        U0 = (2 / (a * k)) * np.arccos((np.cos(np.pi * (2 * n - 1) / (2 * M - 2))) / c)
     elif(type == "RC"): # Riblet-Chebyshev zeros
         c1 = np.cosh(np.arccosh(R) / m)
         c = np.sqrt((1 + c1) / (2 + (c1 - 1) * np.cos(k * a / 2) ** 2))
         alph = c * np.cos(k * a / 2)
         xi = (1 / c) * np.sqrt(((1 + alph ** 2) / 2) + ((1 - alph ** 2) / 2) * 
                                np.cos(((2 * n - 1) * np.pi) / (2 * m)))
-        U0 = (2 / (a*k)) * np.arccos(xi)
-    elif(type=="MZs"): # McNamara-Zolotarev sum-pattern zeros
+        U0 = (2 / (a * k)) * np.arccos(xi)
+    elif(type == "MZs"): # McNamara-Zolotarev sum-pattern zeros
         U0 = "Yet to be done"
-    elif(type=="MZd"): # McNamara-Zolotarev difference-pattern zeros
+    elif(type == "MZd"): # McNamara-Zolotarev difference-pattern zeros
         U0 = "Yet to be done"
     U0 = np.reshape(U0, (len(U0), -1))        
 
@@ -262,7 +262,7 @@ if __name__ == '__main__':
     
     # actual values
     freq = 10e9 # frequency of operation in Hzs
-    wav_len = 3e8/freq # wavelength in meters
+    wav_len = 3e8 / freq # wavelength in meters
     M = 7 # no. of elements along the x-axis
     N = 01 # no. of elements along the y-axis       
     a1 = 17e-3 # separation between elements along the x-axis in meters
@@ -270,8 +270,8 @@ if __name__ == '__main__':
     gamma = np.pi / 2.5 # lattice angle in radians
  
     # normalized values   
-    a = a1/wav_len # 'a1' in-terms of lambda (wavelength)
-    b = b1/wav_len # 'b1' in-terms of lambda (wavelength)
+    a = a1 / wav_len # 'a1' in-terms of lambda (wavelength)
+    b = b1 / wav_len # 'b1' in-terms of lambda (wavelength)
 
     
     #==========================================================================
@@ -306,4 +306,4 @@ if __name__ == '__main__':
     u_max = +2
     u_num = 500     
     pattern_u(array_ip, u_scan, u_min, u_max, u_num, scale="dB",
-              dB_limit= -40, factor="NF", plot_type="rect", lattice=False)
+              dB_limit= -40, factor="NF", plot_type="rect", lattice=False)    

@@ -104,16 +104,18 @@ def pattern_2d(array_ip, freq, scan_freq, tht_resol, phi_resol,
 #    mlab.points3d(x, y, z, scale_factor=0.005)
 
     #==========================================================================
-    # defining outline "ranges" and plotting XYZ-coordinate system
+    # defining outline "ranges" and plotting the XYZ-coordinate system
     #==========================================================================
     
     xmin = min(x)
+    print xmin
     xmax = max(x)
     ymin = min(y)
     ymax = max(y)
     zmin = min(Amn)
     zmax = max(Amn)
     ranges1 = [xmin, xmax, ymin, ymax, zmin, zmax]
+    ranges1 = [min(x), max(x), min(y), max(y), min(Amn), max(Amn)]
     
 #    mlab.outline()
     a1 = mlab.axes(xlabel="X", ylabel="Y", zlabel="Amn", ranges=ranges1)

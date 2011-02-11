@@ -8,6 +8,9 @@
 Module for analysis and design of (uni-directional) planar phased array
 antennas.
 
+Progress:
+Just some important basic routines are done. There is much more to be done. 
+
 References:
 [] Will be provided later.
 """

@@ -85,6 +85,82 @@ def ip_format(a, b, A, gamma=np.pi / 2, plot=False, mayavi_app=False):
         
     return array_ip
 
+def ATE(array_ip):
+    """A simple function to evaluate array taper efficiency(ATE in %)."""
+    
+    A = abs(array_ip[:, 3])
+    A2 = A * A
+    ATE = (100 * (A.sum())**2) / (len(A) * A2.sum())
+
+    return ATE
+
+def AF_zeros(a, M, R, type="DC"):
+    """
+    This function gives array-factor zeros corresponding to different 
+    types of array distributions.
+    
+    a         : separation between elements along the x-axis in wavelengths
+    M         : number of elements along the x-axis
+    R         : side-lobe ration in linear scale
+    type      : EXPLANATION for this parameter will be done later
+    """
+    
+    k = 2 * np.pi # (angular) wave-number, which is 2*pi when lambda = 1
+    m = np.ceil((M - 2) / 2)
+    n = np.arange(1, 1 + m, 1)
+    if(type == "DC"): # Dolph-Chebyshev zeros        
+        c = np.cosh(np.arccosh(R) / (M - 1))
+        U0 = (2 / (a * k)) * np.arccos((np.cos(np.pi * (2 * n - 1) / (2 * M - 2))) / c)
+    elif(type == "RC"): # Riblet-Chebyshev zeros
+        c1 = np.cosh(np.arccosh(R) / m)
+        c = np.sqrt((1 + c1) / (2 + (c1 - 1) * np.cos(k * a / 2) ** 2))
+        alph = c * np.cos(k * a / 2)
+        xi = (1 / c) * np.sqrt(((1 + alph ** 2) / 2) + ((1 - alph ** 2) / 2) * 
+                               np.cos(((2 * n - 1) * np.pi) / (2 * m)))
+        U0 = (2 / (a * k)) * np.arccos(xi)
+    elif(type == "MZs"): # McNamara-Zolotarev sum-pattern zeros
+        U0 = "Yet to be done"
+    elif(type == "MZd"): # McNamara-Zolotarev difference-pattern zeros
+        U0 = "Yet to be done"
+    U0 = np.reshape(U0, (len(U0), -1))        
+
+    return U0
+
+def A_frm_zeros(U0, a, M, symmetry=True):
+    """
+    This function gives array excitation coefficients corresponding to the 
+    given array factor zeros.
+    
+    a         : separation between elements along the x-axis in wavelengths
+    M         : number of elements along the x-axis
+    symmetry  : whether array excitation is even or odd. this simplifies the
+                numerical evaluation process.
+    """
+    
+    k = 2 * np.pi # (angular) wave-number, which is 2*pi when lambda = 1
+    sz = len(U0)
+    UU = np.tile(U0, sz)
+    if(symmetry):
+        if(M % 2 == 0):
+            tmp1 = np.arange(1, 1 + sz, 1) + 0.5
+            tmp2 = 2 * np.cos(k * U0 * a / 2)
+        else:
+            tmp1 = np.arange(1, 1 + sz, 1)
+            tmp2 = np.ones_like(U0)
+        tmp1 = np.reshape(tmp1, (-1, sz))
+        TT = np.tile(tmp1, (sz, 1))
+        CC = -np.linalg.inv(2 * np.cos(k * UU * TT * a))
+        A = np.dot(CC, tmp2)
+        A1 = np.flipud(A)            
+        if(M % 2 == 0):
+            A_tot = np.vstack((A1, 1, 1, A))
+        else:
+            A_tot = np.vstack((A1, 1, A))
+    else:
+        A_tot = "yet to be done"
+        
+    return A_tot
+
 def pattern_u(array_ip, u_scan=0, u_min= -1, u_max=1, u_num=50, scale="dB",
               dB_limit= -40, factor="GF", plot_type="rect", lattice=False):
     """
@@ -187,71 +263,14 @@ def pattern_u(array_ip, u_scan=0, u_min= -1, u_max=1, u_num=50, scale="dB",
                         
     return u, F
 
-def AF_zeros(a, M, R, type="DC"):
-    """
-    This function gives array-factor zeros corresponding to different 
-    types of array distributions.
+def pattern_uv(array_ip, u_scan=0, v_scan=0, u_min= -1, u_max=1, u_num=50,
+               v_min= -1, v_max=1, v_num=50, uv_abs=1, scale="dB",
+               dB_limit= -40, factor="GF", plot_type="rect", lattice=False):
+    """ To be Done """
     
-    a         : separation between elements along the x-axis in wavelengths
-    M         : number of elements along the x-axis
-    R         : side-lobe ration in linear scale
-    type      : EXPLANATION for this parameter will be done later
-    """
     
-    k = 2 * np.pi # (angular) wave-number, which is 2*pi when lambda = 1
-    m = np.ceil((M - 2) / 2)
-    n = np.arange(1, 1 + m, 1)
-    if(type == "DC"): # Dolph-Chebyshev zeros        
-        c = np.cosh(np.arccosh(R) / (M - 1))
-        U0 = (2 / (a * k)) * np.arccos((np.cos(np.pi * (2 * n - 1) / (2 * M - 2))) / c)
-    elif(type == "RC"): # Riblet-Chebyshev zeros
-        c1 = np.cosh(np.arccosh(R) / m)
-        c = np.sqrt((1 + c1) / (2 + (c1 - 1) * np.cos(k * a / 2) ** 2))
-        alph = c * np.cos(k * a / 2)
-        xi = (1 / c) * np.sqrt(((1 + alph ** 2) / 2) + ((1 - alph ** 2) / 2) * 
-                               np.cos(((2 * n - 1) * np.pi) / (2 * m)))
-        U0 = (2 / (a * k)) * np.arccos(xi)
-    elif(type == "MZs"): # McNamara-Zolotarev sum-pattern zeros
-        U0 = "Yet to be done"
-    elif(type == "MZd"): # McNamara-Zolotarev difference-pattern zeros
-        U0 = "Yet to be done"
-    U0 = np.reshape(U0, (len(U0), -1))        
-
-    return U0
-
-def A_frm_zeros(U0, a, M, symmetry=True):
-    """
-    This function gives array excitation coefficients corresponding to the 
-    given array factor zeros.
     
-    a         : separation between elements along the x-axis in wavelengths
-    M         : number of elements along the x-axis
-    symmetry  : whether array excitation is even or odd. this simplifies the
-                numerical evaluation process.
-    """
-    k = 2 * np.pi # (angular) wave-number, which is 2*pi when lambda = 1
-    sz = len(U0)
-    UU = np.tile(U0, sz)
-    if(symmetry):
-        if(M % 2 == 0):
-            tmp1 = np.arange(1, 1 + sz, 1) + 0.5
-            tmp2 = 2 * np.cos(k * U0 * a / 2)
-        else:
-            tmp1 = np.arange(1, 1 + sz, 1)
-            tmp2 = np.ones_like(U0)
-        tmp1 = np.reshape(tmp1, (-1, sz))
-        TT = np.tile(tmp1, (sz, 1))
-        CC = -np.linalg.inv(2 * np.cos(k * UU * TT * a))
-        A = np.dot(CC, tmp2)
-        A1 = np.flipud(A)            
-        if(M % 2 == 0):
-            A_tot = np.vstack((A1, 1, 1, A))
-        else:
-            A_tot = np.vstack((A1, 1, A))
-    else:
-        A_tot = "yet to be done"
-        
-    return A_tot
+    return
 
 #==============================================================================
 # '__main__' function
@@ -291,7 +310,7 @@ if __name__ == '__main__':
 #    A = np.random.rand(N, M)
 
     # Dolph-Chebyshev type distributions    
-    U0 = AF_zeros(a, M, R, type="DC") # finding array-factor zeros    
+    U0 = AF_zeros(a, M, R, type="DC") # finding array-factor zeros
     A = A_frm_zeros(U0, a, M, symmetry=True).T # finding excitation coefficients
     
     #==========================================================================
@@ -299,6 +318,7 @@ if __name__ == '__main__':
     #==========================================================================
     
     array_ip = ip_format(a, b, A, gamma, plot=False, mayavi_app=False)
+    ATE = ATE(array_ip) # array taper efficiency
     
     #==========================================================================
     # Calling the 'pattern_u' function to evaluate and plot 2D AF/GF/NF
@@ -309,4 +329,4 @@ if __name__ == '__main__':
     u_max = +2
     u_num = 500     
     pattern_u(array_ip, u_scan, u_min, u_max, u_num, scale="dB",
-              dB_limit= -40, factor="NF", plot_type="rect", lattice=False)    
+              dB_limit= -40, factor="NF", plot_type="polar", lattice=False)

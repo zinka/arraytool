@@ -216,8 +216,8 @@ def pattern_u(array_ip, u_scan=0, u_min= -1, u_max=1, u_num=50, scale="dB",
         U = np.tile(u - u_scan, len(x))
         X = np.tile(x, (u_num, 1))
         
-        # Evaluating array-factor of the linear array
-        AF = np.dot(np.exp(1j * k * U * X), A)
+        # Evaluating array-factor of the linear array -2
+        AF = np.dot(np.exp(1j * k * U * X), A)        
         
         # Evaluation of F = (AF/GF/NF) => depending upon the user's choice
         if(factor == "AF"):
@@ -233,17 +233,18 @@ def pattern_u(array_ip, u_scan=0, u_min= -1, u_max=1, u_num=50, scale="dB",
             
         # converting 'F' from linear to dB scale, if needed                
         if(scale == "linear"):
+            F_plt = abs(F)
             ss = "in linear scale"
         elif(scale == "dB"):
             F = 20 * np.log10(abs(F))
             # cutoff the "F" below some limit by using "masked_less"
-            F = np.ma.masked_less(F, dB_limit)
+            F_plt = np.ma.masked_less(F, dB_limit)
             ss = "in dB scale"
 
         # plotting the factor (AF/GF/NF)
         if(plot_type):
             if(plot_type == "rect"): # rectangular plot
-                plt.plot(u, F) # use "F.data" for unmasked F, if any exist                
+                plt.plot(u, F_plt) # use "F.data" for unmasked F, if any exist                
                 if(lattice): # highlighting visible-space and unit-lattice
                     plt.axvspan(-1, +1, facecolor='y', alpha=0.2)
                     lim = -np.pi / ((x[2] - x[1]) * k)                
@@ -253,11 +254,11 @@ def pattern_u(array_ip, u_scan=0, u_min= -1, u_max=1, u_num=50, scale="dB",
                 plt.ylabel(f1 + '(u)')                
             if(plot_type == "polar"): # polar plot
                 if(scale == "linear"):
-                    plt.polar(th, F)
+                    plt.polar(th, F_plt)
                     plt.polar(np.pi - th, F, '-b')
                 if(scale == "dB"):
-                    plt.polar(th, F - dB_limit)
-                    plt.polar(np.pi - th, F - dB_limit, '-b')                
+                    plt.polar(th, F_plt - dB_limit)
+                    plt.polar(np.pi - th, F_plt - dB_limit, '-b')                
             plt.title(n1 + ff + ss)
             plt.show()
                         
@@ -266,11 +267,74 @@ def pattern_u(array_ip, u_scan=0, u_min= -1, u_max=1, u_num=50, scale="dB",
 def pattern_uv(array_ip, u_scan=0, v_scan=0, u_min= -1, u_max=1, u_num=50,
                v_min= -1, v_max=1, v_num=50, uv_abs=1, scale="dB",
                dB_limit= -40, factor="GF", plot_type="rect", lattice=False):
-    """ To be Done """
+    """ Not finished yet. """
     
+    x = array_ip[:, 0]
+    y = array_ip[:, 1]
+    z = array_ip[:, 2]
+    A = array_ip[:, 3] # un-packing "array_ip" finished
+    k = 2 * np.pi # (angular) wave-number, which is 2*pi when lambda = 1
+    u_numj = complex(0, u_num)
+    v_numj = complex(0, v_num)
     
-    
-    return
+    # Making sure all elements in the z-column of the "array_ip" are zeros
+    z_flag = True
+    if ((abs(z) > 0).sum()):
+        print "All elements in the z-column of array input should be zero."
+        z_flag = False
+        
+    # After making sure, proceed to the next level, i.e., evaluate the pattern
+    if(z_flag):     
+
+        [u, v] = np.mgrid[u_min:u_max:u_numj, v_min:v_max:v_numj]
+        u1 = np.reshape(u, (u.size, -1))
+        v1 = np.reshape(v, (v.size, -1))
+        A = np.reshape(A, (len(A), -1))
+        U = np.tile(u1 - u_scan, len(x))
+        V = np.tile(v1 - v_scan, len(x))
+        X = np.tile(x, (u.size, 1))
+        Y = np.tile(y, (u.size, 1))
+        
+        # Evaluating array-factor of the planar array
+        AF1 = np.dot(np.exp(1j * k * (U * X + V * Y)), A)
+        AF = np.reshape(AF1, u.shape)
+        
+        # Evaluation of F = (AF/GF/NF) => depending upon the user's choice
+        if(factor == "AF"):
+            F = AF; n1 = ""; ff = "Array-Factor "; f1 = "AF "
+        elif(factor == "GF"):
+            P_inc = ((abs(A)) ** 2).sum()
+            GF = AF / np.sqrt(P_inc) # Converting the AF to GF
+            F = GF; n1 = ""; ff = "Gain-Factor "; f1 = "GF "
+        elif(factor == "NF"):            
+            norm_fact = (abs(A)).sum()
+            F = AF / norm_fact
+            n1 = "Normalized "; ff = "Factor "; f1 = "NF "
+            
+        # converting 'F' from linear to dB scale, if needed                
+        if(scale == "linear"):
+            F_plt = abs(F)
+            ss = "in linear scale"
+        elif(scale == "dB"):
+            F = 20 * np.log10(abs(F))
+            # cutoff the "F" below some limit by using "masked_less"
+            F_plt = np.ma.masked_less(F, dB_limit)
+            ss = "in dB scale"
+            
+        # plotting the factor (AF/GF/NF)
+        if(plot_type):
+            if(plot_type == "rect"): # rectangular plot
+                me1 = mlab.surf(u, v, F_plt, warp_scale='auto')
+                ranges1 = [u.min(), u.max(), v.min(), v.max(),
+                           F_plt.min(), F_plt.max()]
+                mlab.axes(xlabel='u', ylabel='v', zlabel=f1 + '(u,v)',
+                          ranges=ranges1)        
+                me1.scene.isometric_view()        
+                mlab.show()
+            if(plot_type == "polar"): # polar plot
+                print "to be done."
+            
+    return x
 
 #==============================================================================
 # '__main__' function
@@ -286,7 +350,7 @@ if __name__ == '__main__':
     freq = 10e9 # frequency of operation in Hzs
     wav_len = 3e8 / freq # wavelength in meters
     M = 7 # no. of elements along the x-axis
-    N = 01 # no. of elements along the y-axis       
+    N = 10 # no. of elements along the y-axis       
     a1 = 17e-3 # separation between elements along the x-axis in meters
     b1 = 10e-3 # separation between elements along the y-axis in meters
     gamma = np.pi / 2.5 # lattice angle in radians
@@ -294,7 +358,6 @@ if __name__ == '__main__':
     # normalized values   
     a = a1 / wav_len # 'a1' in-terms of lambda (wavelength)
     b = b1 / wav_len # 'b1' in-terms of lambda (wavelength)
-
     
     #==========================================================================
     # Array excitation
@@ -305,13 +368,13 @@ if __name__ == '__main__':
     R = 10 ** (SLR / 20) # converting SLR from dB scale to linear scale
         
 #    # Uniform
-#    A = np.ones((N, M))
+    A = np.ones((N, M))
 #    # Random
 #    A = np.random.rand(N, M)
 
     # Dolph-Chebyshev type distributions    
-    U0 = AF_zeros(a, M, R, type="DC") # finding array-factor zeros
-    A = A_frm_zeros(U0, a, M, symmetry=True).T # finding excitation coefficients
+#    U0 = AF_zeros(a, M, R, type="DC") # finding array-factor zeros
+#    A = A_frm_zeros(U0, a, M, symmetry=True).T # finding excitation coefficients
     
     #==========================================================================
     # Converting 'excitation & position' info into 'Arraytool' input format
@@ -324,9 +387,13 @@ if __name__ == '__main__':
     # Calling the 'pattern_u' function to evaluate and plot 2D AF/GF/NF
     #==========================================================================
     
-    u_scan = 0.3
-    u_min = -2
-    u_max = +2
-    u_num = 500     
-    pattern_u(array_ip, u_scan, u_min, u_max, u_num, scale="dB",
-              dB_limit= -40, factor="NF", plot_type="polar", lattice=False)
+#    pattern_u(array_ip, u_scan=0, u_min=-1, u_max=1, u_num=50, scale="dB",
+#              dB_limit= -40, factor="NF", plot_type="rect", lattice=False)
+    
+    #==========================================================================
+    # Calling the 'pattern_uv' function to evaluate and plot 3D AF/GF/NF
+    #==========================================================================
+    
+    pattern_uv(array_ip, u_scan=0, v_scan=0, u_min= -1, u_max=1, u_num=50,
+               v_min= -1, v_max=1, v_num=50, uv_abs=1, scale="linear",
+               dB_limit= -40, factor="AF", plot_type="rect", lattice=False)

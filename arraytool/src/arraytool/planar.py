@@ -24,6 +24,20 @@ from enthought.mayavi import mlab
 # Custom functions
 #==============================================================================
 
+def cutoff(F, dB_limit= -40):
+    """
+    when AF/GF/NF is 0, their dB value is '-infinity'. So, this function 
+    will be used to cut-off all the value below some 'dB_limit'.
+    By default, 'dB_limit' is -40(dB).
+    """
+    
+    msk1 = F < dB_limit
+    fill = msk1 * dB_limit  
+    msk2 = F >= dB_limit
+    F = F * (msk2) + fill
+    
+    return F
+
 def ip_format(a, b, A, gamma=np.pi / 2, plot=False, mayavi_app=False):
     """
     Function to generate the 'Arraytool' input format.
@@ -237,8 +251,9 @@ def pattern_u(array_ip, u_scan=0, u_min= -1, u_max=1, u_num=50, scale="dB",
             ss = "in linear scale"
         elif(scale == "dB"):
             F = 20 * np.log10(abs(F))
-            # cutoff the "F" below some limit by using "masked_less"
-            F_plt = np.ma.masked_less(F, dB_limit)
+            # cutoff the "F" below some limit
+            F = cutoff(F, dB_limit)
+            F_plt = F
             ss = "in dB scale"
 
         # plotting the factor (AF/GF/NF)
@@ -266,7 +281,8 @@ def pattern_u(array_ip, u_scan=0, u_min= -1, u_max=1, u_num=50, scale="dB",
 
 def pattern_uv(array_ip, u_scan=0, v_scan=0, u_min= -1, u_max=1, u_num=50,
                v_min= -1, v_max=1, v_num=50, uv_abs=1, scale="dB",
-               dB_limit= -40, factor="GF", plot_type="rect", lattice=False):
+               dB_limit= -40, factor="GF", plot_type="rect", lattice=False,
+               mayavi_app=False):
     """ Not finished yet. """
     
     x = array_ip[:, 0]
@@ -317,16 +333,18 @@ def pattern_uv(array_ip, u_scan=0, v_scan=0, u_min= -1, u_max=1, u_num=50,
             ss = "in linear scale"
         elif(scale == "dB"):
             F = 20 * np.log10(abs(F))
-            # cutoff the "F" below some limit by using "masked_less"
-            F_plt = np.ma.masked_less(F, dB_limit)
+            # cutoff the "F" below some limit
+            F = cutoff(F, dB_limit)
+            F_plt = F
             ss = "in dB scale"
             
         # plotting the factor (AF/GF/NF)
         if(plot_type):
+            if (mayavi_app): # opens the 3D plot in MayaVi Application
+                mlab.options.backend = 'envisage'
             if(plot_type == "rect"): # rectangular plot
                 me1 = mlab.surf(u, v, F_plt, warp_scale='auto')
-                ranges1 = [u.min(), u.max(), v.min(), v.max(),
-                           F_plt.min(), F_plt.max()]
+                ranges1 = [u_min, u_max, v_min, v_max, F_plt.min(), F_plt.max()]
                 mlab.axes(xlabel='u', ylabel='v', zlabel=f1 + '(u,v)',
                           ranges=ranges1)        
                 me1.scene.isometric_view()        
@@ -349,11 +367,11 @@ if __name__ == '__main__':
     # actual values
     freq = 10e9 # frequency of operation in Hzs
     wav_len = 3e8 / freq # wavelength in meters
-    M = 7 # no. of elements along the x-axis
-    N = 10 # no. of elements along the y-axis       
+    M = 6 # no. of elements along the x-axis
+    N = 5 # no. of elements along the y-axis       
     a1 = 17e-3 # separation between elements along the x-axis in meters
-    b1 = 10e-3 # separation between elements along the y-axis in meters
-    gamma = np.pi / 2.5 # lattice angle in radians
+    b1 = 17e-3 # separation between elements along the y-axis in meters
+    gamma = np.pi / 2 # lattice angle in radians
  
     # normalized values   
     a = a1 / wav_len # 'a1' in-terms of lambda (wavelength)
@@ -387,13 +405,14 @@ if __name__ == '__main__':
     # Calling the 'pattern_u' function to evaluate and plot 2D AF/GF/NF
     #==========================================================================
     
-#    pattern_u(array_ip, u_scan=0, u_min=-1, u_max=1, u_num=50, scale="dB",
-#              dB_limit= -40, factor="NF", plot_type="rect", lattice=False)
+#    pattern_u(array_ip, u_scan=0, u_min=-2, u_max=2, u_num=500, scale="dB",
+#              dB_limit= -40, factor="NF", plot_type="rect", lattice=True)
     
     #==========================================================================
     # Calling the 'pattern_uv' function to evaluate and plot 3D AF/GF/NF
     #==========================================================================
     
-    pattern_uv(array_ip, u_scan=0, v_scan=0, u_min= -1, u_max=1, u_num=50,
-               v_min= -1, v_max=1, v_num=50, uv_abs=1, scale="linear",
-               dB_limit= -40, factor="AF", plot_type="rect", lattice=False)
+    pattern_uv(array_ip, u_scan=0, v_scan=0, u_min= -1, u_max=1, u_num=100,
+               v_min= -1, v_max=1, v_num=100, uv_abs=1, scale="dB",
+               dB_limit= -40, factor="NF", plot_type="rect", lattice=False,
+               mayavi_app=False)

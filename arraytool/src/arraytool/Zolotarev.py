@@ -178,8 +178,9 @@ def Zolotarev2(p, q, m):
 if __name__ == '__main__':        
     
     # parameters of the 'Zolotarev' polynomial
-    n = 4; N = 2 * n + 1
-    R = 10
+    n = 4; N = 2 * n + 1 # 'N' is the order of the polynomial
+    R = 10 # 'R' is the value of the peak within [-1,+1] 
+    
     # Getting the value of the parameter 'm' from a given 'R' (remember!, m=k^2)
     m = z_m_frm_R(N, R)
     print 'm =', m

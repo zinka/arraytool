@@ -138,7 +138,7 @@ def z_Zolotarev_poly(N, m, interp_num=100, full=False):
         y.append(tmp)
     # Interpolating the data to fit to a Nth order polynomial
     coef = np.polyfit(x, y, N, full)
-    roots = np.roots(coef)
+    roots = np.sort(np.roots(coef))
     return coef, roots
 
 def Zolotarev2(p, q, m):

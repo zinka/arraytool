@@ -147,7 +147,7 @@ def AF_zeros(a, M, R, dist_type, nbar=False, alpha=0):
     
     if(dist_type == "Dolph"): # Dolph zeros
         c = np.cosh(np.arccosh(R) / (M - 1))
-        U0 = (2 / (a * k)) * np.arccos((np.cos(np.pi * (2 * n - 1) / (2 * M - 2))) / c)
+        U0 = (2 / (a * k)) * np.arccos((np.cos(np.pi * (2 * n - 1) / (2 * M - 2))) / c)        
     elif(dist_type == "Riblet"): # Riblet zeros
         c1 = np.cosh(np.arccosh(R) / m)
         c = np.sqrt((1 + c1) / (2 + (c1 - 1) * np.cos(k * a / 2) ** 2))
@@ -171,9 +171,8 @@ def AF_zeros(a, M, R, dist_type, nbar=False, alpha=0):
         if(a < 0.5): c = 1 / np.sin((k * a) / 2)
         else: c = 1
         m1 = Zol.z_m_frm_R(M - 1, R)
-        xn = np.sort(Zol.z_Zolotarev_poly(N=M - 1, m=m1)[1])[m + 1:]
+        xn = Zol.z_Zolotarev_poly(N=M - 1, m=m1)[1][m + 1:]
         U0 = (2 / (a * k)) * np.arcsin(xn / c)
-        
     if(nbar): # Taylor's Dilation procedure
         # see if you can change the below LONG logic
         if((dist_type == "Dolph") or (dist_type == "Riblet") or (dist_type == "McNamara-s")):
@@ -434,8 +433,8 @@ if __name__ == '__main__':
     # frequency and array-arrangement (actual values)
     freq = 10e9 # frequency of operation in Hzs
     wav_len = 3e8 / freq # wavelength in meters
-    M = 20 # no. of elements along the x-axis
-    N = 5 # no. of elements along the y-axis
+    M = 38 # no. of elements along the x-axis
+#    N = 5 # no. of elements along the y-axis
     a1 = 17e-3 # separation between elements along the x-axis in meters
     b1 = 17e-3 # separation between elements along the y-axis in meters
     gamma = np.pi / 2 # lattice angle in radians
@@ -444,7 +443,7 @@ if __name__ == '__main__':
     a = a1 / wav_len # 'a1' in-terms of lambda (wavelength)
     b = b1 / wav_len # 'b1' in-terms of lambda (wavelength)
 
-    SLR = 20 # side-lobe ratio in dB
+    SLR = 25 # side-lobe ratio in dB
     R = 10 ** (SLR / 20) # converting SLR from dB scale to linear scale
 
 #    # Array excitation coefficient matrix
@@ -456,7 +455,7 @@ if __name__ == '__main__':
 #    A = np.random.rand(N, M) # Random excitation
 
     # Using the function 'AF_zeros' to find arrayfactor zeros
-    U0 = AF_zeros(a, M, R, dist_type="McNamara-d", nbar=5, alpha=0)
+    U0 = AF_zeros(a, M, R, dist_type="McNamara-d", nbar=False, alpha=0)
     print 'arrayfactor zeros:', '\n', U0
 
     # Obtaining array excitation coefficients from the arrayfactor zeros
@@ -464,7 +463,7 @@ if __name__ == '__main__':
     print 'array coefficients:', '\n', A.T
 
     # Converting the 'excitation & position' info into 'Arraytool' input format
-    array_ip = ip_format(a, b, A, gamma, plot=True, stem=True, mayavi_app=False)
+    array_ip = ip_format(a, b, A, gamma, plot=False, stem=True, mayavi_app=False)
     ATE = ATE(array_ip) # array taper efficiency
 
     # Calling the 'pattern_u' function to evaluate and plot 2D AF/GF/NF

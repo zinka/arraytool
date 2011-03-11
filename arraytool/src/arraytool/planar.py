@@ -127,6 +127,16 @@ def ATE(array_ip):
     ATE = (A.sum())**2 / (len(A) * A2.sum())
     return ATE
 
+def K_norm(array_ip):
+    """A simple function to evaluate the normalized bore-sight slope."""
+    X = array_ip[:, 0]
+    A = array_ip[:, 3]
+    AX = A*X
+    A1 = abs(A)
+    A2 = A1*A1    
+    K_norm = abs(AX.sum())/np.sqrt(A2.sum())
+    return K_norm
+
 def AF_zeros(a, M, R, dist_type, nbar=False, alpha=0):
     """
     This function gives array-factor zeros corresponding to different

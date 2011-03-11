@@ -21,7 +21,7 @@ set_printoptions(precision=2, threshold=nan, edgeitems=None,
 
 # Rectangular data
 l1 = 10
-eps1 = 0.1
+eps1 = 1
 [x, y] = mgrid[-10:10:0.5, -10:10:0.5]
 
 if (eps1 == 1):
@@ -102,8 +102,8 @@ J_z = reshape(J_z_temp, u2.shape)
 # Plotting current vectors
 #==============================================================================
 
-mlab.options.backend = 'envisage'         # one way to save visualization
-f = mlab.figure()
+#mlab.options.backend = 'envisage'         # one way to save visualization
+#f = mlab.figure()
 c1 = mlab.points3d(0, 0, 0)
 mlab.quiver3d(x, y, z2, J_x, J_y, J_z, colormap="jet", scale_factor=1)
 

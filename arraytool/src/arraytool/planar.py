@@ -131,10 +131,10 @@ def K_norm(array_ip):
     """A simple function to evaluate the normalized bore-sight slope."""
     X = array_ip[:, 0]
     A = array_ip[:, 3]
-    AX = A*X
+    AX = A * X
     A1 = abs(A)
-    A2 = A1*A1    
-    K_norm = abs(AX.sum())/np.sqrt(A2.sum())
+    A2 = A1 * A1    
+    K_norm = abs(AX.sum()) / np.sqrt(A2.sum())
     return K_norm
 
 def AF_zeros(a, M, R, dist_type, nbar=False, alpha=0):
@@ -443,7 +443,7 @@ if __name__ == '__main__':
     # frequency and array-arrangement (actual values)
     freq = 10e9 # frequency of operation in Hzs
     wav_len = 3e8 / freq # wavelength in meters
-    M = 38 # no. of elements along the x-axis
+    M = 10 # no. of elements along the x-axis
 #    N = 5 # no. of elements along the y-axis
     a1 = 17e-3 # separation between elements along the x-axis in meters
     b1 = 17e-3 # separation between elements along the y-axis in meters
@@ -457,8 +457,9 @@ if __name__ == '__main__':
     R = 10 ** (SLR / 20) # converting SLR from dB scale to linear scale
 
 #    # Array excitation coefficient matrix
-#    A = np.array([1,2,3,4,5])
-#    A = np.reshape(A, (len(A),-1)).T # manually entering the coefficients
+#
+#    A = np.array([1,2,3,4,5]) # manually entering the coefficients
+#    A = np.reshape(A, (len(A),-1)).T
 #
 #    A = np.ones((N, M)) # Uniform excitation
 #
@@ -476,17 +477,19 @@ if __name__ == '__main__':
     array_ip = ip_format(a, b, A, gamma, plot=False, stem=True, mayavi_app=False)
     ATE = ATE(array_ip) # array taper efficiency
 
-    # Calling the 'pattern_u' function to evaluate and plot 2D AF/GF/NF
-    pattern_u(array_ip, u_scan=0, u_min= -1, u_max=1, u_num=500, scale="dB",
-              dB_limit= -60, factor="AF", plot_type="rect", lattice=True)
+#    # Calling the 'pattern_u' function to evaluate and plot 2D AF/GF/NF
+#    pattern_u(array_ip, u_scan=0, u_min= -1, u_max=1, u_num=500, scale="dB",
+#              dB_limit= -60, factor="AF", plot_type="rect", lattice=True)
 
-#    # Calling the 'pattern_uv' function to evaluate and plot 3D AF/GF/NF
-#    pattern_uv(array_ip, u_scan=0, v_scan=0, u_min= -1, u_max=1, u_num=100,
-#               v_min= -1, v_max=1, v_num=100, uv_abs=1, scale="dB",
-#               dB_limit= -40, factor="NF", plot_type="rect", lattice=False,
-#               mayavi_app=False)
+    # Calling the 'pattern_uv' function to evaluate and plot 3D AF/GF/NF
+    pattern_uv(array_ip, u_scan=0, v_scan=0, u_min= -1, u_max=1, u_num=100,
+               v_min= -1, v_max=1, v_num=100, uv_abs=1, scale="dB",
+               dB_limit= -40, factor="NF", plot_type="rect", lattice=False,
+               mayavi_app=False)
 
 #==============================================================================
 # Programming tasks
 #==============================================================================
+# odd symmetry ... optimize A_from_zeros
+# use backslah instead of inverse
 

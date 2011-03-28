@@ -418,9 +418,8 @@ def pattern_uv(array_ip, u_scan=0, v_scan=0, u_min= -1, u_max=1, u_num=50,
             ss = "in linear scale"
         elif(scale == "dB"):
             F = 20 * np.log10(abs(F))
-            # cutoff the "F" below some limit
-            F = cutoff(F, dB_limit)
-            F_plt = F
+            # cutoff the "F" below some limit ... just for the plotting purpose
+            F_plt = cutoff(F, dB_limit)
             ss = "in dB scale"
 
         # plotting the factor (AF/GF/NF)
@@ -428,15 +427,20 @@ def pattern_uv(array_ip, u_scan=0, v_scan=0, u_min= -1, u_max=1, u_num=50,
             if (mayavi_app): # opens the 3D plot in MayaVi Application
                 mlab.options.backend = 'envisage'
             if(plot_type == "rect"): # rectangular plot
-                me1 = mlab.surf(u, v, F_plt, warp_scale='auto')
+                plt3d = mlab.surf(u, v, F_plt, warp_scale='auto')
                 ranges1 = [u_min, u_max, v_min, v_max, F_plt.min(), F_plt.max()]
                 mlab.axes(xlabel='u', ylabel='v', zlabel=f1 + '(u,v)',
                           ranges=ranges1)
-                me1.scene.isometric_view()
-                mlab.show()
-            if(plot_type == "polar"): # polar plot
-                print "to be done."
-    return x
+                mlab.title(n1 + ff + ss, size=0.35)
+                plt3d.scene.isometric_view()
+                mlab.show()                
+            if(plot_type == "contour"): # contour plot
+                plt.contourf(u,v,F_plt)
+                plt.axis('tight'); plt.grid(True)
+                plt.xlabel('u, where "u=sin(theta)cos(phi)" in visible-space')
+                plt.ylabel('v, where "u=sin(theta)sin(phi)" in visible-space')
+                plt.show()                
+    return u, v, F
 
 if __name__ == '__main__':
 
@@ -444,7 +448,7 @@ if __name__ == '__main__':
     freq = 10e9 # frequency of operation in Hzs
     wav_len = 3e8 / freq # wavelength in meters
     M = 10 # no. of elements along the x-axis
-#    N = 5 # no. of elements along the y-axis
+    N = 5 # no. of elements along the y-axis
     a1 = 17e-3 # separation between elements along the x-axis in meters
     b1 = 17e-3 # separation between elements along the y-axis in meters
     gamma = np.pi / 2 # lattice angle in radians
@@ -461,17 +465,17 @@ if __name__ == '__main__':
 #    A = np.array([1,2,3,4,5]) # manually entering the coefficients
 #    A = np.reshape(A, (len(A),-1)).T
 #
-#    A = np.ones((N, M)) # Uniform excitation
+    A = np.ones((N, M)) # Uniform excitation
 #
 #    A = np.random.rand(N, M) # Random excitation
 
-    # Using the function 'AF_zeros' to find arrayfactor zeros
-    U0 = AF_zeros(a, M, R, dist_type="McNamara-d", nbar=False, alpha=0)
-    print 'arrayfactor zeros:', '\n', U0
-
-    # Obtaining array excitation coefficients from the arrayfactor zeros
-    A = A_frm_zeros(U0, a, M, symmetry="odd").T # finding excitation coefficients
-    print 'array coefficients:', '\n', A.T
+#    # Using the function 'AF_zeros' to find arrayfactor zeros
+#    U0 = AF_zeros(a, M, R, dist_type="McNamara-d", nbar=False, alpha=0)
+#    print 'arrayfactor zeros:', '\n', U0
+#
+#    # Obtaining array excitation coefficients from the arrayfactor zeros
+#    A = A_frm_zeros(U0, a, M, symmetry="odd").T # finding excitation coefficients
+#    print 'array coefficients:', '\n', A.T
 
     # Converting the 'excitation & position' info into 'Arraytool' input format
     array_ip = ip_format(a, b, A, gamma, plot=False, stem=True, mayavi_app=False)
@@ -484,7 +488,7 @@ if __name__ == '__main__':
     # Calling the 'pattern_uv' function to evaluate and plot 3D AF/GF/NF
     pattern_uv(array_ip, u_scan=0, v_scan=0, u_min= -1, u_max=1, u_num=100,
                v_min= -1, v_max=1, v_num=100, uv_abs=1, scale="dB",
-               dB_limit= -40, factor="NF", plot_type="rect", lattice=False,
+               dB_limit= -40, factor="AF", plot_type="contour", lattice=False,
                mayavi_app=False)
 
 #==============================================================================
@@ -492,4 +496,5 @@ if __name__ == '__main__':
 #==============================================================================
 # odd symmetry ... optimize A_from_zeros
 # use backslah instead of inverse
+# cleanup the coding up to now
 

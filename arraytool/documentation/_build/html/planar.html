@@ -1,0 +1,228 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Planar array routines &mdash; Arraytool v0.0.0 documentation</title>
+    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '0.0.0',
+        COLLAPSE_MODINDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="Arraytool v0.0.0 documentation" href="index.html" />
+    <link rel="next" title="Zolotarev polynomial related routines" href="Zolotarev.html" />
+    <link rel="prev" title="Welcome to Arraytool’s documentation!" href="index.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="modindex.html" title="Global Module Index"
+             accesskey="M">modules</a> |</li>
+        <li class="right" >
+          <a href="Zolotarev.html" title="Zolotarev polynomial related routines"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="index.html" title="Welcome to Arraytool’s documentation!"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">Arraytool v0.0.0 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="module-planar">
+<h1>Planar array routines<a class="headerlink" href="#module-planar" title="Permalink to this headline">¶</a></h1>
+<p>Module for analysis and design of (uni-directional) planar phased array
+antennas.</p>
+<p>Progress:
+Just some important basic routines are done. There is much more to be done!</p>
+<p>References:
+[] Will be provided later.</p>
+<dl class="function">
+<dt id="planar.AF_zeros">
+<tt class="descclassname">planar.</tt><tt class="descname">AF_zeros</tt><big>(</big><em>a</em>, <em>M</em>, <em>R</em>, <em>dist_type</em>, <em>nbar=False</em>, <em>alpha=0</em><big>)</big><a class="headerlink" href="#planar.AF_zeros" title="Permalink to this definition">¶</a></dt>
+<dd><p>This function gives array-factor zeros corresponding to different
+types of array distributions.</p>
+<p>a         : separation between the elements along the x-axis in wavelengths
+M         : number of elements along the x-axis
+R         : side-lobe ratio in linear scale
+type      : type of the distribution, e.g., &#8216;Dolph&#8217; for Dolph-Chebyshev
+nbar      : dilation parameter
+alpha     : Taylor&#8217;s asymptotic tapering parameter (this &#8216;alpha&#8217; has nothing</p>
+<blockquote>
+to do with &#8216;plotting alpha&#8217;, i.e., the transparency parameter)</blockquote>
+</dd></dl>
+
+<dl class="function">
+<dt id="planar.ATE">
+<tt class="descclassname">planar.</tt><tt class="descname">ATE</tt><big>(</big><em>array_ip</em><big>)</big><a class="headerlink" href="#planar.ATE" title="Permalink to this definition">¶</a></dt>
+<dd>A simple function to evaluate the array taper efficiency (ATE).</dd></dl>
+
+<dl class="function">
+<dt id="planar.A_frm_zeros">
+<tt class="descclassname">planar.</tt><tt class="descname">A_frm_zeros</tt><big>(</big><em>U0</em>, <em>a</em>, <em>M</em>, <em>symmetry</em><big>)</big><a class="headerlink" href="#planar.A_frm_zeros" title="Permalink to this definition">¶</a></dt>
+<dd><p>This function gives array excitation coefficients corresponding to the
+given array factor zeros.</p>
+<dl class="docutils">
+<dt>U0 <span class="classifier-delimiter">:</span> <span class="classifier">arrayfactor zeros... usually in the format of the output of the</span></dt>
+<dd>&#8216;AF_zeros&#8217; function.</dd>
+</dl>
+<p>a         : separation between elements along the x-axis in wavelengths
+M         : number of elements along the x-axis
+symmetry  : whether the array excitation is symmetric or not. this simplifies</p>
+<blockquote>
+the numerical evaluation process. Allowed values are &#8216;even&#8217;,
+&#8216;odd&#8217; and False.</blockquote>
+</dd></dl>
+
+<dl class="function">
+<dt id="planar.K_norm">
+<tt class="descclassname">planar.</tt><tt class="descname">K_norm</tt><big>(</big><em>array_ip</em><big>)</big><a class="headerlink" href="#planar.K_norm" title="Permalink to this definition">¶</a></dt>
+<dd>A simple function to evaluate the normalized bore-sight slope.</dd></dl>
+
+<dl class="function">
+<dt id="planar.cutoff">
+<tt class="descclassname">planar.</tt><tt class="descname">cutoff</tt><big>(</big><em>F</em>, <em>dB_limit=-40</em><big>)</big><a class="headerlink" href="#planar.cutoff" title="Permalink to this definition">¶</a></dt>
+<dd>when AF/GF/NF is 0, their dB value is &#8216;-infinity&#8217;. So, this function
+will be used to cut-off all the value below some &#8216;dB_limit&#8217;.
+By default, &#8216;dB_limit&#8217; is -40(dB).</dd></dl>
+
+<dl class="function">
+<dt id="planar.ip_format">
+<tt class="descclassname">planar.</tt><tt class="descname">ip_format</tt><big>(</big><em>a</em>, <em>b</em>, <em>A</em>, <em>gamma=1.5707963267948966</em>, <em>plot=False</em>, <em>color='b'</em>, <em>linewidth=1</em>, <em>linestyle='-'</em>, <em>alpha=1</em>, <em>show=True</em>, <em>stem=False</em>, <em>stemline='g--'</em>, <em>stemmarker='ro'</em>, <em>mayavi_app=False</em><big>)</big><a class="headerlink" href="#planar.ip_format" title="Permalink to this definition">¶</a></dt>
+<dd><p>Function to generate the &#8216;Arraytool&#8217; input format.</p>
+<p>a            : separation between elements along the x-axis in wavelengths
+b            : separation between elements along the y-axis in wavelengths
+A            : visual excitation matrix
+gamma        : lattice angle in radians
+plot         : if True, this function automatically produces a 2D/3D plot</p>
+<blockquote>
+showing the array excitation. In order to use this option
+you need &#8216;Matplotlib&#8217; and &#8216;MayaVi&#8217; libraries.</blockquote>
+<dl class="docutils">
+<dt>stem <span class="classifier-delimiter">:</span> <span class="classifier">if True, a &#8216;stem&#8217; representation of the excitation </span></dt>
+<dd>coefficients will be shown. By default, it is False.</dd>
+<dt>mayavi_app <span class="classifier-delimiter">:</span> <span class="classifier">if True, the 3D plot will be opened in the MayaVi main</span></dt>
+<dd>application itself.</dd>
+</dl>
+<p>All other parameters are nothing but &#8216;Matplotlib&#8217; parameters. These should
+be familiar to &#8216;Matlab&#8217; or &#8216;Matplotlib&#8217; users.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="planar.pattern_u">
+<tt class="descclassname">planar.</tt><tt class="descname">pattern_u</tt><big>(</big><em>array_ip</em>, <em>u_scan=0</em>, <em>u_min=-1</em>, <em>u_max=1</em>, <em>u_num=50</em>, <em>scale='dB'</em>, <em>dB_limit=-40</em>, <em>factor='GF'</em>, <em>plot_type='rect'</em>, <em>lattice=False</em>, <em>color='b'</em>, <em>linewidth=1</em>, <em>linestyle='-'</em>, <em>alpha=1</em>, <em>show=True</em><big>)</big><a class="headerlink" href="#planar.pattern_u" title="Permalink to this definition">¶</a></dt>
+<dd><p>Function to evaluate 2d array-factor(AF) or gain-factor(GF) of a
+linear array in u-domain. By default, this function calculates gain-factor.</p>
+<p>array_ip      : input data in &#8216;Arraytool&#8217; input format
+u_scan        : beam scan position. For example, if you need to scan to</p>
+<blockquote>
+theta=30deg, u_scan = sin(pi/6). By default, &#8216;u_scan&#8217; is 0.</blockquote>
+<dl class="docutils">
+<dt>u_min, u_max <span class="classifier-delimiter">:</span> <span class="classifier">limits of u-domain, by default they are -1 and +1 which</span></dt>
+<dd>correspond to the visible-space</dd>
+<dt>u_num <span class="classifier-delimiter">:</span> <span class="classifier">number of sampling points between &#8216;u_min&#8217; and &#8216;u_max&#8217;,</span></dt>
+<dd>including boundaries. By default, is 50.</dd>
+<dt>scale <span class="classifier-delimiter">:</span> <span class="classifier">By default, this is &#8220;dB&#8221;. If &#8216;scale=&#8221;linear&#8221;&#8217;, this function</span></dt>
+<dd>produces a 2D plot in linear scale.</dd>
+<dt>dB_limit <span class="classifier-delimiter">:</span> <span class="classifier">when AF/GF/NF is 0, their dB value is -infinity. So, we will</span></dt>
+<dd>cut-off all the value below some &#8216;dB_limit&#8217;. By default,
+&#8216;dB_limit&#8217; is -40(dB).</dd>
+<dt>factor <span class="classifier-delimiter">:</span> <span class="classifier">default value is gain-factor, &#8220;GF&#8221;. If you want</span></dt>
+<dd>array-factor or normalized factor, choose &#8220;AF&#8221; or &#8220;NF&#8221;.</dd>
+<dt>plot_type <span class="classifier-delimiter">:</span> <span class="classifier">by default, is &#8220;rect&#8221;. If you want polar plot, use</span></dt>
+<dd>&#8216;plot_type=&#8221;polar&#8221;&#8217;. Finally, if &#8216;plot_type&#8217; is False, it
+doesn&#8217;t plot anything. You need &#8216;matplotlib&#8217; library to use
+this option.</dd>
+<dt>lattice <span class="classifier-delimiter">:</span> <span class="classifier">by default, is False. If True, it will highlight both</span></dt>
+<dd>visible-space and lattice period in u-domain of
+&#8220;rectangular pattern&#8221; plot mode. Lattice period has meaning
+only if the array is &#8220;uniformly space&#8221;.</dd>
+</dl>
+<p>All other parameters are nothing but &#8216;Matplotlib&#8217; parameters. These should
+be familiar to &#8216;Matlab&#8217; or &#8216;Matplotlib&#8217; users.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="planar.pattern_uv">
+<tt class="descclassname">planar.</tt><tt class="descname">pattern_uv</tt><big>(</big><em>array_ip</em>, <em>u_scan=0</em>, <em>v_scan=0</em>, <em>u_min=-1</em>, <em>u_max=1</em>, <em>u_num=50</em>, <em>v_min=-1</em>, <em>v_max=1</em>, <em>v_num=50</em>, <em>uv_abs=1</em>, <em>scale='dB'</em>, <em>dB_limit=-40</em>, <em>factor='GF'</em>, <em>plot_type='rect'</em>, <em>lattice=False</em>, <em>mayavi_app=False</em><big>)</big><a class="headerlink" href="#planar.pattern_uv" title="Permalink to this definition">¶</a></dt>
+<dd>Not finished yet.</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+            <h4>Previous topic</h4>
+            <p class="topless"><a href="index.html"
+                                  title="previous chapter">Welcome to Arraytool&#8217;s documentation!</a></p>
+            <h4>Next topic</h4>
+            <p class="topless"><a href="Zolotarev.html"
+                                  title="next chapter">Zolotarev polynomial related routines</a></p>
+            <h3>This Page</h3>
+            <ul class="this-page-menu">
+              <li><a href="_sources/planar.txt"
+                     rel="nofollow">Show Source</a></li>
+            </ul>
+          <div id="searchbox" style="display: none">
+            <h3>Quick search</h3>
+              <form class="search" action="search.html" method="get">
+                <input type="text" name="q" size="18" />
+                <input type="submit" value="Go" />
+                <input type="hidden" name="check_keywords" value="yes" />
+                <input type="hidden" name="area" value="default" />
+              </form>
+              <p class="searchtip" style="font-size: 90%">
+              Enter search terms or a module, class or function name.
+              </p>
+          </div>
+          <script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="modindex.html" title="Global Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="Zolotarev.html" title="Zolotarev polynomial related routines"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="index.html" title="Welcome to Arraytool’s documentation!"
+             >previous</a> |</li>
+        <li><a href="index.html">Arraytool v0.0.0 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+      &copy; Copyright 2011, Srinivas Zinka.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 0.6.6.
+    </div>
+  </body>
+</html>

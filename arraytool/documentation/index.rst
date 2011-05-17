@@ -11,7 +11,7 @@ Welcome to Arraytool's documentation!
 :Date: |today|
 
 Arraytool is a Python library for analysis and design of phased array antennas.
-For general information about mpmath, see the project website https://github.com/zinka/arraytool.
+For general information about Arraytool, see the project website https://github.com/zinka/arraytool.
 
 These documentation pages include general information as well as docstring listing with use of examples. For quick access to the docstrings of individual functions, use the `index listing <genindex.html>`_.
 
@@ -24,12 +24,12 @@ Introduction
    
    planar.rst
    Zolotarev.rst
-
+   references.rst
 ==================
 Indices and tables
 ==================
 
-* :ref:`genindex`
-* :ref:`modindex`
-* :ref:`search`
+- :ref:`genindex`
+- :ref:`modindex`
+- :ref:`search`
 

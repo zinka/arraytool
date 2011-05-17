@@ -8,11 +8,12 @@
 Module for analysis and design of (uni-directional) planar phased array
 antennas.
 
-Progress:
+**Progress**
 Just some important basic routines are done. There is much more to be done!
 
-References:
-[] Will be provided later.
+**References**
+
+- Will be provided later
 """
 
 from __future__ import division
@@ -22,10 +23,15 @@ from enthought.mayavi import mlab
 import Zolotarev as Zol
 
 def cutoff(F, dB_limit= -40):
-    """
-    when AF/GF/NF is 0, their dB value is '-infinity'. So, this function
+    r"""
+    When AF/GF/NF is 0, their dB value is '-infinity'. So, this function
     will be used to cut-off all the value below some 'dB_limit'.
-    By default, 'dB_limit' is -40(dB).
+    
+    **Parameters**
+    
+    :F:            F is a Numpy array (in our case, it is usually AF/GF/NF)
+    :dB_limit:     cut-off level in dB, default value is -40
+    
     """
     msk1 = F < dB_limit
     fill = msk1 * dB_limit
@@ -36,23 +42,21 @@ def cutoff(F, dB_limit= -40):
 def ip_format(a, b, A, gamma=np.pi / 2, plot=False, color='b', linewidth=1,
               linestyle='-', alpha=1, show=True, stem=False, stemline='g--',
               stemmarker='ro', mayavi_app=False):
-    """
+    r"""
     Function to generate the 'Arraytool' input format.
-
-    a            : separation between elements along the x-axis in wavelengths
-    b            : separation between elements along the y-axis in wavelengths
-    A            : visual excitation matrix
-    gamma        : lattice angle in radians
-    plot         : if True, this function automatically produces a 2D/3D plot
-                   showing the array excitation. In order to use this option
-                   you need 'Matplotlib' and 'MayaVi' libraries.
-    stem         : if True, a 'stem' representation of the excitation 
-                   coefficients will be shown. By default, it is False.                   
-    mayavi_app   : if True, the 3D plot will be opened in the MayaVi main
-                   application itself.
     
-    All other parameters are nothing but 'Matplotlib' parameters. These should
-    be familiar to 'Matlab' or 'Matplotlib' users.                   
+    **Parameters**
+    
+    :a:          separation between elements along the x-axis in wavelengths
+    :b:          separation between elements along the y-axis in wavelengths
+    :A:          visual excitation matrix
+    :gamma:      lattice angle in radians
+    :plot:       if True, produces a 2D/3D plot of the array excitation
+    :stem:       if True, the array excitation is plotted as 'stem plot'
+    :mayavi_app: if True, the 3D plot will be opened in the MayaVi application
+    
+    All other parameters are nothing but the 'Matplotlib' parameters. These
+    should be familiar to 'Matlab' or 'Matplotlib' users.                   
     """
     M = float(A.shape[1]) # no. of elements along the x-axis
     N = float(A.shape[0]) # no. of elements along the y-axis
@@ -121,14 +125,26 @@ def ip_format(a, b, A, gamma=np.pi / 2, plot=False, color='b', linewidth=1,
     return array_ip
 
 def ATE(array_ip):
-    """A simple function to evaluate the array taper efficiency (ATE)."""
+    r"""A simple function to evaluate the array taper efficiency (ATE).
+    
+    **Parameters**
+    
+    :array_ip: array excitation data in 'Arraytool' input format (see ip_format)
+      
+    """
     A = abs(array_ip[:, 3])
     A2 = A * A
     ATE = (A.sum())**2 / (len(A) * A2.sum())
     return ATE
 
 def K_norm(array_ip):
-    """A simple function to evaluate the normalized bore-sight slope."""
+    r"""Function to get the normalized bore-sight slope for difference patterns.
+    
+    **Parameters**
+    
+    :array_ip: array excitation data in 'Arraytool' input format (see ip_format)
+            
+    """
     X = array_ip[:, 0]
     A = array_ip[:, 3]
     AX = A * X
@@ -138,17 +154,19 @@ def K_norm(array_ip):
     return K_norm
 
 def AF_zeros(a, M, R, dist_type, nbar=False, alpha=0):
-    """
+    r"""
     This function gives array-factor zeros corresponding to different
     types of array distributions.
-
-    a         : separation between the elements along the x-axis in wavelengths
-    M         : number of elements along the x-axis
-    R         : side-lobe ratio in linear scale
-    type      : type of the distribution, e.g., 'Dolph' for Dolph-Chebyshev
-    nbar      : dilation parameter
-    alpha     : Taylor's asymptotic tapering parameter (this 'alpha' has nothing
-                to do with 'plotting alpha', i.e., the transparency parameter)
+    
+    **Parameters**
+    
+    :a:        separation between the elements along the x-axis in wavelengths
+    :M:        number of elements along the x-axis
+    :R:        side-lobe ratio in linear scale
+    :type:     type of the distribution, e.g., 'Dolph' for Dolph-Chebyshev
+    :nbar:     transition index for dilation
+    :alpha:    Taylor's asymptotic tapering parameter
+    
     """
     k = 2 * np.pi # (angular) wave-number, which is 2*pi when lambda = 1
     m = np.ceil((M - 2) / 2)
@@ -198,17 +216,17 @@ def AF_zeros(a, M, R, dist_type, nbar=False, alpha=0):
     return U0
 
 def A_frm_zeros(U0, a, M, symmetry):
-    """
+    r"""
     This function gives array excitation coefficients corresponding to the
     given array factor zeros.
-
-    U0        : arrayfactor zeros... usually in the format of the output of the
-                'AF_zeros' function.
-    a         : separation between elements along the x-axis in wavelengths
-    M         : number of elements along the x-axis
-    symmetry  : whether the array excitation is symmetric or not. this simplifies
-                the numerical evaluation process. Allowed values are 'even',
-                'odd' and False.
+    
+    **Parameters**
+    
+    :U0:       arrayfactor zeros... in the format of 'AF_zeros' output form
+    :a:        separation between elements along the x-axis in wavelengths
+    :M:        number of elements along the x-axis
+    :symmetry: symmetry information to simplify numerical process... even/odd/False
+    
     """
     k = 2 * np.pi # (angular) wave-number, which is 2*pi when lambda = 1
     sz = len(U0)
@@ -258,34 +276,27 @@ def A_frm_zeros(U0, a, M, symmetry):
 def pattern_u(array_ip, u_scan=0, u_min= -1, u_max=1, u_num=50, scale="dB",
               dB_limit= -40, factor="GF", plot_type="rect", lattice=False,
               color='b', linewidth=1, linestyle='-', alpha=1, show=True):
-    """
-    Function to evaluate 2d array-factor(AF) or gain-factor(GF) of a
+    r"""
+    Function to evaluate 2d array-factor (AF) or gain-factor (GF) of a
     linear array in u-domain. By default, this function calculates gain-factor.
-
-    array_ip      : input data in 'Arraytool' input format
-    u_scan        : beam scan position. For example, if you need to scan to
-                    theta=30deg, u_scan = sin(pi/6). By default, 'u_scan' is 0.
-    u_min, u_max  : limits of u-domain, by default they are -1 and +1 which
-                    correspond to the visible-space
-    u_num         : number of sampling points between 'u_min' and 'u_max',
-                    including boundaries. By default, is 50.
-    scale         : By default, this is "dB". If 'scale="linear"', this function
-                    produces a 2D plot in linear scale.
-    dB_limit      : when AF/GF/NF is 0, their dB value is -infinity. So, we will
-                    cut-off all the value below some 'dB_limit'. By default,
-                    'dB_limit' is -40(dB).
-    factor        : default value is gain-factor, "GF". If you want
-                    array-factor or normalized factor, choose "AF" or "NF".
-    plot_type     : by default, is "rect". If you want polar plot, use
-                    'plot_type="polar"'. Finally, if 'plot_type' is False, it
-                    doesn't plot anything. You need 'matplotlib' library to use
-                    this option.
-    lattice       : by default, is False. If True, it will highlight both
-                    visible-space and lattice period in u-domain of
-                    "rectangular pattern" plot mode. Lattice period has meaning
-                    only if the array is "uniformly space".
-                    
-    All other parameters are nothing but 'Matplotlib' parameters. These should
+    
+    **Parameters**
+        
+    :array_ip: array excitation data in 'Arraytool' input format (see ``ip_format``)
+    :u_scan:        : beam scan position
+    :u_min, u_max:  : limits of u-domain
+    :u_num:         : number of points between 'u_min' and 'u_max' including 
+                      boundaries
+    :scale:         : specifies the scale choice ... dB/linear
+    :dB_limit:      : cutoff limit (see cutoff)
+    :factor:        : type of pattern you need ... AF/NF/GF
+    :plot_type:     : can be rect/polar ... of False, nothing happens
+    :lattice:       : If True, highlights visible-space and lattice period in 
+                      "rect" plot mode
+    
+    Lattice period is meaningful only if the array is "uniformly spaced". 
+    
+    All other parameters are nothing but 'Matplotlib' parameters. These should 
     be familiar to 'Matlab' or 'Matplotlib' users.
     """
     x = array_ip[:, 0]
@@ -369,7 +380,7 @@ def pattern_uv(array_ip, u_scan=0, v_scan=0, u_min= -1, u_max=1, u_num=50,
                v_min= -1, v_max=1, v_num=50, uv_abs=1, scale="dB",
                dB_limit= -40, factor="GF", plot_type="rect", lattice=False,
                mayavi_app=False):
-    """ Not finished yet. """
+    r""" Usable ... but, not finished yet. """
     x = array_ip[:, 0]
     y = array_ip[:, 1]
     z = array_ip[:, 2]

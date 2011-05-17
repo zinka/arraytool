@@ -8,5 +8,47 @@ Planar array routines
 =====================
 
 .. automodule:: planar
-   :members:
-   :undoc-members:
+
+.. toctree::
+   :maxdepth: 2
+   
+------
+cutoff
+------
+.. autofunction:: planar.cutoff
+
+---------
+ip_format
+---------
+.. autofunction:: planar.ip_format
+
+---
+ATE
+---
+.. autofunction:: planar.ATE
+
+------
+K_norm
+------
+.. autofunction:: planar.K_norm
+
+--------
+AF_zeros
+--------
+.. autofunction:: planar.AF_zeros
+
+-----------
+A_frm_zeros
+-----------
+.. autofunction:: planar.A_frm_zeros
+
+---------
+pattern_u
+---------
+.. autofunction:: planar.pattern_u
+
+----------
+pattern_uv
+----------
+.. autofunction:: planar.pattern_uv
+

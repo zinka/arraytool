@@ -20,6 +20,7 @@
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
     <link rel="top" title="Arraytool v0.0.0 documentation" href="index.html" />
+    <link rel="next" title="References" href="references.html" />
     <link rel="prev" title="Planar array routines" href="planar.html" /> 
   </head>
   <body>
@@ -32,6 +33,9 @@
         <li class="right" >
           <a href="modindex.html" title="Global Module Index"
              accesskey="M">modules</a> |</li>
+        <li class="right" >
+          <a href="references.html" title="References"
+             accesskey="N">next</a> |</li>
         <li class="right" >
           <a href="planar.html" title="Planar array routines"
              accesskey="P">previous</a> |</li>
@@ -47,74 +51,104 @@
   <div class="section" id="module-Zolotarev">
 <h1>Zolotarev polynomial related routines<a class="headerlink" href="#module-Zolotarev" title="Permalink to this headline">¶</a></h1>
 <p>Zolotarev polynomial related routines.</p>
-<p>References:
-[1] McNamara, D. A., &#8220;Direct synthesis of optimum difference patterns for</p>
-<blockquote>
-discrete linear arrays using Zolotarev distributions&#8221;, 
-IEE Proceedings H Microwaves, Antennas and Propagation, 1993, 140, 495-500</blockquote>
-<dl class="docutils">
-<dt>[2] Abramowitz and Stegun, &#8220;Handbook of Mathematical Functions&#8221;, Dover, 1964,</dt>
-<dd><a class="reference external" href="http://people.math.sfu.ca/~cbm/aands/frameindex.htm">http://people.math.sfu.ca/~cbm/aands/frameindex.htm</a>, Page 577</dd>
-<dt>[3] Levy, R., &#8220;Generalized Rational Function Approximation in Finite Intervals</dt>
-<dd>Using Zolotarev Functions&#8221;, #IEEE_J_MTT#, 1970, 18, 1052-1064</dd>
-</dl>
+<p><strong>References</strong></p>
+<ul class="simple">
+<li><a class="reference external" href="references.html#mcnamara93">[McNamara93]</a></li>
+<li><a class="reference external" href="references.html#abramowitz">[Abramowitz]</a></li>
+<li><a class="reference external" href="references.html#levy70">[Levy70]</a></li>
+</ul>
+<ul class="simple">
+</ul>
+<div class="section" id="z-str2num">
+<h2>z_str2num<a class="headerlink" href="#z-str2num" title="Permalink to this headline">¶</a></h2>
 <dl class="function">
-<dt id="Zolotarev.Zolotarev2">
-<tt class="descclassname">Zolotarev.</tt><tt class="descname">Zolotarev2</tt><big>(</big><em>p</em>, <em>q</em>, <em>m</em><big>)</big><a class="headerlink" href="#Zolotarev.Zolotarev2" title="Permalink to this definition">¶</a></dt>
-<dd>Another way to generate Zolotarev polynomial. It is not done yet.</dd></dl>
+<dt id="Zolotarev.z_str2num">
+<tt class="descclassname">Zolotarev.</tt><tt class="descname">z_str2num</tt><big>(</big><em>s</em><big>)</big><a class="headerlink" href="#Zolotarev.z_str2num" title="Permalink to this definition">¶</a></dt>
+<dd>Convert a string to either int or float.</dd></dl>
 
+</div>
+<div class="section" id="z-theta">
+<h2>z_theta<a class="headerlink" href="#z-theta" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="Zolotarev.z_theta">
+<tt class="descclassname">Zolotarev.</tt><tt class="descname">z_theta</tt><big>(</big><em>u</em>, <em>m</em><big>)</big><a class="headerlink" href="#Zolotarev.z_theta" title="Permalink to this definition">¶</a></dt>
+<dd>Jacobi theta function (eq 16.31.1, <a class="reference external" href="references.html#abramowitz">[Abramowitz]</a>).</dd></dl>
+
+</div>
+<div class="section" id="z-eta">
+<h2>z_eta<a class="headerlink" href="#z-eta" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="Zolotarev.z_eta">
+<tt class="descclassname">Zolotarev.</tt><tt class="descname">z_eta</tt><big>(</big><em>u</em>, <em>m</em><big>)</big><a class="headerlink" href="#Zolotarev.z_eta" title="Permalink to this definition">¶</a></dt>
+<dd>Jacobi eta function (eq 16.31.3, <a class="reference external" href="references.html#abramowitz">[Abramowitz]</a>).</dd></dl>
+
+</div>
+<div class="section" id="z-am">
+<h2>z_am<a class="headerlink" href="#z-am" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="Zolotarev.z_am">
+<tt class="descclassname">Zolotarev.</tt><tt class="descname">z_am</tt><big>(</big><em>u</em>, <em>m</em><big>)</big><a class="headerlink" href="#Zolotarev.z_am" title="Permalink to this definition">¶</a></dt>
+<dd>Jacobi amplitude function (eq 16.1.5, <a class="reference external" href="references.html#abramowitz">[Abramowitz]</a>).</dd></dl>
+
+</div>
+<div class="section" id="z-zn">
+<h2>z_zn<a class="headerlink" href="#z-zn" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="Zolotarev.z_zn">
+<tt class="descclassname">Zolotarev.</tt><tt class="descname">z_zn</tt><big>(</big><em>u</em>, <em>m</em><big>)</big><a class="headerlink" href="#Zolotarev.z_zn" title="Permalink to this definition">¶</a></dt>
+<dd>Jacobi Zeta (zn(u,m)) function (eq 16.26.12, <a class="reference external" href="references.html#abramowitz">[Abramowitz]</a>).</dd></dl>
+
+</div>
+<div class="section" id="z-x123-frm-m">
+<h2>z_x123_frm_m<a class="headerlink" href="#z-x123-frm-m" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="Zolotarev.z_x123_frm_m">
+<tt class="descclassname">Zolotarev.</tt><tt class="descname">z_x123_frm_m</tt><big>(</big><em>N</em>, <em>m</em><big>)</big><a class="headerlink" href="#Zolotarev.z_x123_frm_m" title="Permalink to this definition">¶</a></dt>
+<dd>Function to get x1, x2 and x3 (eq 3, 5 and 6, <a class="reference external" href="references.html#mcnamara93">[McNamara93]</a>).</dd></dl>
+
+</div>
+<div class="section" id="z-zolotarev">
+<h2>z_Zolotarev<a class="headerlink" href="#z-zolotarev" title="Permalink to this headline">¶</a></h2>
 <dl class="function">
 <dt id="Zolotarev.z_Zolotarev">
 <tt class="descclassname">Zolotarev.</tt><tt class="descname">z_Zolotarev</tt><big>(</big><em>N</em>, <em>x</em>, <em>m</em><big>)</big><a class="headerlink" href="#Zolotarev.z_Zolotarev" title="Permalink to this definition">¶</a></dt>
-<dd>Function to evaluate the Zolotarev polynomial (eq 1, [1]).</dd></dl>
+<dd>Function to evaluate the Zolotarev polynomial (eq 1, <a class="reference external" href="references.html#mcnamara93">[McNamara93]</a>).</dd></dl>
 
-<dl class="function">
-<dt id="Zolotarev.z_Zolotarev_poly">
-<tt class="descclassname">Zolotarev.</tt><tt class="descname">z_Zolotarev_poly</tt><big>(</big><em>N</em>, <em>m</em>, <em>interp_num=100</em>, <em>full=False</em><big>)</big><a class="headerlink" href="#Zolotarev.z_Zolotarev_poly" title="Permalink to this definition">¶</a></dt>
-<dd>Function to evaluate the polynomial coefficients of  the Zolotarev
-polynomial.</dd></dl>
-
+</div>
+<div class="section" id="z-zolotarev-x2">
+<h2>z_Zolotarev_x2<a class="headerlink" href="#z-zolotarev-x2" title="Permalink to this headline">¶</a></h2>
 <dl class="function">
 <dt id="Zolotarev.z_Zolotarev_x2">
 <tt class="descclassname">Zolotarev.</tt><tt class="descname">z_Zolotarev_x2</tt><big>(</big><em>N</em>, <em>m</em><big>)</big><a class="headerlink" href="#Zolotarev.z_Zolotarev_x2" title="Permalink to this definition">¶</a></dt>
 <dd>This function evaluates the Zolotarev polynomial at x2 for given &#8216;N&#8217; and &#8216;m&#8217;.</dd></dl>
 
-<dl class="function">
-<dt id="Zolotarev.z_am">
-<tt class="descclassname">Zolotarev.</tt><tt class="descname">z_am</tt><big>(</big><em>u</em>, <em>m</em><big>)</big><a class="headerlink" href="#Zolotarev.z_am" title="Permalink to this definition">¶</a></dt>
-<dd>Jacobi amplitude function (eq 16.1.5, [2, p.569]).</dd></dl>
-
-<dl class="function">
-<dt id="Zolotarev.z_eta">
-<tt class="descclassname">Zolotarev.</tt><tt class="descname">z_eta</tt><big>(</big><em>u</em>, <em>m</em><big>)</big><a class="headerlink" href="#Zolotarev.z_eta" title="Permalink to this definition">¶</a></dt>
-<dd>Jacobi eta function (eq 16.31.3, [2, p.577]).</dd></dl>
-
+</div>
+<div class="section" id="z-m-frm-r">
+<h2>z_m_frm_R<a class="headerlink" href="#z-m-frm-r" title="Permalink to this headline">¶</a></h2>
 <dl class="function">
 <dt id="Zolotarev.z_m_frm_R">
 <tt class="descclassname">Zolotarev.</tt><tt class="descname">z_m_frm_R</tt><big>(</big><em>N</em>, <em>R</em>, <em>a=0.10000000000000001</em>, <em>b=0.99999999999989997</em><big>)</big><a class="headerlink" href="#Zolotarev.z_m_frm_R" title="Permalink to this definition">¶</a></dt>
 <dd>Function to obtain the parameter &#8216;m&#8217; for a given &#8216;SLR&#8217; and order of the 
 polynomial &#8216;N&#8217;.</dd></dl>
 
+</div>
+<div class="section" id="z-zolotarev-poly">
+<h2>z_Zolotarev_poly<a class="headerlink" href="#z-zolotarev-poly" title="Permalink to this headline">¶</a></h2>
 <dl class="function">
-<dt id="Zolotarev.z_str2num">
-<tt class="descclassname">Zolotarev.</tt><tt class="descname">z_str2num</tt><big>(</big><em>s</em><big>)</big><a class="headerlink" href="#Zolotarev.z_str2num" title="Permalink to this definition">¶</a></dt>
-<dd>Convert a string to either int or float.</dd></dl>
+<dt id="Zolotarev.z_Zolotarev_poly">
+<tt class="descclassname">Zolotarev.</tt><tt class="descname">z_Zolotarev_poly</tt><big>(</big><em>N</em>, <em>m</em>, <em>interp_num=100</em>, <em>full=False</em><big>)</big><a class="headerlink" href="#Zolotarev.z_Zolotarev_poly" title="Permalink to this definition">¶</a></dt>
+<dd>Function to evaluate the polynomial coefficients of  the Zolotarev
+polynomial.</dd></dl>
 
+</div>
+<div class="section" id="zolotarev2">
+<h2>Zolotarev2<a class="headerlink" href="#zolotarev2" title="Permalink to this headline">¶</a></h2>
 <dl class="function">
-<dt id="Zolotarev.z_theta">
-<tt class="descclassname">Zolotarev.</tt><tt class="descname">z_theta</tt><big>(</big><em>u</em>, <em>m</em><big>)</big><a class="headerlink" href="#Zolotarev.z_theta" title="Permalink to this definition">¶</a></dt>
-<dd>Jacobi theta function (eq 16.31.1, [2, p.577]).</dd></dl>
+<dt id="Zolotarev.Zolotarev2">
+<tt class="descclassname">Zolotarev.</tt><tt class="descname">Zolotarev2</tt><big>(</big><em>p</em>, <em>q</em>, <em>m</em><big>)</big><a class="headerlink" href="#Zolotarev.Zolotarev2" title="Permalink to this definition">¶</a></dt>
+<dd>Another way to generate Zolotarev polynomial. It is not done yet.</dd></dl>
 
-<dl class="function">
-<dt id="Zolotarev.z_x123_frm_m">
-<tt class="descclassname">Zolotarev.</tt><tt class="descname">z_x123_frm_m</tt><big>(</big><em>N</em>, <em>m</em><big>)</big><a class="headerlink" href="#Zolotarev.z_x123_frm_m" title="Permalink to this definition">¶</a></dt>
-<dd>Function to get x1, x2 and x3 (eq 3, 5 and 6, [1]).</dd></dl>
-
-<dl class="function">
-<dt id="Zolotarev.z_zn">
-<tt class="descclassname">Zolotarev.</tt><tt class="descname">z_zn</tt><big>(</big><em>u</em>, <em>m</em><big>)</big><a class="headerlink" href="#Zolotarev.z_zn" title="Permalink to this definition">¶</a></dt>
-<dd>Jacobi Zeta (zn(u,m)) function (eq 16.26.12, [2, p.576]).</dd></dl>
-
+</div>
 </div>
 
 
@@ -123,9 +157,30 @@ polynomial &#8216;N&#8217;.</dd></dl>
       </div>
       <div class="sphinxsidebar">
         <div class="sphinxsidebarwrapper">
+            <h3><a href="index.html">Table Of Contents</a></h3>
+            <ul>
+<li><a class="reference external" href="#">Zolotarev polynomial related routines</a><ul>
+<li><a class="reference external" href="#z-str2num">z_str2num</a></li>
+<li><a class="reference external" href="#z-theta">z_theta</a></li>
+<li><a class="reference external" href="#z-eta">z_eta</a></li>
+<li><a class="reference external" href="#z-am">z_am</a></li>
+<li><a class="reference external" href="#z-zn">z_zn</a></li>
+<li><a class="reference external" href="#z-x123-frm-m">z_x123_frm_m</a></li>
+<li><a class="reference external" href="#z-zolotarev">z_Zolotarev</a></li>
+<li><a class="reference external" href="#z-zolotarev-x2">z_Zolotarev_x2</a></li>
+<li><a class="reference external" href="#z-m-frm-r">z_m_frm_R</a></li>
+<li><a class="reference external" href="#z-zolotarev-poly">z_Zolotarev_poly</a></li>
+<li><a class="reference external" href="#zolotarev2">Zolotarev2</a></li>
+</ul>
+</li>
+</ul>
+
             <h4>Previous topic</h4>
             <p class="topless"><a href="planar.html"
                                   title="previous chapter">Planar array routines</a></p>
+            <h4>Next topic</h4>
+            <p class="topless"><a href="references.html"
+                                  title="next chapter">References</a></p>
             <h3>This Page</h3>
             <ul class="this-page-menu">
               <li><a href="_sources/Zolotarev.txt"
@@ -157,6 +212,9 @@ polynomial &#8216;N&#8217;.</dd></dl>
         <li class="right" >
           <a href="modindex.html" title="Global Module Index"
              >modules</a> |</li>
+        <li class="right" >
+          <a href="references.html" title="References"
+             >next</a> |</li>
         <li class="right" >
           <a href="planar.html" title="Planar array routines"
              >previous</a> |</li>

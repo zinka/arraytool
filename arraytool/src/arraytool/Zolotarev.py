@@ -7,14 +7,14 @@
 """ 
 Zolotarev polynomial related routines.
 
-References:
-[1] McNamara, D. A., "Direct synthesis of optimum difference patterns for 
-    discrete linear arrays using Zolotarev distributions", 
-    IEE Proceedings H Microwaves, Antennas and Propagation, 1993, 140, 495-500
-[2] Abramowitz and Stegun, "Handbook of Mathematical Functions", Dover, 1964,
-    http://people.math.sfu.ca/~cbm/aands/frameindex.htm, Page 577
-[3] Levy, R., "Generalized Rational Function Approximation in Finite Intervals
-    Using Zolotarev Functions", #IEEE_J_MTT#, 1970, 18, 1052-1064
+**References**
+
+- [McNamara93]_
+- [Abramowitz]_
+- [Levy70]_
+
+.. For the full description of the above citations, refer to the file references.py
+    
 """
 
 from __future__ import division
@@ -40,7 +40,7 @@ def z_str2num(s):
     return ret
 
 def z_theta(u, m):
-    """Jacobi theta function (eq 16.31.1, [2, p.577])."""
+    """Jacobi theta function (eq 16.31.1, [Abramowitz]_)."""
     q = qfrom(m=m)
     DM = ellipk(m)
     z = mp.pi * u / (2 * DM)
@@ -48,7 +48,7 @@ def z_theta(u, m):
     return theta
 
 def z_eta(u, m):
-    """Jacobi eta function (eq 16.31.3, [2, p.577])."""
+    """Jacobi eta function (eq 16.31.3, [Abramowitz]_)."""
     q = qfrom(m=m)
     DM = ellipk(m)
     z = mp.pi * u / (2 * DM)
@@ -56,7 +56,7 @@ def z_eta(u, m):
     return eta
 
 def z_am(u, m):
-    """Jacobi amplitude function (eq 16.1.5, [2, p.569])."""
+    """Jacobi amplitude function (eq 16.1.5, [Abramowitz]_)."""
     snM = ellipfun('sn', u=u, m=m)
     cnM = ellipfun('cn', u=u, m=m)
     if (0 <= cnM <= 1):
@@ -71,13 +71,13 @@ def z_am(u, m):
     return phi
 
 def z_zn(u, m):
-    """Jacobi Zeta (zn(u,m)) function (eq 16.26.12, [2, p.576])."""
+    """Jacobi Zeta (zn(u,m)) function (eq 16.26.12, [Abramowitz]_)."""
     phi = z_am(u, m)
     zn = ellipe(phi, m) - ellipe(m) * u / ellipk(m)
     return zn
 
 def z_x123_frm_m(N, m):
-    """Function to get x1, x2 and x3 (eq 3, 5 and 6, [1])."""
+    """Function to get x1, x2 and x3 (eq 3, 5 and 6, [McNamara93]_)."""
     M = -ellipk(m) / N
     snMM = ellipfun('sn', u= -M, m=m)
     snM = ellipfun('sn', u=M, m=m)
@@ -90,11 +90,11 @@ def z_x123_frm_m(N, m):
     return x1, x2, x3
 
 def z_Zolotarev(N, x, m):
-    """Function to evaluate the Zolotarev polynomial (eq 1, [1])."""
+    """Function to evaluate the Zolotarev polynomial (eq 1, [McNamara93]_)."""
     M = -ellipk(m) / N
     x3 = ellipfun('sn', u= -M, m=m)  
-    xbar = x3 * mp.sqrt((x ** 2 - 1) / (x ** 2 - x3 ** 2)) # rearranged eq 21, [3]
-    u = ellipf(mp.asin(xbar), m) # rearranged eq 20, [3], asn(x) = F(asin(x)|m)     
+    xbar = x3 * mp.sqrt((x ** 2 - 1) / (x ** 2 - x3 ** 2)) # rearranged eq 21, [Levy70]_
+    u = ellipf(mp.asin(xbar), m) # rearranged eq 20, [Levy70]_, asn(x) = F(asin(x)|m)     
     f = mp.cosh((N / 2) * mp.log(z_eta(M + u, m) / z_eta(M - u, m)))
     if (f.imag / f.real > 1e-10):
         print "imaginary part of the Zolotarev function is not negligible!"

@@ -25,6 +25,7 @@ Introduction
    planar.rst
    Zolotarev.rst
    references.rst
+
 ==================
 Indices and tables
 ==================

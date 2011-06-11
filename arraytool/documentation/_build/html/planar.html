@@ -61,7 +61,7 @@ Just some important basic routines are done. There is much more to be done!</p>
 <ul class="simple">
 </ul>
 <div class="section" id="cutoff">
-<h2>cutoff<a class="headerlink" href="#cutoff" title="Permalink to this headline">¶</a></h2>
+<span id="id1"></span><h2>cutoff<a class="headerlink" href="#cutoff" title="Permalink to this headline">¶</a></h2>
 <dl class="function">
 <dt id="planar.cutoff">
 <tt class="descclassname">planar.</tt><tt class="descname">cutoff</tt><big>(</big><em>F</em>, <em>dB_limit=-40</em><big>)</big><a class="headerlink" href="#planar.cutoff" title="Permalink to this definition">¶</a></dt>
@@ -82,7 +82,7 @@ will be used to cut-off all the value below some &#8216;dB_limit&#8217;.</p>
 
 </div>
 <div class="section" id="ip-format">
-<h2>ip_format<a class="headerlink" href="#ip-format" title="Permalink to this headline">¶</a></h2>
+<span id="id2"></span><h2>ip_format<a class="headerlink" href="#ip-format" title="Permalink to this headline">¶</a></h2>
 <dl class="function">
 <dt id="planar.ip_format">
 <tt class="descclassname">planar.</tt><tt class="descname">ip_format</tt><big>(</big><em>a</em>, <em>b</em>, <em>A</em>, <em>gamma=1.5707963267948966</em>, <em>plot=False</em>, <em>color='b'</em>, <em>linewidth=1</em>, <em>linestyle='-'</em>, <em>alpha=1</em>, <em>show=True</em>, <em>stem=False</em>, <em>stemline='g--'</em>, <em>stemmarker='ro'</em>, <em>mayavi_app=False</em><big>)</big><a class="headerlink" href="#planar.ip_format" title="Permalink to this definition">¶</a></dt>
@@ -114,7 +114,7 @@ should be familiar to &#8216;Matlab&#8217; or &#8216;Matplotlib&#8217; users.</p
 
 </div>
 <div class="section" id="ate">
-<h2>ATE<a class="headerlink" href="#ate" title="Permalink to this headline">¶</a></h2>
+<span id="id3"></span><h2>ATE<a class="headerlink" href="#ate" title="Permalink to this headline">¶</a></h2>
 <dl class="function">
 <dt id="planar.ATE">
 <tt class="descclassname">planar.</tt><tt class="descname">ATE</tt><big>(</big><em>array_ip</em><big>)</big><a class="headerlink" href="#planar.ATE" title="Permalink to this definition">¶</a></dt>
@@ -124,7 +124,7 @@ should be familiar to &#8216;Matlab&#8217; or &#8216;Matplotlib&#8217; users.</p
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field"><th class="field-name">Array_ip:</th><td class="field-body">array excitation data in &#8216;Arraytool&#8217; input format (see ip_format)</td>
+<tr class="field"><th class="field-name">Array_ip:</th><td class="field-body">array excitation data in &#8216;Arraytool&#8217; input format (see <a class="reference internal" href="#ip-format"><em>ip_format</em></a>)</td>
 </tr>
 </tbody>
 </table>
@@ -132,7 +132,7 @@ should be familiar to &#8216;Matlab&#8217; or &#8216;Matplotlib&#8217; users.</p
 
 </div>
 <div class="section" id="k-norm">
-<h2>K_norm<a class="headerlink" href="#k-norm" title="Permalink to this headline">¶</a></h2>
+<span id="id4"></span><h2>K_norm<a class="headerlink" href="#k-norm" title="Permalink to this headline">¶</a></h2>
 <dl class="function">
 <dt id="planar.K_norm">
 <tt class="descclassname">planar.</tt><tt class="descname">K_norm</tt><big>(</big><em>array_ip</em><big>)</big><a class="headerlink" href="#planar.K_norm" title="Permalink to this definition">¶</a></dt>
@@ -142,7 +142,7 @@ should be familiar to &#8216;Matlab&#8217; or &#8216;Matplotlib&#8217; users.</p
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field"><th class="field-name">Array_ip:</th><td class="field-body">array excitation data in &#8216;Arraytool&#8217; input format (see ip_format)</td>
+<tr class="field"><th class="field-name">Array_ip:</th><td class="field-body">array excitation data in &#8216;Arraytool&#8217; input format (see <a class="reference internal" href="#ip-format"><em>ip_format</em></a>)</td>
 </tr>
 </tbody>
 </table>
@@ -150,12 +150,13 @@ should be familiar to &#8216;Matlab&#8217; or &#8216;Matplotlib&#8217; users.</p
 
 </div>
 <div class="section" id="af-zeros">
-<h2>AF_zeros<a class="headerlink" href="#af-zeros" title="Permalink to this headline">¶</a></h2>
+<span id="id5"></span><h2>AF_zeros<a class="headerlink" href="#af-zeros" title="Permalink to this headline">¶</a></h2>
 <dl class="function">
 <dt id="planar.AF_zeros">
 <tt class="descclassname">planar.</tt><tt class="descname">AF_zeros</tt><big>(</big><em>a</em>, <em>M</em>, <em>R</em>, <em>dist_type</em>, <em>nbar=False</em>, <em>alpha=0</em><big>)</big><a class="headerlink" href="#planar.AF_zeros" title="Permalink to this definition">¶</a></dt>
 <dd><p>This function gives array-factor zeros corresponding to different
-types of array distributions.</p>
+types of array distributions. Unless you know what you are doing exactly,
+do not use this function directly. Instead, user can use the function <tt class="docutils literal"><span class="pre">dist</span></tt>.</p>
 <p><strong>Parameters</strong></p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -167,7 +168,7 @@ types of array distributions.</p>
 </tr>
 <tr class="field"><th class="field-name">R:</th><td class="field-body">side-lobe ratio in linear scale</td>
 </tr>
-<tr class="field"><th class="field-name">Type:</th><td class="field-body">type of the distribution, e.g., &#8216;Dolph&#8217; for Dolph-Chebyshev</td>
+<tr class="field"><th class="field-name">Dist_type:</th><td class="field-body">type of the distribution, e.g., &#8216;Dolph&#8217; for Dolph-Chebyshev</td>
 </tr>
 <tr class="field"><th class="field-name">Nbar:</th><td class="field-body">transition index for dilation</td>
 </tr>
@@ -179,12 +180,13 @@ types of array distributions.</p>
 
 </div>
 <div class="section" id="a-frm-zeros">
-<h2>A_frm_zeros<a class="headerlink" href="#a-frm-zeros" title="Permalink to this headline">¶</a></h2>
+<span id="id6"></span><h2>A_frm_zeros<a class="headerlink" href="#a-frm-zeros" title="Permalink to this headline">¶</a></h2>
 <dl class="function">
 <dt id="planar.A_frm_zeros">
 <tt class="descclassname">planar.</tt><tt class="descname">A_frm_zeros</tt><big>(</big><em>U0</em>, <em>a</em>, <em>M</em>, <em>symmetry</em><big>)</big><a class="headerlink" href="#planar.A_frm_zeros" title="Permalink to this definition">¶</a></dt>
 <dd><p>This function gives array excitation coefficients corresponding to the
-given array factor zeros.</p>
+given array factor zeros. Unless you know what you are doing exactly, do not
+use this function directly. Instead, user can use the function <tt class="docutils literal"><span class="pre">dist</span></tt>.</p>
 <p><strong>Parameters</strong></p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -203,36 +205,69 @@ given array factor zeros.</p>
 </dd></dl>
 
 </div>
-<div class="section" id="pattern-u">
-<h2>pattern_u<a class="headerlink" href="#pattern-u" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="dist">
+<span id="id7"></span><h2>dist<a class="headerlink" href="#dist" title="Permalink to this headline">¶</a></h2>
 <dl class="function">
-<dt id="planar.pattern_u">
-<tt class="descclassname">planar.</tt><tt class="descname">pattern_u</tt><big>(</big><em>array_ip</em>, <em>u_scan=0</em>, <em>u_min=-1</em>, <em>u_max=1</em>, <em>u_num=50</em>, <em>scale='dB'</em>, <em>dB_limit=-40</em>, <em>factor='GF'</em>, <em>plot_type='rect'</em>, <em>lattice=False</em>, <em>color='b'</em>, <em>linewidth=1</em>, <em>linestyle='-'</em>, <em>alpha=1</em>, <em>show=True</em><big>)</big><a class="headerlink" href="#planar.pattern_u" title="Permalink to this definition">¶</a></dt>
-<dd><p>Function to evaluate 2d array-factor (AF) or gain-factor (GF) of a
-linear array in u-domain. By default, this function calculates gain-factor.</p>
+<dt id="planar.dist">
+<tt class="descclassname">planar.</tt><tt class="descname">dist</tt><big>(</big><em>a</em>, <em>M</em>, <em>R_x</em>, <em>dist_type_x</em>, <em>b</em>, <em>N</em>, <em>R_y</em>, <em>dist_type_y=False</em>, <em>mbar=False</em>, <em>nbar=False</em>, <em>alpha_x=0</em>, <em>alpha_y=0</em><big>)</big><a class="headerlink" href="#planar.dist" title="Permalink to this definition">¶</a></dt>
+<dd><p>This function gives array excitation coefficients corresponding to various
+array distribution types such as Dolph-Chebyshev, McNamara-Zolotarev-sum,
+McNamara-Zolotarev-diff-f, McNamara-Zolotarev-diff-s, Taylor, Bayliss,
+Pritchard-Chebyshev-be, Pritchard-Chebyshev-ue, etc.</p>
 <p><strong>Parameters</strong></p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field"><th class="field-name">Array_ip:</th><td class="field-body">array excitation data in &#8216;Arraytool&#8217; input format (see <tt class="docutils literal"><span class="pre">ip_format</span></tt>)</td>
+<tr class="field"><th class="field-name">A:</th><td class="field-body">separation between the elements along the x-axis in wavelengths</td>
 </tr>
-<tr class="field"><th class="field-name">U_scan:</th><td class="field-body">: beam scan position</td>
+<tr class="field"><th class="field-name">M:</th><td class="field-body">number of elements along the x-axis</td>
 </tr>
-<tr class="field"><th class="field-name">U_min, u_max:</th><td class="field-body">: limits of u-domain</td>
+<tr class="field"><th class="field-name">R_x:</th><td class="field-body">side-lobe ratio in linear scale</td>
 </tr>
-<tr class="field"><th class="field-name">U_num:</th><td class="field-body">: number of points between &#8216;u_min&#8217; and &#8216;u_max&#8217; including 
+<tr class="field"><th class="field-name">Dist_type_x:</th><td class="field-body">type of the distribution, e.g., &#8216;Dolph&#8217; for Dolph-Chebyshev</td>
+</tr>
+<tr class="field"><th class="field-name">Mbar:</th><td class="field-body">transition index for dilation</td>
+</tr>
+<tr class="field"><th class="field-name">Alpha_x:</th><td class="field-body">Taylor&#8217;s asymptotic tapering parameter</td>
+</tr>
+</tbody>
+</table>
+<p>All other parameters are similar to the above ones ... except that they
+correspond to the y-axis &#8220;principle plane&#8221; distribution.</p>
+</dd></dl>
+
+</div>
+<div class="section" id="pattern-u">
+<span id="id8"></span><h2>pattern_u<a class="headerlink" href="#pattern-u" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="planar.pattern_u">
+<tt class="descclassname">planar.</tt><tt class="descname">pattern_u</tt><big>(</big><em>array_ip</em>, <em>u_scan=0</em>, <em>u_min=-1</em>, <em>u_max=1</em>, <em>u_num=50</em>, <em>scale='dB'</em>, <em>dB_limit=-40</em>, <em>factor='GF'</em>, <em>plot_type='rect'</em>, <em>lattice=False</em>, <em>color='b'</em>, <em>linewidth=1</em>, <em>linestyle='-'</em>, <em>alpha=1</em>, <em>show=True</em><big>)</big><a class="headerlink" href="#planar.pattern_u" title="Permalink to this definition">¶</a></dt>
+<dd><p>Function to evaluate 2D AF/GF/NF of a linear array in u-domain.
+By default, this function calculates the gain-factor (GF).</p>
+<p><strong>Parameters</strong></p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Array_ip:</th><td class="field-body">array excitation data in &#8216;Arraytool&#8217; input format (see <a class="reference internal" href="#ip-format"><em>ip_format</em></a>)</td>
+</tr>
+<tr class="field"><th class="field-name">U_scan:</th><td class="field-body">beam scan position</td>
+</tr>
+<tr class="field"><th class="field-name">U_min, u_max:</th><td class="field-body">limits of u-domain</td>
+</tr>
+<tr class="field"><th class="field-name">U_num:</th><td class="field-body">number of points between &#8216;u_min&#8217; and &#8216;u_max&#8217; including 
 boundaries</td>
 </tr>
-<tr class="field"><th class="field-name">Scale:</th><td class="field-body">: specifies the scale choice ... dB/linear</td>
+<tr class="field"><th class="field-name">Scale:</th><td class="field-body">specifies the scale choice ... dB/linear</td>
 </tr>
-<tr class="field"><th class="field-name">Db_limit:</th><td class="field-body">: cutoff limit (see cutoff)</td>
+<tr class="field"><th class="field-name">Db_limit:</th><td class="field-body">cutoff limit (see <a class="reference internal" href="#cutoff"><em>cutoff</em></a>)</td>
 </tr>
-<tr class="field"><th class="field-name">Factor:</th><td class="field-body">: type of pattern you need ... AF/NF/GF</td>
+<tr class="field"><th class="field-name">Factor:</th><td class="field-body">type of pattern you need ... AF/NF/GF</td>
 </tr>
-<tr class="field"><th class="field-name">Plot_type:</th><td class="field-body">: can be rect/polar ... of False, nothing happens</td>
+<tr class="field"><th class="field-name">Plot_type:</th><td class="field-body">can be rect/polar ... if False, nothing happens</td>
 </tr>
-<tr class="field"><th class="field-name">Lattice:</th><td class="field-body">: If True, highlights visible-space and lattice period in 
+<tr class="field"><th class="field-name">Lattice:</th><td class="field-body">If True, highlights visible-space and lattice period in 
 &#8220;rect&#8221; plot mode</td>
 </tr>
 </tbody>
@@ -244,11 +279,75 @@ be familiar to &#8216;Matlab&#8217; or &#8216;Matplotlib&#8217; users.</p>
 
 </div>
 <div class="section" id="pattern-uv">
-<h2>pattern_uv<a class="headerlink" href="#pattern-uv" title="Permalink to this headline">¶</a></h2>
+<span id="id9"></span><h2>pattern_uv<a class="headerlink" href="#pattern-uv" title="Permalink to this headline">¶</a></h2>
 <dl class="function">
 <dt id="planar.pattern_uv">
-<tt class="descclassname">planar.</tt><tt class="descname">pattern_uv</tt><big>(</big><em>array_ip</em>, <em>u_scan=0</em>, <em>v_scan=0</em>, <em>u_min=-1</em>, <em>u_max=1</em>, <em>u_num=50</em>, <em>v_min=-1</em>, <em>v_max=1</em>, <em>v_num=50</em>, <em>uv_abs=1</em>, <em>scale='dB'</em>, <em>dB_limit=-40</em>, <em>factor='GF'</em>, <em>plot_type='rect'</em>, <em>lattice=False</em>, <em>mayavi_app=False</em><big>)</big><a class="headerlink" href="#planar.pattern_uv" title="Permalink to this definition">¶</a></dt>
-<dd>Usable ... but, not finished yet.</dd></dl>
+<tt class="descclassname">planar.</tt><tt class="descname">pattern_uv</tt><big>(</big><em>array_ip</em>, <em>u_scan=0</em>, <em>v_scan=0</em>, <em>u_min=-1</em>, <em>u_max=1</em>, <em>u_num=50</em>, <em>v_min=-1</em>, <em>v_max=1</em>, <em>v_num=50</em>, <em>scale='dB'</em>, <em>dB_limit=-40</em>, <em>factor='GF'</em>, <em>plot_type='rect'</em>, <em>mayavi_app=False</em><big>)</big><a class="headerlink" href="#planar.pattern_uv" title="Permalink to this definition">¶</a></dt>
+<dd><p>Function to evaluate 3D AF/GF/NF of a planar array in uv-domain.
+By default, this function calculates the gain-factor (GF).</p>
+<p><strong>Parameters</strong></p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Array_ip:</th><td class="field-body">array excitation data in &#8216;Arraytool&#8217; input format (see <a class="reference internal" href="#ip-format"><em>ip_format</em></a>)</td>
+</tr>
+<tr class="field"><th class="field-name">U_scan, v_scan:</th><td class="field-body">beam scan position in uv-domain</td>
+</tr>
+<tr class="field"><th class="field-name">U_min, etc:</th><td class="field-body">limits of uv-domain</td>
+</tr>
+<tr class="field"><th class="field-name">U_num, v_num:</th><td class="field-body">number of points between &#8216;u_min&#8217; and &#8216;u_max&#8217; including
+boundaries</td>
+</tr>
+<tr class="field"><th class="field-name">Scale:</th><td class="field-body">specifies the scale choice ... dB/linear</td>
+</tr>
+<tr class="field"><th class="field-name">Db_limit:</th><td class="field-body">cutoff limit (see <a class="reference internal" href="#cutoff"><em>cutoff</em></a>)</td>
+</tr>
+<tr class="field"><th class="field-name">Factor:</th><td class="field-body">type of pattern you need ... AF/NF/GF</td>
+</tr>
+<tr class="field"><th class="field-name">Plot_type:</th><td class="field-body">can be rect/polar ... if False, nothing happens</td>
+</tr>
+<tr class="field"><th class="field-name">Mayavi_app:</th><td class="field-body">if True, the 3D plot will be opened in the MayaVi application</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+<div class="section" id="pattern-tp">
+<span id="id10"></span><h2>pattern_tp<a class="headerlink" href="#pattern-tp" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="planar.pattern_tp">
+<tt class="descclassname">planar.</tt><tt class="descname">pattern_tp</tt><big>(</big><em>array_ip</em>, <em>tht_scan=0</em>, <em>phi_scan=0</em>, <em>tht_min=0</em>, <em>tht_max=3.1415926535897931</em>, <em>tht_num=50</em>, <em>phi_min=0</em>, <em>phi_max=6.2831853071795862</em>, <em>phi_num=50</em>, <em>scale='dB'</em>, <em>dB_limit=-40</em>, <em>factor='GF'</em>, <em>plot_type='rect'</em>, <em>mayavi_app=False</em><big>)</big><a class="headerlink" href="#planar.pattern_tp" title="Permalink to this definition">¶</a></dt>
+<dd><p>Function to evaluate 3D AF/GF/NF of a arbitrary 3D array in (tht, phi)-domain.
+By default, this function calculates the gain-factor (GF).</p>
+<p><strong>Parameters</strong></p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Array_ip:</th><td class="field-body">array excitation data in &#8216;Arraytool&#8217; input format (see <a class="reference internal" href="#ip-format"><em>ip_format</em></a>)</td>
+</tr>
+<tr class="field"><th class="field-name">Tht_scan, etc:</th><td class="field-body">beam scan position in (tht, phi)-domain</td>
+</tr>
+<tr class="field"><th class="field-name">Tht_min, etc:</th><td class="field-body">limits of (tht, phi)-domain</td>
+</tr>
+<tr class="field"><th class="field-name">Tht_num, etc:</th><td class="field-body">number of points between &#8216;tht_min&#8217; and &#8216;tht_max&#8217; including
+the boundaries</td>
+</tr>
+<tr class="field"><th class="field-name">Scale:</th><td class="field-body">specifies the scale choice ... dB/linear</td>
+</tr>
+<tr class="field"><th class="field-name">Db_limit:</th><td class="field-body">cutoff limit (see <a class="reference internal" href="#cutoff"><em>cutoff</em></a>)</td>
+</tr>
+<tr class="field"><th class="field-name">Factor:</th><td class="field-body">type of pattern you need ... AF/NF/GF</td>
+</tr>
+<tr class="field"><th class="field-name">Plot_type:</th><td class="field-body">can be rect/polar/contour ... if False, nothing happens</td>
+</tr>
+<tr class="field"><th class="field-name">Mayavi_app:</th><td class="field-body">if True, the 3D plot will be opened in the MayaVi application</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
 
 </div>
 </div>
@@ -268,8 +367,10 @@ be familiar to &#8216;Matlab&#8217; or &#8216;Matplotlib&#8217; users.</p>
 <li><a class="reference external" href="#k-norm">K_norm</a></li>
 <li><a class="reference external" href="#af-zeros">AF_zeros</a></li>
 <li><a class="reference external" href="#a-frm-zeros">A_frm_zeros</a></li>
+<li><a class="reference external" href="#dist">dist</a></li>
 <li><a class="reference external" href="#pattern-u">pattern_u</a></li>
 <li><a class="reference external" href="#pattern-uv">pattern_uv</a></li>
+<li><a class="reference external" href="#pattern-tp">pattern_tp</a></li>
 </ul>
 </li>
 </ul>

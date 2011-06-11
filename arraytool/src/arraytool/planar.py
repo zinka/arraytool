@@ -22,6 +22,10 @@ import matplotlib.pyplot as plt
 from enthought.mayavi import mlab
 import Zolotarev as Zol
 
+# adjusting "matplotlib" label fonts ... can't save .svz files using this option
+from matplotlib import rc
+rc('text', usetex=True)
+
 def cutoff(F, dB_limit= -40):
     r"""
     When AF/GF/NF is 0, their dB value is '-infinity'. So, this function
@@ -129,7 +133,7 @@ def ATE(array_ip):
     
     **Parameters**
     
-    :array_ip: array excitation data in 'Arraytool' input format (see ip_format)
+    :array_ip: array excitation data in 'Arraytool' input format (see :ref:`ip_format`)
       
     """
     A = abs(array_ip[:, 3])
@@ -142,7 +146,7 @@ def K_norm(array_ip):
     
     **Parameters**
     
-    :array_ip: array excitation data in 'Arraytool' input format (see ip_format)
+    :array_ip: array excitation data in 'Arraytool' input format (see :ref:`ip_format`)
             
     """
     X = array_ip[:, 0]
@@ -156,14 +160,15 @@ def K_norm(array_ip):
 def AF_zeros(a, M, R, dist_type, nbar=False, alpha=0):
     r"""
     This function gives array-factor zeros corresponding to different
-    types of array distributions.
+    types of array distributions. Unless you know what you are doing exactly,
+    do not use this function directly. Instead, user can use the function :ref:`dist`.
     
     **Parameters**
     
     :a:        separation between the elements along the x-axis in wavelengths
     :M:        number of elements along the x-axis
     :R:        side-lobe ratio in linear scale
-    :type:     type of the distribution, e.g., 'Dolph' for Dolph-Chebyshev
+    :dist_type:     type of the distribution, e.g., 'Dolph' for Dolph-Chebyshev
     :nbar:     transition index for dilation
     :alpha:    Taylor's asymptotic tapering parameter
     
@@ -183,11 +188,11 @@ def AF_zeros(a, M, R, dist_type, nbar=False, alpha=0):
         xi = (1 / c) * np.sqrt(((1 + alph ** 2) / 2) + ((1 - alph ** 2) / 2) * 
                                np.cos(((2 * n - 1) * np.pi) / (2 * m)))
         U0 = (2 / (a * k)) * np.arccos(xi)
-    elif(dist_type == "DuhamelB"): # Duhamel bi-directional end-fire array zeros
+    elif(dist_type == "Duhamel-b"): # Duhamel bi-directional end-fire array zeros
         if(a < 0.5): c = np.cosh(np.arccosh(R) / (M - 1)) / np.sin((k * a) / 2)
         else: c = np.cosh(np.arccosh(R) / (M - 1))
         U0 = (2 / (a * k)) * np.arcsin((np.cos(np.pi * (2 * n - 1) / (2 * M - 2))) / c)
-    elif(dist_type == "DuhamelU"): # Duhamel uni-directional end-fire array zeros
+    elif(dist_type == "Duhamel-u"): # Duhamel uni-directional end-fire array zeros
         Lamb = np.cosh(np.arccosh(R) / (M - 1))
         xi = (2 / a) * (0.5 * np.pi - (np.arctan(np.tan(k * a / 2) * ((Lamb + 1) / (Lamb - 1)))))
         c = 1 / (np.sin((xi - k) * a / 2))
@@ -202,12 +207,10 @@ def AF_zeros(a, M, R, dist_type, nbar=False, alpha=0):
         xn = Zol.z_Zolotarev_poly(N=M - 1, m=m1)[1][m + 1:]
         U0 = (2 / (a * k)) * np.arcsin(xn / c)
     if(nbar): # Taylor's Dilation procedure
-        # see if you can change the below LONG logic
         if((dist_type == "Dolph") or (dist_type == "Riblet") or (dist_type == "McNamara-s")):
             n_gen = np.arange(nbar, 1 + m, 1) # indices of the generic zeros
             U0_gen = (n_gen + alpha / 2) * (1 / (M * a)) # generic sum zeros
         elif(dist_type == "McNamara-d"):
-            # THIS NEEDS MODIFICATION ... some thing wrong!
             n_gen = np.arange(nbar, 1 + m, 1) # indices of the generic zeros
             U0_gen = (n_gen + (alpha + 1) / 2) * (1 / (M * a)) # generic difference zeros
         sigma = U0_gen[0] / U0[nbar - 1] # Dilation factor
@@ -215,10 +218,11 @@ def AF_zeros(a, M, R, dist_type, nbar=False, alpha=0):
     U0 = np.reshape(U0, (len(U0), -1))
     return U0
 
-def A_frm_zeros(U0, a, M, symmetry):
+def A_frm_zeros(U0, a, M, symmetry=False):
     r"""
     This function gives array excitation coefficients corresponding to the
-    given array factor zeros.
+    given array factor zeros. Unless you know what you are doing exactly, do not
+    use this function directly. Instead, user can use the function :ref:`dist`.
     
     **Parameters**
     
@@ -273,26 +277,106 @@ def A_frm_zeros(U0, a, M, symmetry):
         A_tot = np.vstack((1, A))
     return A_tot
 
+def dist(a, M, R_x, dist_type_x, b, N, R_y, dist_type_y=False, mbar=False,
+         nbar=False, alpha_x=0, alpha_y=0):
+    r"""
+    This function gives array excitation coefficients corresponding to various
+    array distribution types such as Dolph-Chebyshev, McNamara-Zolotarev-sum,
+    McNamara-Zolotarev-diff-f, McNamara-Zolotarev-diff-s, Taylor, Bayliss,
+    Pritchard-Chebyshev-be, Pritchard-Chebyshev-ue, etc.
+    
+    **Parameters**
+    
+    :a:           separation between the elements along the x-axis in wavelengths
+    :M:           number of elements along the x-axis
+    :R_x:         side-lobe ratio in linear scale
+    :dist_type_x: type of the distribution, e.g., 'Dolph' for Dolph-Chebyshev
+    :mbar:        transition index for dilation
+    :alpha_x:     Taylor's asymptotic tapering parameter
+    
+    All other parameters are similar to the above ones ... except that they
+    correspond to the y-axis "principle plane" distribution.
+    
+    """
+    # modify the symmetry thing in MZ-s, be, ue patterns ...
+    if(dist_type_x == "Dolph-Chebyshev"):
+        U0 = AF_zeros(a, M, R_x, dist_type="Dolph")
+        Ax = A_frm_zeros(U0, a, M, symmetry="even").T # Done
+    elif(dist_type_x == "McNamara-Zolotarev-sum"):
+        U0 = AF_zeros(a, M, R_x, dist_type="Riblet")
+        Ax = A_frm_zeros(U0, a, M, symmetry="even").T # Done
+    elif(dist_type_x == "McNamara-Zolotarev-diff-f"):
+        U0 = AF_zeros(a, M, R_x, dist_type="McNamara-d")
+        Ax = A_frm_zeros(U0, a, M, symmetry="odd").T # Done
+    elif(dist_type_x == "McNamara-Zolotarev-diff-s"):
+        U0 = AF_zeros(a, M, R_x, dist_type="McNamara-d")
+        Ax = A_frm_zeros(U0, a, M, symmetry="odd").T # To be Modified later
+    elif(dist_type_x == "Taylor"):
+        U0 = AF_zeros(a, M, R_x, dist_type="Dolph", nbar=mbar, alpha=alpha_x)
+        Ax = A_frm_zeros(U0, a, M, symmetry="even").T # Done
+    elif(dist_type_x == "Bayliss"):
+        U0 = AF_zeros(a, M, R_x, dist_type="McNamara-d", nbar=mbar, alpha=alpha_x)
+        Ax = A_frm_zeros(U0, a, M, symmetry="odd").T # Done
+    elif(dist_type_x == "Pritchard-Chebyshev-be"):
+        U0 = AF_zeros(a, M, R_x, dist_type="Duhamel-b")
+        Ax = A_frm_zeros(U0, a, M, symmetry=False).T # Done
+    elif(dist_type_x == "Pritchard-Chebyshev-ue"):
+        U0 = AF_zeros(a, M, R_x, dist_type="Duhamel-u")
+        Ax = A_frm_zeros(U0, a, M, symmetry=False).T # Done
+        
+    if(dist_type_y):
+        # modify the symmetry thing in MZ-s, be, ue patterns ...
+        if(dist_type_y == "Dolph-Chebyshev"):
+            V0 = AF_zeros(b, N, R_y, dist_type="Dolph")
+            Ay = A_frm_zeros(V0, b, N, symmetry="even") # Done
+        elif(dist_type_y == "McNamara-Zolotarev-sum"):
+            V0 = AF_zeros(b, N, R_y, dist_type="Riblet")
+            Ay = A_frm_zeros(V0, b, N, symmetry="even") # Done
+        elif(dist_type_y == "McNamara-Zolotarev-diff-f"):
+            V0 = AF_zeros(b, N, R_y, dist_type="McNamara-d")
+            Ay = A_frm_zeros(V0, b, N, symmetry="odd") # Done
+        elif(dist_type_y == "McNamara-Zolotarev-diff-s"):
+            V0 = AF_zeros(b, N, R_y, dist_type="McNamara-d")
+            Ay = A_frm_zeros(V0, b, N, symmetry="odd") # To be Modified later
+        elif(dist_type_y == "Taylor"):
+            V0 = AF_zeros(b, N, R_y, dist_type="Dolph", nbar=nbar, alpha=alpha_y)
+            Ay = A_frm_zeros(V0, b, N, symmetry="even") # Done
+        elif(dist_type_y == "Bayliss"):
+            V0 = AF_zeros(b, N, R_y, dist_type="McNamara-d", nbar=nbar, alpha=alpha_y)
+            Ay = A_frm_zeros(V0, b, N, symmetry="odd") # Done
+        elif(dist_type_y == "Pritchard-Chebyshev-be"):
+            V0 = AF_zeros(b, N, R_y, dist_type="Duhamel-b")
+            Ay = A_frm_zeros(V0, b, N, symmetry=False) # Done
+        elif(dist_type_y == "Pritchard-Chebyshev-ue"):
+            V0 = AF_zeros(b, N, R_y, dist_type="Duhamel-u")
+            Ay = A_frm_zeros(V0, b, N, symmetry=False) # Done
+        Ax = np.tile(Ax, (N,1))
+        Ay = np.tile(Ay, (1,M))
+        Ax = Ax*Ay
+        
+    A_tot = Ax
+    return A_tot
+
 def pattern_u(array_ip, u_scan=0, u_min= -1, u_max=1, u_num=50, scale="dB",
               dB_limit= -40, factor="GF", plot_type="rect", lattice=False,
               color='b', linewidth=1, linestyle='-', alpha=1, show=True):
     r"""
-    Function to evaluate 2d array-factor (AF) or gain-factor (GF) of a
-    linear array in u-domain. By default, this function calculates gain-factor.
+    Function to evaluate 2D AF/GF/NF of a linear array in u-domain.
+    By default, this function calculates the gain-factor (GF).
     
     **Parameters**
         
-    :array_ip: array excitation data in 'Arraytool' input format (see ``ip_format``)
-    :u_scan:        : beam scan position
-    :u_min, u_max:  : limits of u-domain
-    :u_num:         : number of points between 'u_min' and 'u_max' including 
-                      boundaries
-    :scale:         : specifies the scale choice ... dB/linear
-    :dB_limit:      : cutoff limit (see cutoff)
-    :factor:        : type of pattern you need ... AF/NF/GF
-    :plot_type:     : can be rect/polar ... of False, nothing happens
-    :lattice:       : If True, highlights visible-space and lattice period in 
-                      "rect" plot mode
+    :array_ip:      array excitation data in 'Arraytool' input format (see :ref:`ip_format`)
+    :u_scan:        beam scan position
+    :u_min, u_max:  limits of u-domain
+    :u_num:         number of points between 'u_min' and 'u_max' including 
+                    boundaries
+    :scale:         specifies the scale choice ... dB/linear
+    :dB_limit:      cutoff limit (see :ref:`cutoff`)
+    :factor:        type of pattern you need ... AF/NF/GF
+    :plot_type:     can be rect/polar ... if False, nothing happens
+    :lattice:       If True, highlights visible-space and lattice period in 
+                    "rect" plot mode
     
     Lattice period is meaningful only if the array is "uniformly spaced". 
     
@@ -358,7 +442,7 @@ def pattern_u(array_ip, u_scan=0, u_min= -1, u_max=1, u_num=50, scale="dB",
                     lim = -np.pi / ((x[2] - x[1]) * k)
                     plt.axvspan(-lim, +lim, facecolor='b', alpha=0.2)
                 plt.axis('tight'); plt.grid(True)
-                plt.xlabel('u, where "u=sin(theta)" in visible-space')
+                plt.xlabel(r'$u,\ \mathrm{where}\ u=\sin \theta\ \mathrm{in}\ \mathrm{the}\ \mathrm{visible-space}$', fontsize=16)
                 plt.ylabel(f1 + '(u)')
             if(plot_type == "polar"): # polar plot
                 th = np.arcsin(u)
@@ -377,10 +461,26 @@ def pattern_u(array_ip, u_scan=0, u_min= -1, u_max=1, u_num=50, scale="dB",
     return u, F
 
 def pattern_uv(array_ip, u_scan=0, v_scan=0, u_min= -1, u_max=1, u_num=50,
-               v_min= -1, v_max=1, v_num=50, uv_abs=1, scale="dB",
-               dB_limit= -40, factor="GF", plot_type="rect", lattice=False,
+               v_min= -1, v_max=1, v_num=50, scale="dB",
+               dB_limit= -40, factor="GF", plot_type="rect",
                mayavi_app=False):
-    r""" Usable ... but, not finished yet. """
+    r"""
+    Function to evaluate 3D AF/GF/NF of a planar array in uv-domain.
+    By default, this function calculates the gain-factor (GF).
+    
+    **Parameters**
+        
+    :array_ip:       array excitation data in 'Arraytool' input format (see :ref:`ip_format`)
+    :u_scan, v_scan: beam scan position in uv-domain
+    :u_min, etc:     limits of uv-domain
+    :u_num, v_num:   number of points between 'u_min' and 'u_max' including
+                     boundaries
+    :scale:          specifies the scale choice ... dB/linear
+    :dB_limit:       cutoff limit (see :ref:`cutoff`)
+    :factor:         type of pattern you need ... AF/NF/GF
+    :plot_type:      can be rect/polar ... if False, nothing happens
+    :mayavi_app:     if True, the 3D plot will be opened in the MayaVi application
+    """
     x = array_ip[:, 0]
     y = array_ip[:, 1]
     z = array_ip[:, 2]
@@ -435,9 +535,9 @@ def pattern_uv(array_ip, u_scan=0, v_scan=0, u_min= -1, u_max=1, u_num=50,
 
         # plotting the factor (AF/GF/NF)
         if(plot_type):
-            if (mayavi_app): # opens the 3D plot in MayaVi Application
-                mlab.options.backend = 'envisage'
             if(plot_type == "rect"): # rectangular plot
+                if (mayavi_app): # opens the 3D plot in MayaVi Application
+                    mlab.options.backend = 'envisage'                
                 plt3d = mlab.surf(u, v, F_plt, warp_scale='auto')
                 ranges1 = [u_min, u_max, v_min, v_max, F_plt.min(), F_plt.max()]
                 mlab.axes(xlabel='u', ylabel='v', zlabel=f1 + '(u,v)',
@@ -446,12 +546,117 @@ def pattern_uv(array_ip, u_scan=0, v_scan=0, u_min= -1, u_max=1, u_num=50,
                 plt3d.scene.isometric_view()
                 mlab.show()                
             if(plot_type == "contour"): # contour plot
-                plt.contourf(u,v,F_plt)
-                plt.axis('tight'); plt.grid(True)
-                plt.xlabel('u, where "u=sin(theta)cos(phi)" in visible-space')
-                plt.ylabel('v, where "u=sin(theta)sin(phi)" in visible-space')
+                plt.contourf(u, v, F_plt)
+                vs = plt.Circle((0, 0), radius=1, edgecolor='w', fill=False)
+                ax = plt.gca(); ax.add_patch(vs)                
+                plt.axis('image'); plt.grid(True)
+                plt.xlabel(r'$u,\ \mathrm{where}\ u=\sin \theta \cos \phi\ \mathrm{in}\ \mathrm{the}\ \mathrm{visible-space}$', fontsize=16)
+                plt.ylabel(r'$v,\ \mathrm{where}\ v=\sin \theta \sin \phi\ \mathrm{in}\ \mathrm{the}\ \mathrm{visible-space}$', fontsize=16)
                 plt.show()                
     return u, v, F
+
+def pattern_tp(array_ip, tht_scan=0, phi_scan=0, tht_min=0, tht_max=np.pi, tht_num=50,
+               phi_min=0, phi_max=2 * np.pi, phi_num=50, scale="dB",
+               dB_limit= -40, factor="GF", plot_type="rect",
+               mayavi_app=False):
+    r"""
+    Function to evaluate 3D AF/GF/NF of a arbitrary 3D array in (tht, phi)-domain.
+    By default, this function calculates the gain-factor (GF).
+    
+    **Parameters**
+        
+    :array_ip:       array excitation data in 'Arraytool' input format (see :ref:`ip_format`)
+    :tht_scan, etc:  beam scan position in (tht, phi)-domain
+    :tht_min, etc:   limits of (tht, phi)-domain
+    :tht_num, etc:   number of points between 'tht_min' and 'tht_max' including
+                     the boundaries
+    :scale:          specifies the scale choice ... dB/linear
+    :dB_limit:       cutoff limit (see :ref:`cutoff`)
+    :factor:         type of pattern you need ... AF/NF/GF
+    :plot_type:      can be rect/polar/contour ... if False, nothing happens
+    :mayavi_app:     if True, the 3D plot will be opened in the MayaVi application
+    """
+    x = array_ip[:, 0]
+    y = array_ip[:, 1]
+    z = array_ip[:, 2]
+    A = array_ip[:, 3] # un-packing "array_ip" finished
+    k = 2 * np.pi # (angular) wave-number, which is 2*pi when lambda = 1
+    tht_numj = complex(0, tht_num)
+    phi_numj = complex(0, phi_num)
+
+    [tht, phi] = np.mgrid[tht_min:tht_max:tht_numj, phi_min:phi_max:phi_numj]
+    u = np.sin(tht) * np.cos(phi); v = np.sin(tht) * np.sin(phi); w = np.cos(tht)
+    u1 = np.reshape(u, (u.size, -1))
+    v1 = np.reshape(v, (v.size, -1))
+    w1 = np.reshape(w, (w.size, -1))
+    u_scan = np.sin(tht_scan) * np.cos(phi_scan)
+    v_scan = np.sin(tht_scan) * np.sin(phi_scan)
+    w_scan = np.cos(tht_scan)
+    
+    A = np.reshape(A, (len(A), -1))
+    U = np.tile(u1 - u_scan, len(x))
+    V = np.tile(v1 - v_scan, len(x))
+    W = np.tile(w1 - w_scan, len(x))
+    X = np.tile(x, (u.size, 1))
+    Y = np.tile(y, (u.size, 1))
+    Z = np.tile(z, (u.size, 1))
+
+    # Evaluating array-factor of the planar array
+    AF1 = np.dot(np.exp(1j * k * (U * X + V * Y + W * Z)), A)
+    AF = np.reshape(AF1, u.shape)
+
+    # Evaluation of F = (AF/GF/NF) => depending upon the user's choice
+    if(factor == "AF"):
+        F = AF; n1 = ""; ff = "Array-Factor "; f1 = "AF "
+    elif(factor == "GF"):
+        P_inc = ((abs(A)) ** 2).sum()
+        GF = AF / np.sqrt(P_inc) # Converting the AF to GF
+        F = GF; n1 = ""; ff = "Gain-Factor "; f1 = "GF "
+    elif(factor == "NF"):
+        norm_fact = (abs(A)).sum()
+        F = AF / norm_fact
+        n1 = "Normalized "; ff = "Factor "; f1 = "NF "
+
+    # converting 'F' from linear to dB scale, if needed
+    if(scale == "linear"):
+        F_plt = abs(F)
+        ss = "in linear scale"
+    elif(scale == "dB"):
+        F = 20 * np.log10(abs(F))
+        # cutoff the "F" below some limit ... just for the plotting purpose
+        F_plt = cutoff(F, dB_limit)
+        ss = "in dB scale"
+
+    # plotting the factor (AF/GF/NF)
+    if(plot_type):
+        if (mayavi_app): # opens the 3D plot in MayaVi Application
+            mlab.options.backend = 'envisage'
+        if(plot_type == "rect"): # rectangular plot
+            plt3d = mlab.surf(tht, phi, F_plt, warp_scale='auto')
+            ranges1 = [tht.min(), tht.max(), phi.min(), phi.max(), F_plt.min(), F_plt.max()]
+            mlab.axes(xlabel='Tht', ylabel='Phi', zlabel=f1 + '(Tht,Phi)',
+                      ranges=ranges1)
+            mlab.title(n1 + ff + ss, size=0.35)
+            plt3d.scene.isometric_view()
+            mlab.show()
+        if(plot_type == "polar"): # rectangular plot
+            # modify the below code ...
+            F_plt = F_plt - dB_limit
+            F_plt_x = F_plt * u; F_plt_y = F_plt * v; F_plt_z = F_plt * w
+            plt3d = mlab.mesh(F_plt_x, F_plt_y, F_plt_z)
+            ranges1 = [F_plt_x.min(), F_plt_x.max(), F_plt_y.min(), F_plt_y.max(), F_plt_z.min(), F_plt_z.max()]
+            mlab.axes(xlabel='x', ylabel='y', zlabel='z',
+                      ranges=ranges1)
+            mlab.title(n1 + ff + ss, size=0.35)
+            plt3d.scene.isometric_view()
+            mlab.show()        
+        if(plot_type == "contour"): # contour plot
+            plt.contourf(tht, phi, F_plt)
+            plt.axis('tight'); plt.grid(True)
+            plt.xlabel(r'$\theta$', fontsize=16)
+            plt.ylabel(r'$\phi$', fontsize=16)
+            plt.show()                
+    return tht, phi, F
 
 if __name__ == '__main__':
 
@@ -459,7 +664,7 @@ if __name__ == '__main__':
     freq = 10e9 # frequency of operation in Hzs
     wav_len = 3e8 / freq # wavelength in meters
     M = 10 # no. of elements along the x-axis
-    N = 5 # no. of elements along the y-axis
+    N = 10 # no. of elements along the y-axis
     a1 = 17e-3 # separation between elements along the x-axis in meters
     b1 = 17e-3 # separation between elements along the y-axis in meters
     gamma = np.pi / 2 # lattice angle in radians
@@ -477,7 +682,7 @@ if __name__ == '__main__':
 #    A = np.reshape(A, (len(A),-1)).T
 #
     A = np.ones((N, M)) # Uniform excitation
-#
+
 #    A = np.random.rand(N, M) # Random excitation
 
 #    # Using the function 'AF_zeros' to find arrayfactor zeros
@@ -488,6 +693,9 @@ if __name__ == '__main__':
 #    A = A_frm_zeros(U0, a, M, symmetry="odd").T # finding excitation coefficients
 #    print 'array coefficients:', '\n', A.T
 
+#    A = dist(a, M=0, R_x=0, dist_type_x=0, b=0, N=0, R_y=0, dist_type_y=False,
+#             mbar=False, nbar=False, alpha_x=0, alpha_y=0)
+
     # Converting the 'excitation & position' info into 'Arraytool' input format
     array_ip = ip_format(a, b, A, gamma, plot=False, stem=True, mayavi_app=False)
     ATE = ATE(array_ip) # array taper efficiency
@@ -497,15 +705,22 @@ if __name__ == '__main__':
 #              dB_limit= -60, factor="AF", plot_type="rect", lattice=True)
 
     # Calling the 'pattern_uv' function to evaluate and plot 3D AF/GF/NF
-    pattern_uv(array_ip, u_scan=0, v_scan=0, u_min= -1, u_max=1, u_num=100,
-               v_min= -1, v_max=1, v_num=100, uv_abs=1, scale="dB",
-               dB_limit= -40, factor="AF", plot_type="contour", lattice=False,
+#    pattern_uv(array_ip, u_scan=0, v_scan=0, u_min= -2, u_max=2, u_num=300,
+#               v_min= -2, v_max=2, v_num=300, scale="dB",
+#               dB_limit=0, factor="AF", plot_type="contour",
+#               mayavi_app=False)
+    
+    pattern_tp(array_ip, tht_scan=0, phi_scan=0, tht_min= 0, tht_max=1*np.pi, tht_num=100,
+               phi_min= 0, phi_max=2*np.pi, phi_num=100, scale="dB",
+               dB_limit= -40, factor="GF", plot_type="polar",
                mayavi_app=False)
 
 #==============================================================================
-# Programming tasks
+# Programming tasks (NOTES to myself)
 #==============================================================================
 # odd symmetry ... optimize A_from_zeros
 # use backslah instead of inverse
 # cleanup the coding up to now
+# modify the equations from ko -> uv space
+# simplify array distribution ... and some function for principle plane excitation (dist)
 

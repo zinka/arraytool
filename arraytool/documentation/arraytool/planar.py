@@ -161,7 +161,7 @@ def AF_zeros(a, M, R, dist_type, nbar=False, alpha=0):
     r"""
     This function gives array-factor zeros corresponding to different
     types of array distributions. Unless you know what you are doing exactly,
-    do not use this function directly. Instead, user can use the function ``dist``.
+    do not use this function directly. Instead, user can use the function :ref:`dist`.
     
     **Parameters**
     
@@ -218,11 +218,11 @@ def AF_zeros(a, M, R, dist_type, nbar=False, alpha=0):
     U0 = np.reshape(U0, (len(U0), -1))
     return U0
 
-def A_frm_zeros(U0, a, M, symmetry):
+def A_frm_zeros(U0, a, M, symmetry=False):
     r"""
     This function gives array excitation coefficients corresponding to the
     given array factor zeros. Unless you know what you are doing exactly, do not
-    use this function directly. Instead, user can use the function ``dist``.
+    use this function directly. Instead, user can use the function :ref:`dist`.
     
     **Parameters**
     
@@ -298,33 +298,64 @@ def dist(a, M, R_x, dist_type_x, b, N, R_y, dist_type_y=False, mbar=False,
     correspond to the y-axis "principle plane" distribution.
     
     """
+    # modify the symmetry thing in MZ-s, be, ue patterns ...
     if(dist_type_x == "Dolph-Chebyshev"):
-        U0 = AF_zeros(a, M, R, dist_type="McNamara-d", nbar=False, alpha=0)
-        Ax = A_frm_zeros(U0, a, M, symmetry="odd").T
+        U0 = AF_zeros(a, M, R_x, dist_type="Dolph")
+        Ax = A_frm_zeros(U0, a, M, symmetry="even").T # Done
     elif(dist_type_x == "McNamara-Zolotarev-sum"):
-        U0 = AF_zeros(a, M, R, dist_type="McNamara-d", nbar=False, alpha=0)
-        Ax = A_frm_zeros(U0, a, M, symmetry="odd").T
+        U0 = AF_zeros(a, M, R_x, dist_type="Riblet")
+        Ax = A_frm_zeros(U0, a, M, symmetry="even").T # Done
     elif(dist_type_x == "McNamara-Zolotarev-diff-f"):
-        U0 = AF_zeros(a, M, R, dist_type="McNamara-d", nbar=False, alpha=0)
-        Ax = A_frm_zeros(U0, a, M, symmetry="odd").T
+        U0 = AF_zeros(a, M, R_x, dist_type="McNamara-d")
+        Ax = A_frm_zeros(U0, a, M, symmetry="odd").T # Done
     elif(dist_type_x == "McNamara-Zolotarev-diff-s"):
-        U0 = AF_zeros(a, M, R, dist_type="McNamara-d", nbar=False, alpha=0)
-        Ax = A_frm_zeros(U0, a, M, symmetry="odd").T
+        U0 = AF_zeros(a, M, R_x, dist_type="McNamara-d")
+        Ax = A_frm_zeros(U0, a, M, symmetry="odd").T # To be Modified later
     elif(dist_type_x == "Taylor"):
-        U0 = AF_zeros(a, M, R, dist_type="McNamara-d", nbar=False, alpha=0)
-        Ax = A_frm_zeros(U0, a, M, symmetry="odd").T
+        U0 = AF_zeros(a, M, R_x, dist_type="Dolph", nbar=mbar, alpha=alpha_x)
+        Ax = A_frm_zeros(U0, a, M, symmetry="even").T # Done
     elif(dist_type_x == "Bayliss"):
-        U0 = AF_zeros(a, M, R, dist_type="McNamara-d", nbar=False, alpha=0)
-        Ax = A_frm_zeros(U0, a, M, symmetry="odd").T
+        U0 = AF_zeros(a, M, R_x, dist_type="McNamara-d", nbar=mbar, alpha=alpha_x)
+        Ax = A_frm_zeros(U0, a, M, symmetry="odd").T # Done
     elif(dist_type_x == "Pritchard-Chebyshev-be"):
-        U0 = AF_zeros(a, M, R, dist_type="McNamara-d", nbar=False, alpha=0)
-        Ax = A_frm_zeros(U0, a, M, symmetry="odd").T
+        U0 = AF_zeros(a, M, R_x, dist_type="Duhamel-b")
+        Ax = A_frm_zeros(U0, a, M, symmetry=False).T # Done
     elif(dist_type_x == "Pritchard-Chebyshev-ue"):
-        U0 = AF_zeros(a, M, R, dist_type="McNamara-d", nbar=False, alpha=0)
-        Ax = A_frm_zeros(U0, a, M, symmetry="odd").T        
+        U0 = AF_zeros(a, M, R_x, dist_type="Duhamel-u")
+        Ax = A_frm_zeros(U0, a, M, symmetry=False).T # Done
+        
     if(dist_type_y):
-        print "to be done"
-    return array_ip
+        # modify the symmetry thing in MZ-s, be, ue patterns ...
+        if(dist_type_y == "Dolph-Chebyshev"):
+            V0 = AF_zeros(b, N, R_y, dist_type="Dolph")
+            Ay = A_frm_zeros(V0, b, N, symmetry="even") # Done
+        elif(dist_type_y == "McNamara-Zolotarev-sum"):
+            V0 = AF_zeros(b, N, R_y, dist_type="Riblet")
+            Ay = A_frm_zeros(V0, b, N, symmetry="even") # Done
+        elif(dist_type_y == "McNamara-Zolotarev-diff-f"):
+            V0 = AF_zeros(b, N, R_y, dist_type="McNamara-d")
+            Ay = A_frm_zeros(V0, b, N, symmetry="odd") # Done
+        elif(dist_type_y == "McNamara-Zolotarev-diff-s"):
+            V0 = AF_zeros(b, N, R_y, dist_type="McNamara-d")
+            Ay = A_frm_zeros(V0, b, N, symmetry="odd") # To be Modified later
+        elif(dist_type_y == "Taylor"):
+            V0 = AF_zeros(b, N, R_y, dist_type="Dolph", nbar=nbar, alpha=alpha_y)
+            Ay = A_frm_zeros(V0, b, N, symmetry="even") # Done
+        elif(dist_type_y == "Bayliss"):
+            V0 = AF_zeros(b, N, R_y, dist_type="McNamara-d", nbar=nbar, alpha=alpha_y)
+            Ay = A_frm_zeros(V0, b, N, symmetry="odd") # Done
+        elif(dist_type_y == "Pritchard-Chebyshev-be"):
+            V0 = AF_zeros(b, N, R_y, dist_type="Duhamel-b")
+            Ay = A_frm_zeros(V0, b, N, symmetry=False) # Done
+        elif(dist_type_y == "Pritchard-Chebyshev-ue"):
+            V0 = AF_zeros(b, N, R_y, dist_type="Duhamel-u")
+            Ay = A_frm_zeros(V0, b, N, symmetry=False) # Done
+        Ax = np.tile(Ax, (N,1))
+        Ay = np.tile(Ay, (1,M))
+        Ax = Ax*Ay
+        
+    A_tot = Ax
+    return A_tot
 
 def pattern_u(array_ip, u_scan=0, u_min= -1, u_max=1, u_num=50, scale="dB",
               dB_limit= -40, factor="GF", plot_type="rect", lattice=False,
@@ -524,8 +555,8 @@ def pattern_uv(array_ip, u_scan=0, v_scan=0, u_min= -1, u_max=1, u_num=50,
                 plt.show()                
     return u, v, F
 
-def pattern_tp(array_ip, tht_scan=0, phi_scan=0, tht_min= 0, tht_max=np.pi, tht_num=50,
-               phi_min= 0, phi_max=2*np.pi, phi_num=50, scale="dB",
+def pattern_tp(array_ip, tht_scan=0, phi_scan=0, tht_min=0, tht_max=np.pi, tht_num=50,
+               phi_min=0, phi_max=2 * np.pi, phi_num=50, scale="dB",
                dB_limit= -40, factor="GF", plot_type="rect",
                mayavi_app=False):
     r"""
@@ -554,12 +585,12 @@ def pattern_tp(array_ip, tht_scan=0, phi_scan=0, tht_min= 0, tht_max=np.pi, tht_
     phi_numj = complex(0, phi_num)
 
     [tht, phi] = np.mgrid[tht_min:tht_max:tht_numj, phi_min:phi_max:phi_numj]
-    u = np.sin(tht)*np.cos(phi); v = np.sin(tht)*np.sin(phi); w = np.cos(tht)
+    u = np.sin(tht) * np.cos(phi); v = np.sin(tht) * np.sin(phi); w = np.cos(tht)
     u1 = np.reshape(u, (u.size, -1))
     v1 = np.reshape(v, (v.size, -1))
     w1 = np.reshape(w, (w.size, -1))
-    u_scan = np.sin(tht_scan)*np.cos(phi_scan)
-    v_scan = np.sin(tht_scan)*np.sin(phi_scan)
+    u_scan = np.sin(tht_scan) * np.cos(phi_scan)
+    v_scan = np.sin(tht_scan) * np.sin(phi_scan)
     w_scan = np.cos(tht_scan)
     
     A = np.reshape(A, (len(A), -1))
@@ -611,7 +642,7 @@ def pattern_tp(array_ip, tht_scan=0, phi_scan=0, tht_min= 0, tht_max=np.pi, tht_
         if(plot_type == "polar"): # rectangular plot
             # modify the below code ...
             F_plt = F_plt - dB_limit
-            F_plt_x = F_plt*u; F_plt_y = F_plt*v; F_plt_z = F_plt*w
+            F_plt_x = F_plt * u; F_plt_y = F_plt * v; F_plt_z = F_plt * w
             plt3d = mlab.mesh(F_plt_x, F_plt_y, F_plt_z)
             ranges1 = [F_plt_x.min(), F_plt_x.max(), F_plt_y.min(), F_plt_y.max(), F_plt_z.min(), F_plt_z.max()]
             mlab.axes(xlabel='x', ylabel='y', zlabel='z',
@@ -662,8 +693,8 @@ if __name__ == '__main__':
 #    A = A_frm_zeros(U0, a, M, symmetry="odd").T # finding excitation coefficients
 #    print 'array coefficients:', '\n', A.T
 
-    dist(a, M=0, R_x=0, dist_type_x=0, b=0, N=0, R_y=0, dist_type_y=False, mbar=False,
-         nbar=False, alpha_x=0, alpha_y=0)
+#    A = dist(a, M=0, R_x=0, dist_type_x=0, b=0, N=0, R_y=0, dist_type_y=False,
+#             mbar=False, nbar=False, alpha_x=0, alpha_y=0)
 
     # Converting the 'excitation & position' info into 'Arraytool' input format
     array_ip = ip_format(a, b, A, gamma, plot=False, stem=True, mayavi_app=False)
@@ -679,10 +710,10 @@ if __name__ == '__main__':
 #               dB_limit=0, factor="AF", plot_type="contour",
 #               mayavi_app=False)
     
-#    pattern_tp(array_ip, tht_scan=0, phi_scan=0, tht_min= 0, tht_max=1*np.pi, tht_num=100,
-#               phi_min= 0, phi_max=2*np.pi, phi_num=100, scale="dB",
-#               dB_limit= -40, factor="GF", plot_type="polar",
-#               mayavi_app=False)
+    pattern_tp(array_ip, tht_scan=0, phi_scan=0, tht_min= 0, tht_max=1*np.pi, tht_num=100,
+               phi_min= 0, phi_max=2*np.pi, phi_num=100, scale="dB",
+               dB_limit= -40, factor="GF", plot_type="polar",
+               mayavi_app=False)
 
 #==============================================================================
 # Programming tasks (NOTES to myself)

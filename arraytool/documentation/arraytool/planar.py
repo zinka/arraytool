@@ -34,8 +34,7 @@ def cutoff(F, dB_limit= -40):
     **Parameters**
     
     :F:            F is a Numpy array (in our case, it is usually AF/GF/NF)
-    :dB_limit:     cut-off level in dB, default value is -40
-    
+    :dB_limit:     cut-off level in dB, default value is -40    
     """
     msk1 = F < dB_limit
     fill = msk1 * dB_limit
@@ -109,21 +108,22 @@ def ip_format(a, b, A, gamma=np.pi / 2, plot=False, color='b', linewidth=1,
                          linestyle=linestyle, alpha=alpha)
             if(stem): plt.stem(y, A_plt, linefmt=stemline, markerfmt=stemmarker)
             plt.axis('tight'); plt.grid(True)
-            plt.xlabel(r'$y$'); plt.ylabel(r'$\left|A_{n}\right|$')
-            if(show): plt.show()
+            plt.xlabel(r'$y$', fontsize=16); plt.ylabel(r'$\left|A_{n}\right|$', fontsize=16)
+            if(show): plt.title(r'$\mathrm{Array}\ \mathrm{Excitation}$',fontsize=18); plt.show()
         elif (N == 1):  # i.e, linear array is along the x-direction
             plt.plot(x, A_plt, color=color, linewidth=linewidth,
                          linestyle=linestyle, alpha=alpha)
             if(stem): plt.stem(x, A_plt, linefmt=stemline, markerfmt=stemmarker)
             plt.axis('tight'); plt.grid(True)
-            plt.xlabel(r'$x$'); plt.ylabel(r'$\left|A_{m}\right|$')
-            if(show): plt.show()
+            plt.xlabel(r'$x$', fontsize=16); plt.ylabel(r'$\left|A_{m}\right|$', fontsize=16)
+            if(show): plt.title(r'$\mathrm{Array}\ \mathrm{Excitation}$',fontsize=18); plt.show()
         else:
             if (mayavi_app): # this option opens the 3D plot in MayaVi Application
                 mlab.options.backend = 'envisage'
             s1 = mlab.quiver3d(x, y, z, z, z, A_plt) # stem3D representation
             ranges1 = [x.min(), x.max(), y.min(), y.max(), A_plt.min(), A_plt.max()]
-            mlab.axes(xlabel="x", ylabel="y", zlabel="Excitation", ranges=ranges1)
+            mlab.axes(xlabel="x", ylabel="y", zlabel="Amn", ranges=ranges1, nb_labels=3)
+            mlab.colorbar(orientation="vertical", nb_labels=5)
             s1.scene.isometric_view()
             if(show): mlab.show()
     return array_ip
@@ -133,8 +133,7 @@ def ATE(array_ip):
     
     **Parameters**
     
-    :array_ip: array excitation data in 'Arraytool' input format (see :ref:`ip_format`)
-      
+    :array_ip: array excitation data in 'Arraytool' input format (see :ref:`ip_format`)      
     """
     A = abs(array_ip[:, 3])
     A2 = A * A
@@ -146,8 +145,7 @@ def K_norm(array_ip):
     
     **Parameters**
     
-    :array_ip: array excitation data in 'Arraytool' input format (see :ref:`ip_format`)
-            
+    :array_ip: array excitation data in 'Arraytool' input format (see :ref:`ip_format`)            
     """
     X = array_ip[:, 0]
     A = array_ip[:, 3]
@@ -170,8 +168,7 @@ def AF_zeros(a, M, R, dist_type, nbar=False, alpha=0):
     :R:        side-lobe ratio in linear scale
     :dist_type:     type of the distribution, e.g., 'Dolph' for Dolph-Chebyshev
     :nbar:     transition index for dilation
-    :alpha:    Taylor's asymptotic tapering parameter
-    
+    :alpha:    Taylor's asymptotic tapering parameter    
     """
     k = 2 * np.pi # (angular) wave-number, which is 2*pi when lambda = 1
     m = np.ceil((M - 2) / 2)
@@ -229,8 +226,7 @@ def A_frm_zeros(U0, a, M, symmetry=False):
     :U0:       arrayfactor zeros... in the format of 'AF_zeros' output form
     :a:        separation between elements along the x-axis in wavelengths
     :M:        number of elements along the x-axis
-    :symmetry: symmetry information to simplify numerical process... even/odd/False
-    
+    :symmetry: symmetry information to simplify numerical process... even/odd/False    
     """
     k = 2 * np.pi # (angular) wave-number, which is 2*pi when lambda = 1
     sz = len(U0)
@@ -277,7 +273,7 @@ def A_frm_zeros(U0, a, M, symmetry=False):
         A_tot = np.vstack((1, A))
     return A_tot
 
-def dist(a, M, R_x, dist_type_x, b, N, R_y, dist_type_y=False, mbar=False,
+def dist(a, M, R_x, dist_type_x, b=None, N=None, R_y=None, dist_type_y=False, mbar=False,
          nbar=False, alpha_x=0, alpha_y=0):
     r"""
     This function gives array excitation coefficients corresponding to various
@@ -295,8 +291,7 @@ def dist(a, M, R_x, dist_type_x, b, N, R_y, dist_type_y=False, mbar=False,
     :alpha_x:     Taylor's asymptotic tapering parameter
     
     All other parameters are similar to the above ones ... except that they
-    correspond to the y-axis "principle plane" distribution.
-    
+    correspond to the y-axis "principle plane" distribution.    
     """
     # modify the symmetry thing in MZ-s, be, ue patterns ...
     if(dist_type_x == "Dolph-Chebyshev"):
@@ -323,6 +318,7 @@ def dist(a, M, R_x, dist_type_x, b, N, R_y, dist_type_y=False, mbar=False,
     elif(dist_type_x == "Pritchard-Chebyshev-ue"):
         U0 = AF_zeros(a, M, R_x, dist_type="Duhamel-u")
         Ax = A_frm_zeros(U0, a, M, symmetry=False).T # Done
+        print Ax
         
     if(dist_type_y):
         # modify the symmetry thing in MZ-s, be, ue patterns ...
@@ -350,9 +346,9 @@ def dist(a, M, R_x, dist_type_x, b, N, R_y, dist_type_y=False, mbar=False,
         elif(dist_type_y == "Pritchard-Chebyshev-ue"):
             V0 = AF_zeros(b, N, R_y, dist_type="Duhamel-u")
             Ay = A_frm_zeros(V0, b, N, symmetry=False) # Done
-        Ax = np.tile(Ax, (N,1))
-        Ay = np.tile(Ay, (1,M))
-        Ax = Ax*Ay
+        Ax = np.tile(Ax, (N, 1))
+        Ay = np.tile(Ay, (1, M))
+        Ax = Ax * Ay
         
     A_tot = Ax
     return A_tot
@@ -412,25 +408,25 @@ def pattern_u(array_ip, u_scan=0, u_min= -1, u_max=1, u_num=50, scale="dB",
 
         # Evaluation of F = (AF/GF/NF) => depending upon the user's choice
         if(factor == "AF"):
-            F = AF; n1 = ""; ff = "Array-Factor "; f1 = "AF "
+            F = AF; n1 = ""; ff = r"$\mathrm{Array-Factor}\ $"; f1 = r"$AF\ $"
         elif(factor == "GF"):
             P_inc = ((abs(A)) ** 2).sum()
             GF = AF / np.sqrt(P_inc) # Converting the AF to GF
-            F = GF; n1 = ""; ff = "Gain-Factor "; f1 = "GF "
+            F = GF; n1 = ""; ff = r"$\mathrm{Gain-Factor}\ $"; f1 = r"$GF\ $"
         elif(factor == "NF"):
             norm_fact = (abs(A)).sum()
             F = AF / norm_fact
-            n1 = "Normalized "; ff = "Factor "; f1 = "NF "
+            n1 = r"$\mathrm{Normalized}\ $"; ff = r"$\mathrm{Factor}\ $"; f1 = r"$NF\ $"
 
         # converting 'F' from linear to dB scale, if needed
         if(scale == "linear"):
             F_plt = abs(F)
-            ss = "in linear scale"
+            ss = r"$\mathrm{in}\ \mathrm{linear}\ \mathrm{scale}$"
         elif(scale == "dB"):
             F = 20 * np.log10(abs(F))
             # cutoff the "F" below some limit ... just for the plotting purpose
             F_plt = cutoff(F, dB_limit)
-            ss = "in dB scale"
+            ss = r"$\mathrm{in}\ \mathrm{dB}\ \mathrm{scale}$"
 
         # plotting the factor 'F_plt'
         if(plot_type):
@@ -443,7 +439,7 @@ def pattern_u(array_ip, u_scan=0, u_min= -1, u_max=1, u_num=50, scale="dB",
                     plt.axvspan(-lim, +lim, facecolor='b', alpha=0.2)
                 plt.axis('tight'); plt.grid(True)
                 plt.xlabel(r'$u,\ \mathrm{where}\ u=\sin \theta\ \mathrm{in}\ \mathrm{the}\ \mathrm{visible-space}$', fontsize=16)
-                plt.ylabel(f1 + '(u)')
+                plt.ylabel(f1 + r'$(u)$', fontsize=16)
             if(plot_type == "polar"): # polar plot
                 th = np.arcsin(u)
                 if(scale == "linear"):
@@ -456,7 +452,7 @@ def pattern_u(array_ip, u_scan=0, u_min= -1, u_max=1, u_num=50, scale="dB",
                               linewidth=linewidth, linestyle=linestyle, alpha=alpha)
                     plt.polar(np.pi - th, F_plt - dB_limit, color=color,
                               linewidth=linewidth, linestyle=linestyle, alpha=alpha)
-            plt.title(n1 + ff + ss)
+            plt.title(n1 + ff + ss, fontsize=18)
             if(show): plt.show()
     return u, F
 
@@ -540,9 +536,10 @@ def pattern_uv(array_ip, u_scan=0, v_scan=0, u_min= -1, u_max=1, u_num=50,
                     mlab.options.backend = 'envisage'                
                 plt3d = mlab.surf(u, v, F_plt, warp_scale='auto')
                 ranges1 = [u_min, u_max, v_min, v_max, F_plt.min(), F_plt.max()]
-                mlab.axes(xlabel='u', ylabel='v', zlabel=f1 + '(u,v)',
-                          ranges=ranges1)
+                mlab.axes(xlabel='u', ylabel='v', zlabel=f1,
+                          ranges=ranges1, nb_labels=5)
                 mlab.title(n1 + ff + ss, size=0.35)
+                mlab.colorbar(orientation="vertical", nb_labels=5)
                 plt3d.scene.isometric_view()
                 mlab.show()                
             if(plot_type == "contour"): # contour plot
@@ -634,20 +631,22 @@ def pattern_tp(array_ip, tht_scan=0, phi_scan=0, tht_min=0, tht_max=np.pi, tht_n
         if(plot_type == "rect"): # rectangular plot
             plt3d = mlab.surf(tht, phi, F_plt, warp_scale='auto')
             ranges1 = [tht.min(), tht.max(), phi.min(), phi.max(), F_plt.min(), F_plt.max()]
-            mlab.axes(xlabel='Tht', ylabel='Phi', zlabel=f1 + '(Tht,Phi)',
-                      ranges=ranges1)
+            mlab.axes(xlabel='Tht', ylabel='Phi', zlabel=f1,
+                      ranges=ranges1, nb_labels=5)
             mlab.title(n1 + ff + ss, size=0.35)
+            mlab.colorbar(orientation="vertical", nb_labels=5)
             plt3d.scene.isometric_view()
             mlab.show()
         if(plot_type == "polar"): # rectangular plot
-            # modify the below code ...
-            F_plt = F_plt - dB_limit
-            F_plt_x = F_plt * u; F_plt_y = F_plt * v; F_plt_z = F_plt * w
-            plt3d = mlab.mesh(F_plt_x, F_plt_y, F_plt_z)
+            if(scale == "dB"):
+                F_plt = F_plt - dB_limit
+            F_plt_x = F_plt * u; F_plt_y = F_plt * v; F_plt_z = F_plt * w            
             ranges1 = [F_plt_x.min(), F_plt_x.max(), F_plt_y.min(), F_plt_y.max(), F_plt_z.min(), F_plt_z.max()]
+            plt3d = mlab.mesh(F_plt_x, F_plt_y, F_plt_z, scalars=F_plt, extent=ranges1)
             mlab.axes(xlabel='x', ylabel='y', zlabel='z',
-                      ranges=ranges1)
+                      ranges=ranges1, nb_labels=5)
             mlab.title(n1 + ff + ss, size=0.35)
+            mlab.colorbar(orientation="vertical", nb_labels=5)
             plt3d.scene.isometric_view()
             mlab.show()        
         if(plot_type == "contour"): # contour plot
@@ -663,9 +662,9 @@ if __name__ == '__main__':
     # frequency and array-arrangement (actual values)
     freq = 10e9 # frequency of operation in Hzs
     wav_len = 3e8 / freq # wavelength in meters
-    M = 10 # no. of elements along the x-axis
-    N = 10 # no. of elements along the y-axis
-    a1 = 17e-3 # separation between elements along the x-axis in meters
+    M = 40 # no. of elements along the x-axis
+    N = 5 # no. of elements along the y-axis
+    a1 = 15e-3 # separation between elements along the x-axis in meters
     b1 = 17e-3 # separation between elements along the y-axis in meters
     gamma = np.pi / 2 # lattice angle in radians
 
@@ -677,43 +676,43 @@ if __name__ == '__main__':
     R = 10 ** (SLR / 20) # converting SLR from dB scale to linear scale
 
 #    # Array excitation coefficient matrix
-#
+
 #    A = np.array([1,2,3,4,5]) # manually entering the coefficients
 #    A = np.reshape(A, (len(A),-1)).T
-#
-    A = np.ones((N, M)) # Uniform excitation
 
+    A = np.ones((N, M)) # Uniform excitation
+    
 #    A = np.random.rand(N, M) # Random excitation
 
 #    # Using the function 'AF_zeros' to find arrayfactor zeros
-#    U0 = AF_zeros(a, M, R, dist_type="McNamara-d", nbar=False, alpha=0)
+#    U0 = AF_zeros(a, M, R, dist_type="Dolph", nbar=5, alpha=0)
 #    print 'arrayfactor zeros:', '\n', U0
-#
+
 #    # Obtaining array excitation coefficients from the arrayfactor zeros
-#    A = A_frm_zeros(U0, a, M, symmetry="odd").T # finding excitation coefficients
+#    A = A_frm_zeros(U0, a, M, symmetry="even").T # finding excitation coefficients
 #    print 'array coefficients:', '\n', A.T
 
-#    A = dist(a, M=0, R_x=0, dist_type_x=0, b=0, N=0, R_y=0, dist_type_y=False,
-#             mbar=False, nbar=False, alpha_x=0, alpha_y=0)
+    # Finding the array excitation directly from "dist" function
+    A = dist(a, M, R, dist_type_x="Taylor", mbar=10, alpha_x=0)
+#    print 'array coefficients:', '\n', A.T
 
-    # Converting the 'excitation & position' info into 'Arraytool' input format
+#    # Converting the 'excitation & position' info into 'Arraytool' input format
     array_ip = ip_format(a, b, A, gamma, plot=False, stem=True, mayavi_app=False)
-    ATE = ATE(array_ip) # array taper efficiency
+#    ATE = ATE(array_ip) # array taper efficiency
 
 #    # Calling the 'pattern_u' function to evaluate and plot 2D AF/GF/NF
-#    pattern_u(array_ip, u_scan=0, u_min= -1, u_max=1, u_num=500, scale="dB",
-#              dB_limit= -60, factor="AF", plot_type="rect", lattice=True)
+#    pattern_u(array_ip, u_scan=0, u_min= -1, u_max=1, u_num=700, scale="dB",
+#              dB_limit= -40, factor="AF", plot_type="rect", lattice=True)
 
-    # Calling the 'pattern_uv' function to evaluate and plot 3D AF/GF/NF
+#    # Calling the 'pattern_uv' function to evaluate and plot 3D AF/GF/NF
 #    pattern_uv(array_ip, u_scan=0, v_scan=0, u_min= -2, u_max=2, u_num=300,
-#               v_min= -2, v_max=2, v_num=300, scale="dB",
-#               dB_limit=0, factor="AF", plot_type="contour",
-#               mayavi_app=False)
+#               v_min= -2, v_max=2, v_num=300, scale="dB", dB_limit=-40,
+#               factor="NF", plot_type="rect", mayavi_app=False)
     
-    pattern_tp(array_ip, tht_scan=0, phi_scan=0, tht_min= 0, tht_max=1*np.pi, tht_num=100,
-               phi_min= 0, phi_max=2*np.pi, phi_num=100, scale="dB",
-               dB_limit= -40, factor="GF", plot_type="polar",
-               mayavi_app=False)
+#    # Calling the 'pattern_tp' function to evaluate and plot 3D AF/GF/NF    
+    pattern_tp(array_ip, tht_scan=0, phi_scan=0, tht_min= 0, tht_max=1*np.pi, tht_num=200,
+               phi_min= 0*np.pi, phi_max=2*np.pi, phi_num=200, scale="dB", dB_limit= -40,
+               factor="GF", plot_type="polar", mayavi_app=False)
 
 #==============================================================================
 # Programming tasks (NOTES to myself)
@@ -723,4 +722,5 @@ if __name__ == '__main__':
 # cleanup the coding up to now
 # modify the equations from ko -> uv space
 # simplify array distribution ... and some function for principle plane excitation (dist)
-
+# use same names in AF_zeros and dist
+# use same title fonts everywhere ...

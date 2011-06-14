@@ -21,45 +21,31 @@ import numpy as np
 import matplotlib.pyplot as plt
 from enthought.mayavi import mlab
 import Zolotarev as Zol
+import Tkinter as ti
+import tkFileDialog as tkdlg
 
 # adjusting "matplotlib" label fonts ... can't save .svz files using this option
 from matplotlib import rc
 rc('text', usetex=True)
-
-def cutoff(F, dB_limit= -40):
-    r"""
-    When AF/GF/NF is 0, their dB value is '-infinity'. So, this function
-    will be used to cut-off all the value below some 'dB_limit'.
-    
-    **Parameters**
-    
-    :F:            F is a Numpy array (in our case, it is usually AF/GF/NF)
-    :dB_limit:     cut-off level in dB, default value is -40    
-    """
-    msk1 = F < dB_limit
-    fill = msk1 * dB_limit
-    msk2 = F >= dB_limit
-    F = F * (msk2) + fill
-    return F
 
 def ip_format(a, b, A, gamma=np.pi / 2, plot=False, color='b', linewidth=1,
               linestyle='-', alpha=1, show=True, stem=False, stemline='g--',
               stemmarker='ro', mayavi_app=False):
     r"""
     Function to generate the 'Arraytool' input format.
-    
-    **Parameters**
-    
-    :a:          separation between elements along the x-axis in wavelengths
-    :b:          separation between elements along the y-axis in wavelengths
-    :A:          visual excitation matrix
-    :gamma:      lattice angle in radians
-    :plot:       if True, produces a 2D/3D plot of the array excitation
-    :stem:       if True, the array excitation is plotted as 'stem plot'
-    :mayavi_app: if True, the 3D plot will be opened in the MayaVi application
+
+    :param a:          separation between elements along the x-axis in wavelengths
+    :param b:          separation between elements along the y-axis in wavelengths
+    :param A:          visual excitation matrix
+    :param gamma:      lattice angle in radians
+    :param plot:       if True, produces a 2D/3D plot of the array excitation
+    :param stem:       if True, the array excitation is plotted as 'stem plot'
+    :param mayavi_app: if True, the 3D plot will be opened in the MayaVi application
     
     All other parameters are nothing but the 'Matplotlib' parameters. These
-    should be familiar to 'Matlab' or 'Matplotlib' users.                   
+    should be familiar to 'Matlab' or 'Matplotlib' users.
+    
+    :rtype:            array_ip, a Numpy array of size (Number_elements(A)*4)             
     """
     M = float(A.shape[1]) # no. of elements along the x-axis
     N = float(A.shape[0]) # no. of elements along the y-axis
@@ -109,14 +95,14 @@ def ip_format(a, b, A, gamma=np.pi / 2, plot=False, color='b', linewidth=1,
             if(stem): plt.stem(y, A_plt, linefmt=stemline, markerfmt=stemmarker)
             plt.axis('tight'); plt.grid(True)
             plt.xlabel(r'$y$', fontsize=16); plt.ylabel(r'$\left|A_{n}\right|$', fontsize=16)
-            if(show): plt.title(r'$\mathrm{Array}\ \mathrm{Excitation}$',fontsize=18); plt.show()
+            if(show): plt.title(r'$\mathrm{Array}\ \mathrm{Excitation}$', fontsize=18); plt.show()
         elif (N == 1):  # i.e, linear array is along the x-direction
             plt.plot(x, A_plt, color=color, linewidth=linewidth,
                          linestyle=linestyle, alpha=alpha)
             if(stem): plt.stem(x, A_plt, linefmt=stemline, markerfmt=stemmarker)
             plt.axis('tight'); plt.grid(True)
             plt.xlabel(r'$x$', fontsize=16); plt.ylabel(r'$\left|A_{m}\right|$', fontsize=16)
-            if(show): plt.title(r'$\mathrm{Array}\ \mathrm{Excitation}$',fontsize=18); plt.show()
+            if(show): plt.title(r'$\mathrm{Array}\ \mathrm{Excitation}$', fontsize=18); plt.show()
         else:
             if (mayavi_app): # this option opens the 3D plot in MayaVi Application
                 mlab.options.backend = 'envisage'
@@ -128,12 +114,46 @@ def ip_format(a, b, A, gamma=np.pi / 2, plot=False, color='b', linewidth=1,
             if(show): mlab.show()
     return array_ip
 
+def at_import(dtype='complex'):
+    r"""A simple function to import a CSV text file as a Numpy ndarray
+    
+    :param dtype: Data-type of the resulting array; default:complex. For further
+                  information, see numpy.loadtxt.
+                  
+    :rtype:       ip, a Numpy ndarray
+    """
+    master = ti.Tk(); master.withdraw() #hiding tkinter window 
+    file_path = tkdlg.askopenfilename(title="Open file", filetypes=[("txt file",
+                ".csv"), ("All files", ".*")]); master.quit()
+    ip = np.loadtxt(file_path, delimiter=',', dtype=dtype)
+    return ip
+
+def at_export(data, data_ID=False, fmt='%.4e', mode='a'):
+    r"""A simple function to export a Numpy ndarray as a CSV text file.
+    
+    :param data:        Numpy ndarray
+    :param data_ID:     a string to represent the data being exported
+    :param fmt:         str or sequence of strs. For more information, see
+                        numpy.savetxt.
+    :param mode:        file opening mode, e.g., 'w', 'a', etc
+    
+    :rtype:             A CSV text file 
+    """
+    master = ti.Tk(); master.withdraw() #hiding tkinter window 
+    file_path = tkdlg.asksaveasfile(mode, title="Save file", filetypes=[("txt file",
+                ".csv"), ("All files", ".*")]); master.quit()
+    if(data_ID):
+        file_path.write(data_ID + '\n' + '\n')
+    np.savetxt(file_path, data, delimiter=',', fmt=fmt)
+    file_path.write('\n')
+    return
+
 def ATE(array_ip):
     r"""A simple function to evaluate the array taper efficiency (ATE).
+
+    :param array_ip: array excitation data in 'Arraytool' input format (see :func:`ip_format`)
     
-    **Parameters**
-    
-    :array_ip: array excitation data in 'Arraytool' input format (see :ref:`ip_format`)      
+    :rtype:          ATE, a Numpy float    
     """
     A = abs(array_ip[:, 3])
     A2 = A * A
@@ -143,9 +163,9 @@ def ATE(array_ip):
 def K_norm(array_ip):
     r"""Function to get the normalized bore-sight slope for difference patterns.
     
-    **Parameters**
+    :param array_ip: array excitation data in 'Arraytool' input format (see :func:`ip_format`)
     
-    :array_ip: array excitation data in 'Arraytool' input format (see :ref:`ip_format`)            
+    :rtype:          K_norm, a Numpy float              
     """
     X = array_ip[:, 0]
     A = array_ip[:, 3]
@@ -159,16 +179,16 @@ def AF_zeros(a, M, R, dist_type, nbar=False, alpha=0):
     r"""
     This function gives array-factor zeros corresponding to different
     types of array distributions. Unless you know what you are doing exactly,
-    do not use this function directly. Instead, user can use the function :ref:`dist`.
+    do not use this function directly. Instead, user can use the function :func:`dist`.
     
-    **Parameters**
+    :param a:        separation between the elements along the x-axis in wavelengths
+    :param M:        number of elements along the x-axis
+    :param R:        side-lobe ratio in linear scale
+    :param dist_type:     type of the distribution, e.g., 'Dolph' for Dolph-Chebyshev
+    :param nbar:     transition index for dilation
+    :param alpha:    Taylor's asymptotic tapering parameter
     
-    :a:        separation between the elements along the x-axis in wavelengths
-    :M:        number of elements along the x-axis
-    :R:        side-lobe ratio in linear scale
-    :dist_type:     type of the distribution, e.g., 'Dolph' for Dolph-Chebyshev
-    :nbar:     transition index for dilation
-    :alpha:    Taylor's asymptotic tapering parameter    
+    :rtype:          U0, a Numpy array of size (*,1)
     """
     k = 2 * np.pi # (angular) wave-number, which is 2*pi when lambda = 1
     m = np.ceil((M - 2) / 2)
@@ -219,14 +239,14 @@ def A_frm_zeros(U0, a, M, symmetry=False):
     r"""
     This function gives array excitation coefficients corresponding to the
     given array factor zeros. Unless you know what you are doing exactly, do not
-    use this function directly. Instead, user can use the function :ref:`dist`.
+    use this function directly. Instead, user can use the function :func:`dist`.
+
+    :param U0:       arrayfactor zeros... in the format of 'AF_zeros' output form
+    :param a:        separation between elements along the x-axis in wavelengths
+    :param M:        number of elements along the x-axis
+    :param symmetry: symmetry information to simplify numerical process... even/odd/False
     
-    **Parameters**
-    
-    :U0:       arrayfactor zeros... in the format of 'AF_zeros' output form
-    :a:        separation between elements along the x-axis in wavelengths
-    :M:        number of elements along the x-axis
-    :symmetry: symmetry information to simplify numerical process... even/odd/False    
+    :rtype:          A_tot, a Numpy array of size (1,M)
     """
     k = 2 * np.pi # (angular) wave-number, which is 2*pi when lambda = 1
     sz = len(U0)
@@ -280,18 +300,18 @@ def dist(a, M, R_x, dist_type_x, b=None, N=None, R_y=None, dist_type_y=False, mb
     array distribution types such as Dolph-Chebyshev, McNamara-Zolotarev-sum,
     McNamara-Zolotarev-diff-f, McNamara-Zolotarev-diff-s, Taylor, Bayliss,
     Pritchard-Chebyshev-be, Pritchard-Chebyshev-ue, etc.
-    
-    **Parameters**
-    
-    :a:           separation between the elements along the x-axis in wavelengths
-    :M:           number of elements along the x-axis
-    :R_x:         side-lobe ratio in linear scale
-    :dist_type_x: type of the distribution, e.g., 'Dolph' for Dolph-Chebyshev
-    :mbar:        transition index for dilation
-    :alpha_x:     Taylor's asymptotic tapering parameter
+
+    :param a:           separation between the elements along the x-axis in wavelengths
+    :param M:           number of elements along the x-axis
+    :param R_x:         side-lobe ratio in linear scale
+    :param dist_type_x: type of the distribution, e.g., 'Dolph' for Dolph-Chebyshev
+    :param mbar:        transition index for dilation
+    :param alpha_x:     Taylor's asymptotic tapering parameter
     
     All other parameters are similar to the above ones ... except that they
-    correspond to the y-axis "principle plane" distribution.    
+    correspond to the y-axis "principle plane" distribution.
+    
+    :rtype:             A_tot, a Numpy array of size (N,M)
     """
     # modify the symmetry thing in MZ-s, be, ue patterns ...
     if(dist_type_x == "Dolph-Chebyshev"):
@@ -353,31 +373,47 @@ def dist(a, M, R_x, dist_type_x, b=None, N=None, R_y=None, dist_type_y=False, mb
     A_tot = Ax
     return A_tot
 
+def cutoff(F, dB_limit= -40):
+    r"""
+    When AF/GF/NF is 0, their dB value is '-infinity'. So, this function
+    will be used to cut-off all the value below some 'dB_limit'.
+    
+    :param F:            F is a Numpy array (in our case, it is usually AF/GF/NF)
+    :param dB_limit:     cut-off level in dB, default value is -40
+    
+    :rtype:              a Numpy array, same size as the input parameter F
+    """
+    msk1 = F < dB_limit
+    fill = msk1 * dB_limit
+    msk2 = F >= dB_limit
+    F = F * (msk2) + fill
+    return F
+
 def pattern_u(array_ip, u_scan=0, u_min= -1, u_max=1, u_num=50, scale="dB",
               dB_limit= -40, factor="GF", plot_type="rect", lattice=False,
               color='b', linewidth=1, linestyle='-', alpha=1, show=True):
     r"""
     Function to evaluate 2D AF/GF/NF of a linear array in u-domain.
     By default, this function calculates the gain-factor (GF).
-    
-    **Parameters**
-        
-    :array_ip:      array excitation data in 'Arraytool' input format (see :ref:`ip_format`)
-    :u_scan:        beam scan position
-    :u_min, u_max:  limits of u-domain
-    :u_num:         number of points between 'u_min' and 'u_max' including 
-                    boundaries
-    :scale:         specifies the scale choice ... dB/linear
-    :dB_limit:      cutoff limit (see :ref:`cutoff`)
-    :factor:        type of pattern you need ... AF/NF/GF
-    :plot_type:     can be rect/polar ... if False, nothing happens
-    :lattice:       If True, highlights visible-space and lattice period in 
-                    "rect" plot mode
+   
+    :param array_ip:      array excitation data in 'Arraytool' input format (see :func:`ip_format`)
+    :param u_scan:        beam scan position
+    :param u_min, u_max:  limits of u-domain
+    :param u_num:         number of points between 'u_min' and 'u_max' including 
+                          boundaries
+    :param scale:         specifies the scale choice ... dB/linear
+    :param dB_limit:      cutoff limit (see :func:`cutoff`)
+    :param factor:        type of pattern you need ... AF/NF/GF
+    :param plot_type:     can be rect/polar ... if False, nothing happens
+    :param lattice:       If True, highlights visible-space and lattice period in 
+                          "rect" plot mode
     
     Lattice period is meaningful only if the array is "uniformly spaced". 
     
     All other parameters are nothing but 'Matplotlib' parameters. These should 
     be familiar to 'Matlab' or 'Matplotlib' users.
+    
+    :rtype:                A list, [u,F]
     """
     x = array_ip[:, 0]
     y = array_ip[:, 1]
@@ -463,19 +499,18 @@ def pattern_uv(array_ip, u_scan=0, v_scan=0, u_min= -1, u_max=1, u_num=50,
     r"""
     Function to evaluate 3D AF/GF/NF of a planar array in uv-domain.
     By default, this function calculates the gain-factor (GF).
+   
+    :param array_ip:       array excitation data in 'Arraytool' input format (see :func:`ip_format`)
+    :param u_scan, v_scan: beam scan position in uv-domain
+    :param u_min, etc:     limits of uv-domain
+    :param u_num, v_num:   number of points between 'u_min' and 'u_max' including boundaries
+    :param scale:          specifies the scale choice ... dB/linear
+    :param dB_limit:       cutoff limit (see :func:`cutoff`)
+    :param factor:         type of pattern you need ... AF/NF/GF
+    :param plot_type:      can be rect/polar ... if False, nothing happens
+    :param mayavi_app:     if True, the 3D plot will be opened in the MayaVi application
     
-    **Parameters**
-        
-    :array_ip:       array excitation data in 'Arraytool' input format (see :ref:`ip_format`)
-    :u_scan, v_scan: beam scan position in uv-domain
-    :u_min, etc:     limits of uv-domain
-    :u_num, v_num:   number of points between 'u_min' and 'u_max' including
-                     boundaries
-    :scale:          specifies the scale choice ... dB/linear
-    :dB_limit:       cutoff limit (see :ref:`cutoff`)
-    :factor:         type of pattern you need ... AF/NF/GF
-    :plot_type:      can be rect/polar ... if False, nothing happens
-    :mayavi_app:     if True, the 3D plot will be opened in the MayaVi application
+    :rtype:                A list, [u,v,F]
     """
     x = array_ip[:, 0]
     y = array_ip[:, 1]
@@ -549,6 +584,7 @@ def pattern_uv(array_ip, u_scan=0, v_scan=0, u_min= -1, u_max=1, u_num=50,
                 plt.axis('image'); plt.grid(True)
                 plt.xlabel(r'$u,\ \mathrm{where}\ u=\sin \theta \cos \phi\ \mathrm{in}\ \mathrm{the}\ \mathrm{visible-space}$', fontsize=16)
                 plt.ylabel(r'$v,\ \mathrm{where}\ v=\sin \theta \sin \phi\ \mathrm{in}\ \mathrm{the}\ \mathrm{visible-space}$', fontsize=16)
+                plt.colorbar(format='$%.2f$')
                 plt.show()                
     return u, v, F
 
@@ -559,19 +595,19 @@ def pattern_tp(array_ip, tht_scan=0, phi_scan=0, tht_min=0, tht_max=np.pi, tht_n
     r"""
     Function to evaluate 3D AF/GF/NF of a arbitrary 3D array in (tht, phi)-domain.
     By default, this function calculates the gain-factor (GF).
+   
+    :param array_ip:       array excitation data in 'Arraytool' input format (see :func:`ip_format`)
+    :param tht_scan, etc:  beam scan position in (tht, phi)-domain
+    :param tht_min, etc:   limits of (tht, phi)-domain
+    :param tht_num, etc:   number of points between 'tht_min' and 'tht_max' including
+                           the boundaries
+    :param scale:          specifies the scale choice ... dB/linear
+    :param dB_limit:       cutoff limit (see :func:`cutoff`)
+    :param factor:         type of pattern you need ... AF/NF/GF
+    :param plot_type:      can be rect/polar/contour ... if False, nothing happens
+    :param mayavi_app:     if True, the 3D plot will be opened in the MayaVi application
     
-    **Parameters**
-        
-    :array_ip:       array excitation data in 'Arraytool' input format (see :ref:`ip_format`)
-    :tht_scan, etc:  beam scan position in (tht, phi)-domain
-    :tht_min, etc:   limits of (tht, phi)-domain
-    :tht_num, etc:   number of points between 'tht_min' and 'tht_max' including
-                     the boundaries
-    :scale:          specifies the scale choice ... dB/linear
-    :dB_limit:       cutoff limit (see :ref:`cutoff`)
-    :factor:         type of pattern you need ... AF/NF/GF
-    :plot_type:      can be rect/polar/contour ... if False, nothing happens
-    :mayavi_app:     if True, the 3D plot will be opened in the MayaVi application
+    :rtype:                A list, [tht,phi,F]
     """
     x = array_ip[:, 0]
     y = array_ip[:, 1]
@@ -654,6 +690,7 @@ def pattern_tp(array_ip, tht_scan=0, phi_scan=0, tht_min=0, tht_max=np.pi, tht_n
             plt.axis('tight'); plt.grid(True)
             plt.xlabel(r'$\theta$', fontsize=16)
             plt.ylabel(r'$\phi$', fontsize=16)
+            plt.colorbar(format='$%.2f$')
             plt.show()                
     return tht, phi, F
 
@@ -662,8 +699,8 @@ if __name__ == '__main__':
     # frequency and array-arrangement (actual values)
     freq = 10e9 # frequency of operation in Hzs
     wav_len = 3e8 / freq # wavelength in meters
-    M = 40 # no. of elements along the x-axis
-    N = 5 # no. of elements along the y-axis
+    M = 10 # no. of elements along the x-axis
+    N = 11 # no. of elements along the y-axis
     a1 = 15e-3 # separation between elements along the x-axis in meters
     b1 = 17e-3 # separation between elements along the y-axis in meters
     gamma = np.pi / 2 # lattice angle in radians
@@ -692,27 +729,28 @@ if __name__ == '__main__':
 #    A = A_frm_zeros(U0, a, M, symmetry="even").T # finding excitation coefficients
 #    print 'array coefficients:', '\n', A.T
 
-    # Finding the array excitation directly from "dist" function
-    A = dist(a, M, R, dist_type_x="Taylor", mbar=10, alpha_x=0)
+#    # Finding the array excitation directly from "dist" function
+#    A = dist(a, M, R, dist_type_x="Taylor", mbar=10, alpha_x=0)
 #    print 'array coefficients:', '\n', A.T
 
 #    # Converting the 'excitation & position' info into 'Arraytool' input format
     array_ip = ip_format(a, b, A, gamma, plot=False, stem=True, mayavi_app=False)
-#    ATE = ATE(array_ip) # array taper efficiency
+#    ATE = ATE(array_ip) # array taper efficiency;
+#    print type(ATE)
 
 #    # Calling the 'pattern_u' function to evaluate and plot 2D AF/GF/NF
 #    pattern_u(array_ip, u_scan=0, u_min= -1, u_max=1, u_num=700, scale="dB",
 #              dB_limit= -40, factor="AF", plot_type="rect", lattice=True)
 
 #    # Calling the 'pattern_uv' function to evaluate and plot 3D AF/GF/NF
-#    pattern_uv(array_ip, u_scan=0, v_scan=0, u_min= -2, u_max=2, u_num=300,
-#               v_min= -2, v_max=2, v_num=300, scale="dB", dB_limit=-40,
+#    pattern_uv(array_ip, u_scan=0, v_scan=0, u_min= -1.5, u_max=1.5, u_num=300,
+#               v_min= -1.5, v_max=1.5, v_num=300, scale="dB", dB_limit=-40,
 #               factor="NF", plot_type="rect", mayavi_app=False)
     
 #    # Calling the 'pattern_tp' function to evaluate and plot 3D AF/GF/NF    
-    pattern_tp(array_ip, tht_scan=0, phi_scan=0, tht_min= 0, tht_max=1*np.pi, tht_num=200,
-               phi_min= 0*np.pi, phi_max=2*np.pi, phi_num=200, scale="dB", dB_limit= -40,
-               factor="GF", plot_type="polar", mayavi_app=False)
+#    pattern_tp(array_ip, tht_scan=(0)*np.pi, phi_scan=(0)*np.pi, tht_min= 0, tht_max=0.5*np.pi, tht_num=200,
+#               phi_min= 0*np.pi, phi_max=2*np.pi, phi_num=200, scale="dB", dB_limit= -40,
+#               factor="GF", plot_type="polar", mayavi_app=False)
 
 #==============================================================================
 # Programming tasks (NOTES to myself)
@@ -721,6 +759,5 @@ if __name__ == '__main__':
 # use backslah instead of inverse
 # cleanup the coding up to now
 # modify the equations from ko -> uv space
-# simplify array distribution ... and some function for principle plane excitation (dist)
 # use same names in AF_zeros and dist
-# use same title fonts everywhere ...
+# implement show in pattern_** functions

@@ -21,7 +21,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 from enthought.mayavi import mlab
 import Zolotarev as Zol
-import Tkinter as TK
+import Tkinter as ti
 import tkFileDialog as tkdlg
 
 # adjusting "matplotlib" label fonts ... can't save .svz files using this option
@@ -95,14 +95,14 @@ def ip_format(a, b, A, gamma=np.pi / 2, plot=False, color='b', linewidth=1,
             if(stem): plt.stem(y, A_plt, linefmt=stemline, markerfmt=stemmarker)
             plt.axis('tight'); plt.grid(True)
             plt.xlabel(r'$y$', fontsize=16); plt.ylabel(r'$\left|A_{n}\right|$', fontsize=16)
-            if(show): plt.title(r'$\mathrm{Array}\ \mathrm{Excitation}$',fontsize=18); plt.show()
+            if(show): plt.title(r'$\mathrm{Array}\ \mathrm{Excitation}$', fontsize=18); plt.show()
         elif (N == 1):  # i.e, linear array is along the x-direction
             plt.plot(x, A_plt, color=color, linewidth=linewidth,
                          linestyle=linestyle, alpha=alpha)
             if(stem): plt.stem(x, A_plt, linefmt=stemline, markerfmt=stemmarker)
             plt.axis('tight'); plt.grid(True)
             plt.xlabel(r'$x$', fontsize=16); plt.ylabel(r'$\left|A_{m}\right|$', fontsize=16)
-            if(show): plt.title(r'$\mathrm{Array}\ \mathrm{Excitation}$',fontsize=18); plt.show()
+            if(show): plt.title(r'$\mathrm{Array}\ \mathrm{Excitation}$', fontsize=18); plt.show()
         else:
             if (mayavi_app): # this option opens the 3D plot in MayaVi Application
                 mlab.options.backend = 'envisage'
@@ -117,14 +117,14 @@ def ip_format(a, b, A, gamma=np.pi / 2, plot=False, color='b', linewidth=1,
 def at_import(dtype='complex'):
     r"""A simple function to import a CSV text file as a Numpy ndarray
     
-    :param dtype: Data-type of the resulting array; default:float. For further
+    :param dtype: Data-type of the resulting array; default:complex. For further
                   information, see numpy.loadtxt.
                   
     :rtype:       ip, a Numpy ndarray
     """
-    master = TK.Tk(); master.withdraw() #hiding tkinter window 
+    master = ti.Tk(); master.withdraw() #hiding tkinter window 
     file_path = tkdlg.askopenfilename(title="Open file", filetypes=[("txt file",
-                ".csv"),("All files",".*")]); master.quit()
+                ".csv"), ("All files", ".*")]); master.quit()
     ip = np.loadtxt(file_path, delimiter=',', dtype=dtype)
     return ip
 
@@ -139,12 +139,12 @@ def at_export(data, data_ID=False, fmt='%.4e', mode='a'):
     
     :rtype:             A CSV text file 
     """
-    master = TK.Tk(); master.withdraw() #hiding tkinter window 
+    master = ti.Tk(); master.withdraw() #hiding tkinter window 
     file_path = tkdlg.asksaveasfile(mode, title="Save file", filetypes=[("txt file",
-                ".csv"),("All files",".*")]); master.quit()
+                ".csv"), ("All files", ".*")]); master.quit()
     if(data_ID):
-        file_path.write(data_ID+'\n'+'\n')
-    np.savetxt(file_path, data,  delimiter=',',fmt=fmt)
+        file_path.write(data_ID + '\n' + '\n')
+    np.savetxt(file_path, data, delimiter=',', fmt=fmt)
     file_path.write('\n')
     return
 
@@ -759,8 +759,5 @@ if __name__ == '__main__':
 # use backslah instead of inverse
 # cleanup the coding up to now
 # modify the equations from ko -> uv space
-# simplify array distribution ... and some function for principle plane excitation (dist)
 # use same names in AF_zeros and dist
-# use same title fonts everywhere ...
-# params, rtype for import and export
-# :func:`str`
+# implement show in pattern_** functions

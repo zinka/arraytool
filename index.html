@@ -6,7 +6,7 @@
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
     <title>Welcome to Arraytool’s documentation! &mdash; Arraytool v0.0.0 documentation</title>
-    <link rel="stylesheet" href="static/default.css" type="text/css" />
+    <link rel="stylesheet" href="static/nature.css" type="text/css" />
     <link rel="stylesheet" href="static/pygments.css" type="text/css" />
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
@@ -20,7 +20,7 @@
     <script type="text/javascript" src="static/jquery.js"></script>
     <script type="text/javascript" src="static/doctools.js"></script>
     <link rel="top" title="Arraytool v0.0.0 documentation" href="#" />
-    <link rel="next" title="Planar array routines" href="planar.html" /> 
+    <link rel="next" title="Think beyond the Visible Space!" href="basics.html" /> 
   </head>
   <body>
     <div class="related">
@@ -33,7 +33,7 @@
           <a href="modindex.html" title="Global Module Index"
              accesskey="M">modules</a> |</li>
         <li class="right" >
-          <a href="planar.html" title="Planar array routines"
+          <a href="basics.html" title="Think beyond the Visible Space!"
              accesskey="N">next</a> |</li>
         <li><a href="#">Arraytool v0.0.0 documentation</a> &raquo;</li> 
       </ul>
@@ -52,56 +52,86 @@
 <tbody valign="top">
 <tr class="field"><th class="field-name">Release:</th><td class="field-body">0.0.0</td>
 </tr>
-<tr class="field"><th class="field-name">Date:</th><td class="field-body">June 14, 2011</td>
+<tr class="field"><th class="field-name">Date:</th><td class="field-body">June 20, 2011</td>
 </tr>
 </tbody>
 </table>
 <p>Arraytool is a Python library for analysis and design of phased array antennas.
 For general information about Arraytool, see the project <a class="reference external" href="https://github.com/zinka/arraytool">repository</a> and <a class="reference external" href="http://zinka.wordpress.com/">blog</a>.</p>
 <p>These documentation pages include general information as well as docstring listing with use of examples. For quick access to the docstrings of individual functions, use the <a class="reference external" href="genindex.html">index listing</a>.</p>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last">Arraytool project and its documentation are still ongoing. If anybody wants to contribute to this project,
+please leave a message at the <a class="reference external" href="http://zinka.wordpress.com/arraytool/#respond/">project blog</a>.</p>
 </div>
-<div class="section" id="introduction">
-<h1>Introduction<a class="headerlink" href="#introduction" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="basic-theory">
+<h2>Basic Theory<a class="headerlink" href="#basic-theory" title="Permalink to this headline">¶</a></h2>
+<p>This is a brief <cite>mathematical</cite> introduction related to the <a class="reference external" href="http://en.wikipedia.org/wiki/Phased_array">phased array antennas</a>. The theory presented here is not meant to be exhaustive, but only sufficient to understand various definitions and functions related to Arraytool library.</p>
 <ul>
-<li class="toctree-l1"><a class="reference external" href="planar.html">Planar array routines</a><ul>
-<li class="toctree-l2"><a class="reference external" href="planar.html#ip-format">ip_format</a></li>
-<li class="toctree-l2"><a class="reference external" href="planar.html#at-import">at_import</a></li>
-<li class="toctree-l2"><a class="reference external" href="planar.html#at-export">at_export</a></li>
-<li class="toctree-l2"><a class="reference external" href="planar.html#ate">ATE</a></li>
-<li class="toctree-l2"><a class="reference external" href="planar.html#k-norm">K_norm</a></li>
-<li class="toctree-l2"><a class="reference external" href="planar.html#af-zeros">AF_zeros</a></li>
-<li class="toctree-l2"><a class="reference external" href="planar.html#a-frm-zeros">A_frm_zeros</a></li>
-<li class="toctree-l2"><a class="reference external" href="planar.html#dist">dist</a></li>
-<li class="toctree-l2"><a class="reference external" href="planar.html#cutoff">cutoff</a></li>
-<li class="toctree-l2"><a class="reference external" href="planar.html#pattern-u">pattern_u</a></li>
-<li class="toctree-l2"><a class="reference external" href="planar.html#pattern-uv">pattern_uv</a></li>
-<li class="toctree-l2"><a class="reference external" href="planar.html#pattern-tp">pattern_tp</a></li>
+<li class="toctree-l1"><a class="reference external" href="basics.html">Think beyond the Visible Space!</a></li>
+<li class="toctree-l1"><a class="reference external" href="basics.html#relation-between-source-excitation-and-far-field-pattern">Relation between Source Excitation and Far-Field Pattern</a><ul>
+<li class="toctree-l2"><a class="reference external" href="basics.html#far-field-greens-functions-of-infinitesimal-dipoles">Far-field Green’s Functions of Infinitesimal Dipoles</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference external" href="Zolotarev.html">Zolotarev polynomial related routines</a><ul>
-<li class="toctree-l2"><a class="reference external" href="Zolotarev.html#z-str2num">z_str2num</a></li>
-<li class="toctree-l2"><a class="reference external" href="Zolotarev.html#z-theta">z_theta</a></li>
-<li class="toctree-l2"><a class="reference external" href="Zolotarev.html#z-eta">z_eta</a></li>
-<li class="toctree-l2"><a class="reference external" href="Zolotarev.html#z-am">z_am</a></li>
-<li class="toctree-l2"><a class="reference external" href="Zolotarev.html#z-zn">z_zn</a></li>
-<li class="toctree-l2"><a class="reference external" href="Zolotarev.html#z-x123-frm-m">z_x123_frm_m</a></li>
-<li class="toctree-l2"><a class="reference external" href="Zolotarev.html#z-zolotarev">z_Zolotarev</a></li>
-<li class="toctree-l2"><a class="reference external" href="Zolotarev.html#z-zolotarev-x2">z_Zolotarev_x2</a></li>
-<li class="toctree-l2"><a class="reference external" href="Zolotarev.html#z-m-frm-r">z_m_frm_R</a></li>
-<li class="toctree-l2"><a class="reference external" href="Zolotarev.html#z-zolotarev-poly">z_Zolotarev_poly</a></li>
-<li class="toctree-l2"><a class="reference external" href="Zolotarev.html#zolotarev2">Zolotarev2</a></li>
+<li class="toctree-l1"><a class="reference external" href="basics.html#continuous-vs-discrete-sources">Continuous VS Discrete Sources</a><ul>
+<li class="toctree-l2"><a class="reference external" href="basics.html#scanning-via-progressive-phase-shift">Scanning via Progressive Phase Shift</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference external" href="references.html">References</a></li>
+<li class="toctree-l1"><a class="reference external" href="basics.html#array-and-grating-lobe-lattices">Array and Grating-Lobe Lattices</a></li>
+<li class="toctree-l1"><a class="reference external" href="basics.html#classification-of-array-excitation-types">Classification of Array Excitation Types</a></li>
+<li class="toctree-l1"><a class="reference external" href="basics.html#various-parameters-of-array-antennas">Various Parameters of Array Antennas</a><ul>
+<li class="toctree-l2"><a class="reference external" href="basics.html#array-pattern">Array Pattern</a></li>
+<li class="toctree-l2"><a class="reference external" href="basics.html#array-gain">Array Gain</a></li>
+<li class="toctree-l2"><a class="reference external" href="basics.html#array-directivity">Array Directivity</a></li>
+<li class="toctree-l2"><a class="reference external" href="basics.html#various-array-factor-definitions-used-in-arraytool">Various Array Factor Definitions used in Arraytool</a></li>
+<li class="toctree-l2"><a class="reference external" href="basics.html#array-tapper-efficiency">Array Tapper Efficiency</a></li>
+<li class="toctree-l2"><a class="reference external" href="basics.html#normalized-bore-sight-slope">Normalized Bore-sight Slope</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference external" href="basics.html#mutual-coupling-in-array-antennas">Mutual Coupling in Array Antennas</a></li>
+<li class="toctree-l1"><a class="reference external" href="basics.html#conformal-array-antennas">Conformal Array Antennas</a><ul>
+<li class="toctree-l2"><a class="reference external" href="basics.html#circular-arrays">Circular Arrays</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference external" href="basics.html#shaped-beam-synthesis">Shaped Beam Synthesis</a></li>
+<li class="toctree-l1"><a class="reference external" href="basics.html#array-feeding">Array Feeding</a></li>
+</ul>
+<p>For more comprehensive treatment, see the following books.</p>
+<ul class="simple">
+<li><a class="reference external" href="arraytool/references.html#bhattacharyya">[Bhattacharyya]</a></li>
+<li><a class="reference external" href="arraytool/references.html#hansen">[Hansen]</a></li>
+<li><a class="reference external" href="arraytool/references.html#mailloux">[Mailloux]</a></li>
 </ul>
 </div>
-<div class="section" id="indices-and-tables">
-<h1>Indices and tables<a class="headerlink" href="#indices-and-tables" title="Permalink to this headline">¶</a></h1>
-<ul class="simple">
-<li><a class="reference external" href="genindex.html"><em>Index</em></a></li>
-<li><a class="reference external" href="modindex.html"><em>Module Index</em></a></li>
-<li><a class="reference external" href="search.html"><em>Search Page</em></a></li>
+<div class="section" id="tutorial">
+<h2>Tutorial<a class="headerlink" href="#tutorial" title="Permalink to this headline">¶</a></h2>
+<p>If you are new to Arraytool, start from here.</p>
+<ul>
+<li class="toctree-l1"><a class="reference external" href="tutorial.html">Arraytool Import and Export</a></li>
+<li class="toctree-l1"><a class="reference external" href="tutorial.html#arraytool-input-format-i">Arraytool Input Format - I</a></li>
+<li class="toctree-l1"><a class="reference external" href="tutorial.html#arraytool-input-format-ii">Arraytool Input Format - II</a></li>
+<li class="toctree-l1"><a class="reference external" href="tutorial.html#array-factor-zeros">Array Factor Zeros</a></li>
+<li class="toctree-l1"><a class="reference external" href="tutorial.html#excitation-from-af-zeros">Excitation from AF Zeros</a></li>
+<li class="toctree-l1"><a class="reference external" href="tutorial.html#generating-various-types-of-array-excitations">Generating Various Types of Array Excitations</a></li>
+<li class="toctree-l1"><a class="reference external" href="tutorial.html#evaluating-2d-array-factor-of-a-linear-array-in-u-domain">Evaluating 2D Array Factor of a Linear Array in u - domain</a></li>
+<li class="toctree-l1"><a class="reference external" href="tutorial.html#evaluating-3d-array-factor-of-a-planar-array-in-uv-domain">Evaluating 3D Array Factor of a planar Array in uv - domain</a></li>
+<li class="toctree-l1"><a class="reference external" href="tutorial.html#evaluating-3d-array-factor-of-an-arbitrary-3d-array-in-tht-phi-domain">Evaluating 3D Array Factor of an arbitrary 3D Array in (tht, phi) - domain</a></li>
+<li class="toctree-l1"><a class="reference external" href="tutorial.html#usage-of-zolotarev-polynomial-module">Usage of Zolotarev Polynomial Module</a></li>
 </ul>
+</div>
+<div class="section" id="function-reference">
+<h2>Function Reference<a class="headerlink" href="#function-reference" title="Permalink to this headline">¶</a></h2>
+<ul>
+<li class="toctree-l1"><a class="reference external" href="planar.html">Planar Array Routines</a></li>
+<li class="toctree-l1"><a class="reference external" href="Zolotarev.html">Zolotarev Polynomial Related Routines</a></li>
+</ul>
+</div>
+<div class="section" id="end-matter">
+<h2>End matter<a class="headerlink" href="#end-matter" title="Permalink to this headline">¶</a></h2>
+<ul>
+<li class="toctree-l1"><a class="reference external" href="arraytool/references.html">References</a></li>
+</ul>
+</div>
 </div>
 
 
@@ -112,16 +142,26 @@ For general information about Arraytool, see the project <a class="reference ext
         <div class="sphinxsidebarwrapper">
             <h3><a href="#">Table Of Contents</a></h3>
             <ul>
-<li><a class="reference external" href="#">Welcome to Arraytool&#8217;s documentation!</a></li>
-<li><a class="reference external" href="#introduction">Introduction</a><ul>
+<li><a class="reference external" href="#">Welcome to Arraytool&#8217;s documentation!</a><ul>
+<li><a class="reference external" href="#basic-theory">Basic Theory</a><ul>
 </ul>
 </li>
-<li><a class="reference external" href="#indices-and-tables">Indices and tables</a></li>
+<li><a class="reference external" href="#tutorial">Tutorial</a><ul>
+</ul>
+</li>
+<li><a class="reference external" href="#function-reference">Function Reference</a><ul>
+</ul>
+</li>
+<li><a class="reference external" href="#end-matter">End matter</a><ul>
+</ul>
+</li>
+</ul>
+</li>
 </ul>
 
             <h4>Next topic</h4>
-            <p class="topless"><a href="planar.html"
-                                  title="next chapter">Planar array routines</a></p>
+            <p class="topless"><a href="basics.html"
+                                  title="next chapter">Think beyond the Visible Space!</a></p>
             <h3>This Page</h3>
             <ul class="this-page-menu">
               <li><a href="sources/index.txt"
@@ -154,7 +194,7 @@ For general information about Arraytool, see the project <a class="reference ext
           <a href="modindex.html" title="Global Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="planar.html" title="Planar array routines"
+          <a href="basics.html" title="Think beyond the Visible Space!"
              >next</a> |</li>
         <li><a href="#">Arraytool v0.0.0 documentation</a> &raquo;</li> 
       </ul>

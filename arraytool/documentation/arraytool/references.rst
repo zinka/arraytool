@@ -1,8 +1,7 @@
-#! /usr/bin/env python
+References
+==========
 
-"""
-
-The following is a non-comprehensive list of works used in the development of Arraytool
+This is a non-comprehensive list of works used in the development of Arraytool 
 or cited for examples or mathematical definitions used in this documentation.
 
 .. [McNamara93] McNamara, D. A., "Direct synthesis of optimum difference patterns for
@@ -22,6 +21,3 @@ or cited for examples or mathematical definitions used in this documentation.
 .. [Hansen] Hansen, R. C., "Phased Array Antennas", John Willey, 1998
 
 .. [Mailloux] Mailloux, R. J., "Phased Array Antenna Handbook", Artech House Publishers, 2005
-
-                        
-"""            

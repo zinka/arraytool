@@ -1,10 +1,10 @@
-Planar array routines
+Planar Array Routines
 =====================
 
 .. automodule:: planar
 
 .. toctree::
-   :maxdepth: 2
+   :maxdepth: 1
 
 ip_format
 ---------

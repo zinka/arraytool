@@ -8,7 +8,7 @@
 Module for analysis and design of (uni-directional) planar phased array
 antennas.
 
-**Progress**
+**Progress:**
 Just some important basic routines are done. There is much more to be done!
 
 **References**
@@ -45,7 +45,7 @@ def ip_format(a, b, A, gamma=np.pi / 2, plot=False, color='b', linewidth=1,
     All other parameters are nothing but the 'Matplotlib' parameters. These
     should be familiar to 'Matlab' or 'Matplotlib' users.
     
-    :rtype:            array_ip, a Numpy array of size (Number_elements(A)*4)             
+    :rtype:            array_ip, a Numpy array of size (Number_elements(A)*4)
     """
     M = float(A.shape[1]) # no. of elements along the x-axis
     N = float(A.shape[0]) # no. of elements along the y-axis
@@ -115,7 +115,8 @@ def ip_format(a, b, A, gamma=np.pi / 2, plot=False, color='b', linewidth=1,
     return array_ip
 
 def at_import(dtype='complex'):
-    r"""A simple function to import a CSV text file as a Numpy ndarray
+    r"""
+    A simple function to import a CSV text file as a Numpy ndarray
     
     :param dtype: Data-type of the resulting array; default:complex. For further
                   information, see numpy.loadtxt.
@@ -129,7 +130,8 @@ def at_import(dtype='complex'):
     return ip
 
 def at_export(data, data_ID=False, fmt='%.4e', mode='a'):
-    r"""A simple function to export a Numpy ndarray as a CSV text file.
+    r"""
+    A simple function to export a Numpy ndarray as a CSV text file.
     
     :param data:        Numpy ndarray
     :param data_ID:     a string to represent the data being exported
@@ -149,7 +151,8 @@ def at_export(data, data_ID=False, fmt='%.4e', mode='a'):
     return
 
 def ATE(array_ip):
-    r"""A simple function to evaluate the array taper efficiency (ATE).
+    r"""
+    A simple function to evaluate the array taper efficiency (ATE).
 
     :param array_ip: array excitation data in 'Arraytool' input format (see :func:`ip_format`)
     
@@ -161,7 +164,8 @@ def ATE(array_ip):
     return ATE
 
 def K_norm(array_ip):
-    r"""Function to get the normalized bore-sight slope for difference patterns.
+    r"""
+    Function to get the normalized bore-sight slope for difference patterns.
     
     :param array_ip: array excitation data in 'Arraytool' input format (see :func:`ip_format`)
     
@@ -761,3 +765,5 @@ if __name__ == '__main__':
 # modify the equations from ko -> uv space
 # use same names in AF_zeros and dist
 # implement show in pattern_** functions
+# "See also" doc string
+# in Sphinx docs, choose section, subsections, title etc carefully ...

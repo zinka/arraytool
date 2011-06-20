@@ -1,9 +1,3 @@
-.. Arraytool documentation master file, created by
-   sphinx-quickstart on Thu Feb  3 20:51:16 2011.
-   You can adapt this file completely to your liking, but it should at least
-   contain the root `toctree` directive.
-
-=====================================
 Welcome to Arraytool's documentation!
 =====================================
 
@@ -15,22 +9,50 @@ For general information about Arraytool, see the project `repository <https://gi
 
 These documentation pages include general information as well as docstring listing with use of examples. For quick access to the docstrings of individual functions, use the `index listing <genindex.html>`_.
 
-============
-Introduction
-============
+.. warning::
+
+   Arraytool project and its documentation are still ongoing. If anybody wants to contribute to this project,
+   please leave a message at the `project blog <http://zinka.wordpress.com/arraytool/#respond/>`_.
+
+Basic Theory
+------------
+
+This is a brief `mathematical` introduction related to the `phased array antennas <http://en.wikipedia.org/wiki/Phased_array>`_. The theory presented here is not meant to be exhaustive, but only sufficient to understand various definitions and functions related to Arraytool library.
 
 .. toctree::
    :maxdepth: 2
    
+   basics.rst
+   
+For more comprehensive treatment, see the following books.
+
+- [Bhattacharyya]_
+- [Hansen]_
+- [Mailloux]_ 
+
+Tutorial
+--------
+
+If you are new to Arraytool, start from here.
+
+.. toctree::
+   :maxdepth: 2
+   
+   tutorial.rst
+
+Function Reference
+------------------
+
+.. toctree::
+   :maxdepth: 1
+   
    planar.rst
    Zolotarev.rst
-   references.rst
 
-==================
-Indices and tables
-==================
+End matter
+----------
 
-- :ref:`genindex`
-- :ref:`modindex`
-- :ref:`search`
-
+.. toctree::
+   :maxdepth: 2
+   
+   arraytool/references.rst

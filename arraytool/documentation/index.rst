@@ -1,8 +1,8 @@
 Welcome to Arraytool's Documentation!
 =====================================
 
-:Release: |version|
-:Date: |today|
+.. :Release: |version|
+.. :Date: |today|
 
 Arraytool is a Python library for analysis and design of phased array antennas.
 For general information about Arraytool, see the project `repository <https://github.com/zinka/arraytool>`_ and my `personal blog <http://zinka.wordpress.com/>`_.

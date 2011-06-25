@@ -199,7 +199,7 @@ def AF_zeros(a, M, R, dist_type, nbar=False, alpha=0):
     n = np.arange(1, 1 + m, 1) # number of zeros for symmetric array-factors
     na = np.arange(1, M, 1) # number of zeros for 'asymmetric' array-factors
     
-    if(dist_type == "Dolph"): # Dolph zeros
+    if(dist_type == "Dolph-Chebyshev"): # Dolph zeros
         c = np.cosh(np.arccosh(R) / (M - 1))
         U0 = (2 / (a * k)) * np.arccos((np.cos(np.pi * (2 * n - 1) / (2 * M - 2))) / c)        
     elif(dist_type == "Riblet"): # Riblet zeros
@@ -228,7 +228,7 @@ def AF_zeros(a, M, R, dist_type, nbar=False, alpha=0):
         xn = Zol.z_Zolotarev_poly(N=M - 1, m=m1)[1][m + 1:]
         U0 = (2 / (a * k)) * np.arcsin(xn / c)
     if(nbar): # Taylor's Dilation procedure
-        if((dist_type == "Dolph") or (dist_type == "Riblet") or (dist_type == "McNamara-s")):
+        if((dist_type == "Dolph-Chebyshev") or (dist_type == "Riblet") or (dist_type == "McNamara-s")):
             n_gen = np.arange(nbar, 1 + m, 1) # indices of the generic zeros
             U0_gen = (n_gen + alpha / 2) * (1 / (M * a)) # generic sum zeros
         elif(dist_type == "McNamara-d"):
@@ -319,7 +319,7 @@ def dist(a, M, R_x, dist_type_x, b=None, N=None, R_y=None, dist_type_y=False, mb
     """
     # modify the symmetry thing in MZ-s, be, ue patterns ...
     if(dist_type_x == "Dolph-Chebyshev"):
-        U0 = AF_zeros(a, M, R_x, dist_type="Dolph")
+        U0 = AF_zeros(a, M, R_x, dist_type="Dolph-Chebyshev")
         Ax = A_frm_zeros(U0, a, M, symmetry="even").T # Done
     elif(dist_type_x == "McNamara-Zolotarev-sum"):
         U0 = AF_zeros(a, M, R_x, dist_type="Riblet")
@@ -331,7 +331,7 @@ def dist(a, M, R_x, dist_type_x, b=None, N=None, R_y=None, dist_type_y=False, mb
         U0 = AF_zeros(a, M, R_x, dist_type="McNamara-d")
         Ax = A_frm_zeros(U0, a, M, symmetry="odd").T # To be Modified later
     elif(dist_type_x == "Taylor"):
-        U0 = AF_zeros(a, M, R_x, dist_type="Dolph", nbar=mbar, alpha=alpha_x)
+        U0 = AF_zeros(a, M, R_x, dist_type="Dolph-Chebyshev", nbar=mbar, alpha=alpha_x)
         Ax = A_frm_zeros(U0, a, M, symmetry="even").T # Done
     elif(dist_type_x == "Bayliss"):
         U0 = AF_zeros(a, M, R_x, dist_type="McNamara-d", nbar=mbar, alpha=alpha_x)
@@ -347,7 +347,7 @@ def dist(a, M, R_x, dist_type_x, b=None, N=None, R_y=None, dist_type_y=False, mb
     if(dist_type_y):
         # modify the symmetry thing in MZ-s, be, ue patterns ...
         if(dist_type_y == "Dolph-Chebyshev"):
-            V0 = AF_zeros(b, N, R_y, dist_type="Dolph")
+            V0 = AF_zeros(b, N, R_y, dist_type="Dolph-Chebyshev")
             Ay = A_frm_zeros(V0, b, N, symmetry="even") # Done
         elif(dist_type_y == "McNamara-Zolotarev-sum"):
             V0 = AF_zeros(b, N, R_y, dist_type="Riblet")
@@ -359,7 +359,7 @@ def dist(a, M, R_x, dist_type_x, b=None, N=None, R_y=None, dist_type_y=False, mb
             V0 = AF_zeros(b, N, R_y, dist_type="McNamara-d")
             Ay = A_frm_zeros(V0, b, N, symmetry="odd") # To be Modified later
         elif(dist_type_y == "Taylor"):
-            V0 = AF_zeros(b, N, R_y, dist_type="Dolph", nbar=nbar, alpha=alpha_y)
+            V0 = AF_zeros(b, N, R_y, dist_type="Dolph-Chebyshev", nbar=nbar, alpha=alpha_y)
             Ay = A_frm_zeros(V0, b, N, symmetry="even") # Done
         elif(dist_type_y == "Bayliss"):
             V0 = AF_zeros(b, N, R_y, dist_type="McNamara-d", nbar=nbar, alpha=alpha_y)
@@ -481,16 +481,16 @@ def pattern_u(array_ip, u_scan=0, u_min= -1, u_max=1, u_num=50, scale="dB",
                 plt.xlabel(r'$u,\ \mathrm{where}\ u=\sin \theta\ \mathrm{in}\ \mathrm{the}\ \mathrm{visible-space}$', fontsize=16)
                 plt.ylabel(f1 + r'$(u)$', fontsize=16)
             if(plot_type == "polar"): # polar plot
-                th = np.arcsin(u)
+                tht = np.arcsin(u)
                 if(scale == "linear"):
-                    plt.polar(th, F_plt, color=color, linewidth=linewidth,
+                    plt.polar(tht, F_plt, color=color, linewidth=linewidth,
                               linestyle=linestyle, alpha=alpha)
-                    plt.polar(np.pi - th, F_plt, color=color, linewidth=linewidth,
+                    plt.polar(np.pi - tht, F_plt, color=color, linewidth=linewidth,
                               linestyle=linestyle, alpha=alpha)
                 if(scale == "dB"):
-                    plt.polar(th, F_plt - dB_limit, color=color,
+                    plt.polar(tht, F_plt - dB_limit, color=color,
                               linewidth=linewidth, linestyle=linestyle, alpha=alpha)
-                    plt.polar(np.pi - th, F_plt - dB_limit, color=color,
+                    plt.polar(np.pi - tht, F_plt - dB_limit, color=color,
                               linewidth=linewidth, linestyle=linestyle, alpha=alpha)
             plt.title(n1 + ff + ss, fontsize=18)
             if(show): plt.show()

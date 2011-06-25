@@ -1,7 +1,7 @@
 A Few Examples
 ==============
 
-Intro TBD
+Intro - To be done!
 
 Import and Export
 -----------------
@@ -45,4 +45,4 @@ Evaluating 3D Array Factor of an arbitrary 3D Array in (tht, phi) - domain
 
 Usage of Zolotarev Polynomial Module
 ------------------------------------
-TBD
+To be done!

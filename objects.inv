@@ -1,7 +1,15 @@
 # Sphinx inventory version 1
 # Project: Arraytool
 # Version: 0.0.0
+AF_zeros_ex mod tutorial.html
 planar mod planar.html
+pattern_uv_ex mod tutorial.html
+pattern_u_ex mod tutorial.html
+at_import_ex mod tutorial.html
+A_frm_zeros_ex mod tutorial.html
+ip_format_ex mod tutorial.html
+pattern_tp_ex mod tutorial.html
+dist_ex mod tutorial.html
 Zolotarev mod Zolotarev.html
 planar.dist function planar.html
 Zolotarev.z_str2num function Zolotarev.html

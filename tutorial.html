@@ -5,8 +5,8 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Arraytool Import and Export &mdash; Arraytool v0.0.0 documentation</title>
-    <link rel="stylesheet" href="static/nature.css" type="text/css" />
+    <title>A Few Examples &mdash; Arraytool v0.0.0 documentation</title>
+    <link rel="stylesheet" href="static/default.css" type="text/css" />
     <link rel="stylesheet" href="static/pygments.css" type="text/css" />
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
@@ -48,35 +48,284 @@
         <div class="bodywrapper">
           <div class="body">
             
-  <div class="section" id="arraytool-import-and-export">
-<h1>Arraytool Import and Export<a class="headerlink" href="#arraytool-import-and-export" title="Permalink to this headline">¶</a></h1>
+  <div class="section" id="a-few-examples">
+<h1>A Few Examples<a class="headerlink" href="#a-few-examples" title="Permalink to this headline">¶</a></h1>
+<p>Intro TBD</p>
+<div class="section" id="module-at_import_ex">
+<h2>Import and Export<a class="headerlink" href="#module-at_import_ex" title="Permalink to this headline">¶</a></h2>
+<p><tt class="xref docutils literal"><span class="pre">at_import()</span></tt> is a simple function to import CSV text files as Numpy ndarrays.
+This will open a simple GUI dialog box asking for the place where your CSV file
+is located:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">import</span> <span class="nn">arraytool.planar</span> <span class="kn">as</span> <span class="nn">planar</span>
+<span class="n">planar</span><span class="o">.</span><span class="n">at_import</span><span class="p">()</span>
+</pre></div>
 </div>
-<div class="section" id="arraytool-input-format-i">
-<h1>Arraytool Input Format - I<a class="headerlink" href="#arraytool-input-format-i" title="Permalink to this headline">¶</a></h1>
+<p>Similarly, <tt class="xref docutils literal"><span class="pre">at_export()</span></tt> can be used to export any Numpy ndarray data to a 
+CSV file. This will open a simple GUI dialog box asking for the location where
+the CSV file needs to be saved:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">import</span> <span class="nn">arraytool.planar</span> <span class="kn">as</span> <span class="nn">planar</span>
+<span class="n">planar</span><span class="o">.</span><span class="n">at_export</span><span class="p">()</span>
+</pre></div>
 </div>
-<div class="section" id="arraytool-input-format-ii">
-<h1>Arraytool Input Format - II<a class="headerlink" href="#arraytool-input-format-ii" title="Permalink to this headline">¶</a></h1>
 </div>
-<div class="section" id="array-factor-zeros">
-<h1>Array Factor Zeros<a class="headerlink" href="#array-factor-zeros" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="module-ip_format_ex">
+<h2>Input Format<a class="headerlink" href="#module-ip_format_ex" title="Permalink to this headline">¶</a></h2>
+<p>One way to generate Arraytool&#8217;s input format is to use the function <tt class="xref docutils literal"><span class="pre">ip_format()</span></tt>:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">import</span> <span class="nn">arraytool.planar</span> <span class="kn">as</span> <span class="nn">planar</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
+
+<span class="c"># Array lattice parameters (a &amp; b are normalized with respect to the wavelength)</span>
+<span class="n">a</span> <span class="o">=</span> <span class="mf">0.5</span> <span class="c"># separation between the elements along x-axis</span>
+<span class="n">b</span> <span class="o">=</span> <span class="mf">0.7</span> <span class="c"># separation between the elements along y-axis</span>
+<span class="n">gamma</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">/</span> <span class="mi">2</span> <span class="c"># lattice angle in radians</span>
+
+<span class="c"># Array Excitation information</span>
+<span class="n">M</span> <span class="o">=</span> <span class="mi">1</span> <span class="c"># no. of elements along x-axis</span>
+<span class="n">N</span> <span class="o">=</span> <span class="mi">11</span> <span class="c"># no. of elements along y-axis</span>
+<span class="n">A</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">((</span><span class="n">N</span><span class="p">,</span> <span class="n">M</span><span class="p">))</span> <span class="c"># A simple uniform planar excitation</span>
+
+<span class="c"># Generating Arraytool input format </span>
+<span class="n">array_ip</span> <span class="o">=</span> <span class="n">planar</span><span class="o">.</span><span class="n">ip_format</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">A</span><span class="p">,</span> <span class="n">gamma</span><span class="p">)</span>
+
+<span class="k">print</span> <span class="n">array_ip</span>
+</pre></div>
 </div>
-<div class="section" id="excitation-from-af-zeros">
-<h1>Excitation from AF Zeros<a class="headerlink" href="#excitation-from-af-zeros" title="Permalink to this headline">¶</a></h1>
+<p>In the above coding, matrix A represents the planar array arrangement which is
+shown below.</p>
+<p>Also, if needed, one can plot the array excitation using the option <tt class="docutils literal"><span class="pre">plot</span></tt> of
+<tt class="xref docutils literal"><span class="pre">ip_format()</span></tt>. If the array is linear (either along x or y axis), a 2D plot
+is generated using <cite>Matplotlib</cite>. If the given array is planar, a 3D stem plot is
+generated using <cite>Mayavi</cite>. Two such simple plots are shown below.</p>
+<p>Another way is, to simply make a CSV file in the below format and and import it 
+using the function <tt class="xref docutils literal"><span class="pre">at_import()</span></tt>.</p>
 </div>
-<div class="section" id="generating-various-types-of-array-excitations">
-<h1>Generating Various Types of Array Excitations<a class="headerlink" href="#generating-various-types-of-array-excitations" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="module-AF_zeros_ex">
+<h2>Array Factor Zeros<a class="headerlink" href="#module-AF_zeros_ex" title="Permalink to this headline">¶</a></h2>
+<p>Array factor of a <cite>linear discrete</cite> array (neglecting any normalization factor)
+is defined as</p>
+<img src="images/mathmpl/math-a809ec80fb.png" class="center" /><p>Some of the array factor properties are given as:</p>
+<ul class="simple">
+<li>If all the elements in the array are placed uniformly, then <img src="images/mathmpl/math-a23f0bfe42.png" style="position: relative; bottom: -3px"/>
+is a periodic function in the <img src="images/mathmpl/math-4f4f21d34c.png" style="position: relative; bottom: -3px"/> - domain with a period of <img src="images/mathmpl/math-0a6537bef7.png" style="position: relative; bottom: -8px"/>,
+where <img src="images/mathmpl/math-e269772661.png" style="position: relative; bottom: -3px"/> is the separation between elements.</li>
+<li>Since <img src="images/mathmpl/math-a23f0bfe42.png" style="position: relative; bottom: -3px"/> is a polynomial of the order <img src="images/mathmpl/math-8973edab29.png" style="position: relative; bottom: -3px"/> in <img src="images/mathmpl/math-4f4f21d34c.png" style="position: relative; bottom: -3px"/>,
+if we know <img src="images/mathmpl/math-8973edab29.png" style="position: relative; bottom: -3px"/> zeros of the array factor (with in a period), we can easily evaluate all 
+array coefficients <img src="images/mathmpl/math-27fc52bb87.png" style="position: relative; bottom: -8px"/>. Fortunately, in most of the cases (except 
+shaped beam synthesis), these zeros are symmetrically located on the <img src="images/mathmpl/math-4f4f21d34c.png" style="position: relative; bottom: -3px"/>
+axis. So, in symmetric cases, we need only <img src="images/mathmpl/math-448095175c.png" style="position: relative; bottom: -8px"/>
+zeros. If the pattern is a difference pattern, then zero at the origin also should be
+taken into consideration.</li>
+</ul>
+<p>In Arraytool, the function <tt class="xref docutils literal"><span class="pre">AF_zeros()</span></tt> provides these <img src="images/mathmpl/math-448095175c.png" style="position: relative; bottom: -8px"/>
+zeros. So, let us get the array factor zeros for some simple array excitations:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">import</span> <span class="nn">arraytool.planar</span> <span class="kn">as</span> <span class="nn">planar</span>
+
+<span class="n">a</span> <span class="o">=</span> <span class="mf">0.5</span> <span class="c"># separation between the elements along x-axis (normalized WRS wavelength)</span>
+<span class="n">M</span> <span class="o">=</span> <span class="mi">10</span> <span class="c"># no. of elements along x-axis</span>
+
+<span class="n">SLR</span> <span class="o">=</span> <span class="mi">25</span> <span class="c"># side-lobe ratio in dB</span>
+<span class="n">R</span> <span class="o">=</span> <span class="mi">10</span> <span class="o">**</span> <span class="p">(</span><span class="n">SLR</span> <span class="o">/</span> <span class="mi">20</span><span class="p">)</span> <span class="c"># converting SLR from dB scale to linear scale</span>
+
+<span class="n">U0</span> <span class="o">=</span> <span class="n">planar</span><span class="o">.</span><span class="n">AF_zeros</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">M</span><span class="p">,</span> <span class="n">R</span><span class="p">,</span> <span class="n">dist_type</span><span class="o">=</span><span class="s">&quot;Dolph-Chebyshev&quot;</span><span class="p">)</span>
+<span class="k">print</span> <span class="s">&#39;arrayfactor zeros:&#39;</span><span class="p">,</span> <span class="s">&#39;</span><span class="se">\n</span><span class="s">&#39;</span><span class="p">,</span> <span class="n">U0</span>
+</pre></div>
 </div>
-<div class="section" id="evaluating-2d-array-factor-of-a-linear-array-in-u-domain">
-<h1>Evaluating 2D Array Factor of a Linear Array in u - domain<a class="headerlink" href="#evaluating-2d-array-factor-of-a-linear-array-in-u-domain" title="Permalink to this headline">¶</a></h1>
+<p>The output is as shown below:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">arrayfactor</span> <span class="n">zeros</span><span class="p">:</span> 
+<span class="go">array([[ 0.2348126 ],</span>
+<span class="go">       [ 0.38767709],</span>
+<span class="go">       [ 0.58329742],</span>
+<span class="go">       [ 0.78998547]])</span>
+</pre></div>
 </div>
-<div class="section" id="evaluating-3d-array-factor-of-a-planar-array-in-uv-domain">
-<h1>Evaluating 3D Array Factor of a planar Array in uv - domain<a class="headerlink" href="#evaluating-3d-array-factor-of-a-planar-array-in-uv-domain" title="Permalink to this headline">¶</a></h1>
 </div>
-<div class="section" id="evaluating-3d-array-factor-of-an-arbitrary-3d-array-in-tht-phi-domain">
-<h1>Evaluating 3D Array Factor of an arbitrary 3D Array in (tht, phi) - domain<a class="headerlink" href="#evaluating-3d-array-factor-of-an-arbitrary-3d-array-in-tht-phi-domain" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="module-A_frm_zeros_ex">
+<h2>Excitation from AF Zeros<a class="headerlink" href="#module-A_frm_zeros_ex" title="Permalink to this headline">¶</a></h2>
+<p>In the previous section we obtained the array factor zeros. Now, we can use those 
+zeros to obtain the array excitation using the function <tt class="xref docutils literal"><span class="pre">A_frm_zeros()</span></tt> as 
+shown below:</p>
+<div class="highlight-python"><pre>import arraytool.planar as planar
+
+a = 0.5 # separation between the elements along x-axis (normalized WRS wavelength)
+M = 10 # no. of elements along x-axis
+
+SLR = 25 # side-lobe ratio in dB
+R = 10 ** (SLR / 20) # converting SLR from dB scale to linear scale
+
+U0 = planar.AF_zeros(a, M, R, dist_type="Dolph-Chebyshev")
+
+A = planar.A_frm_zeros(U0, a, M, symmetry="even").T # finding excitation coefficients
+print 'array coefficients:', '</pre>
+</div>
+<p>&#8216;, A.T</p>
+<p>The output is as shown below:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">array</span> <span class="n">coefficients</span><span class="p">:</span>
+<span class="go">array([[ 0.64163439],</span>
+<span class="go">       [ 0.59442917],</span>
+<span class="go">       [ 0.77799478],</span>
+<span class="go">       [ 0.921367  ],</span>
+<span class="go">       [ 1.        ],</span>
+<span class="go">       [ 1.        ],</span>
+<span class="go">       [ 0.921367  ],</span>
+<span class="go">       [ 0.77799478],</span>
+<span class="go">       [ 0.59442917],</span>
+<span class="go">       [ 0.64163439]])</span>
+</pre></div>
+</div>
+<p>As can be seen above, array coefficients at the center are normalized to the value 1.</p>
+</div>
+<div class="section" id="module-dist_ex">
+<h2>Generating Various Types of Array Excitations<a class="headerlink" href="#module-dist_ex" title="Permalink to this headline">¶</a></h2>
+<p>Most of the times, we don&#8217;t have to go through the process given in the last 
+two sections. Instead, we can get the excitation values in one single step using
+the function <tt class="xref docutils literal"><span class="pre">dist()</span></tt>. This function gives array excitation coefficients 
+corresponding to various array distribution types such as Dolph-Chebyshev, 
+McNamara-Zolotarev-sum, McNamara-Zolotarev-diff-f, McNamara-Zolotarev-diff-s, 
+Taylor, Bayliss, Pritchard-Chebyshev-be, Pritchard-Chebyshev-ue, etc. A simple
+example to obtain Taylor n-bar (also known as <cite>Villeneuve</cite>) distribution is shown below:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">import</span> <span class="nn">arraytool.planar</span> <span class="kn">as</span> <span class="nn">planar</span>
+
+<span class="n">a</span> <span class="o">=</span> <span class="mf">0.5</span> <span class="c"># separation between the elements along x-axis (normalized WRS wavelength)</span>
+<span class="n">M</span> <span class="o">=</span> <span class="mi">10</span> <span class="c"># no. of elements along x-axis</span>
+
+<span class="n">SLR</span> <span class="o">=</span> <span class="mi">25</span> <span class="c"># side-lobe ratio in dB</span>
+<span class="n">R</span> <span class="o">=</span> <span class="mi">10</span> <span class="o">**</span> <span class="p">(</span><span class="n">SLR</span> <span class="o">/</span> <span class="mi">20</span><span class="p">)</span> <span class="c"># converting SLR from dB scale to linear scale</span>
+
+<span class="n">A</span> <span class="o">=</span> <span class="n">planar</span><span class="o">.</span><span class="n">dist</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">M</span><span class="p">,</span> <span class="n">R</span><span class="p">,</span> <span class="n">dist_type_x</span><span class="o">=</span><span class="s">&quot;Taylor&quot;</span><span class="p">,</span> <span class="n">mbar</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">alpha_x</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+<span class="k">print</span> <span class="s">&#39;array coefficients:&#39;</span><span class="p">,</span> <span class="s">&#39;</span><span class="se">\n</span><span class="s">&#39;</span><span class="p">,</span> <span class="n">A</span><span class="o">.</span><span class="n">T</span>
+</pre></div>
+</div>
+<p>The output is as shown below:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">arrayfactor</span> <span class="n">zeros</span><span class="p">:</span> 
+<span class="go">array([[ 0.52917308],</span>
+<span class="go">       [ 0.61909302],</span>
+<span class="go">       [ 0.76458654],</span>
+<span class="go">       [ 0.91008006],</span>
+<span class="go">       [ 1.        ],</span>
+<span class="go">       [ 1.        ],</span>
+<span class="go">       [ 0.91008006],</span>
+<span class="go">       [ 0.76458654],</span>
+<span class="go">       [ 0.61909302],</span>
+<span class="go">       [ 0.52917308]])</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">However, the function <tt class="xref docutils literal"><span class="pre">dist()</span></tt> will not provide any information regarding the
+array factor zeros. If this information is necessary, then there is no other option 
+but to use the function <tt class="xref docutils literal"><span class="pre">AF_zeros()</span></tt></p>
+</div>
+</div>
+<div class="section" id="module-pattern_u_ex">
+<h2>Evaluating 2D Array Factor of a Linear Array in u - domain<a class="headerlink" href="#module-pattern_u_ex" title="Permalink to this headline">¶</a></h2>
+<p>Obviously, the most important task in array analysis and design is to plot the actual
+array factor. In order to accomplish this task, one can use the function <tt class="xref docutils literal"><span class="pre">pattern_u()</span></tt>.
+A simple example to plot a Dolph-Chebyshev pattern is shown below:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">import</span> <span class="nn">arraytool.planar</span> <span class="kn">as</span> <span class="nn">planar</span>
+
+<span class="n">a</span> <span class="o">=</span> <span class="mf">0.6</span> <span class="c"># separation between the elements along x-axis (normalized WRS wavelength)</span>
+<span class="n">M</span> <span class="o">=</span> <span class="mi">10</span> <span class="c"># no. of elements along x-axis</span>
+
+<span class="n">SLR</span> <span class="o">=</span> <span class="mi">25</span> <span class="c"># side-lobe ratio in dB</span>
+<span class="n">R</span> <span class="o">=</span> <span class="mi">10</span> <span class="o">**</span> <span class="p">(</span><span class="n">SLR</span> <span class="o">/</span> <span class="mi">20</span><span class="p">)</span> <span class="c"># converting SLR from dB scale to linear scale</span>
+
+<span class="n">A</span> <span class="o">=</span> <span class="n">planar</span><span class="o">.</span><span class="n">dist</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">M</span><span class="p">,</span> <span class="n">R</span><span class="p">,</span> <span class="n">dist_type_x</span><span class="o">=</span><span class="s">&quot;Dolph-Chebyshev&quot;</span><span class="p">)</span>
+
+<span class="c"># Converting the &#39;excitation &amp; position&#39; information into Arraytool input format</span>
+<span class="n">array_ip</span> <span class="o">=</span> <span class="n">planar</span><span class="o">.</span><span class="n">ip_format</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">A</span><span class="o">=</span><span class="n">A</span><span class="p">,</span> <span class="n">plot</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">stem</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+
+<span class="c"># Calling the &#39;pattern_u&#39; function to evaluate and plot 2D AF/GF/NF</span>
+<span class="p">[</span><span class="n">u</span><span class="p">,</span><span class="n">AF</span><span class="p">]</span> <span class="o">=</span> <span class="n">planar</span><span class="o">.</span><span class="n">pattern_u</span><span class="p">(</span><span class="n">array_ip</span><span class="p">,</span> <span class="n">u_scan</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">u_min</span><span class="o">=</span> <span class="o">-</span><span class="mi">2</span><span class="p">,</span> <span class="n">u_max</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">u_num</span><span class="o">=</span><span class="mi">300</span><span class="p">,</span>
+                          <span class="n">scale</span><span class="o">=</span><span class="s">&quot;dB&quot;</span><span class="p">,</span> <span class="n">dB_limit</span><span class="o">=</span> <span class="o">-</span><span class="mi">40</span><span class="p">,</span> <span class="n">factor</span><span class="o">=</span><span class="s">&quot;NF&quot;</span><span class="p">,</span> 
+                          <span class="n">plot_type</span><span class="o">=</span><span class="s">&quot;rect&quot;</span><span class="p">,</span> <span class="n">lattice</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>If a polar plot is needed, then the following command can be used:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="c"># Calling the &#39;pattern_u&#39; function to evaluate and plot 2D AF/GF/NF</span>
+<span class="p">[</span><span class="n">u</span><span class="p">,</span><span class="n">AF</span><span class="p">]</span> <span class="o">=</span> <span class="n">planar</span><span class="o">.</span><span class="n">pattern_u</span><span class="p">(</span><span class="n">array_ip</span><span class="p">,</span> <span class="n">u_scan</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">u_min</span><span class="o">=</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="n">u_max</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">u_num</span><span class="o">=</span><span class="mi">300</span><span class="p">,</span>
+                          <span class="n">scale</span><span class="o">=</span><span class="s">&quot;dB&quot;</span><span class="p">,</span> <span class="n">dB_limit</span><span class="o">=</span> <span class="o">-</span><span class="mi">40</span><span class="p">,</span> <span class="n">factor</span><span class="o">=</span><span class="s">&quot;NF&quot;</span><span class="p">,</span> 
+                          <span class="n">plot_type</span><span class="o">=</span><span class="s">&quot;polar&quot;</span><span class="p">,</span> <span class="n">lattice</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="module-pattern_uv_ex">
+<h2>Evaluating 3D Array Factor of a planar Array in uv - domain<a class="headerlink" href="#module-pattern_uv_ex" title="Permalink to this headline">¶</a></h2>
+<p>When the given array is planar, i.e., a 2D array in the <img src="images/mathmpl/math-2fa73c1d15.png" style="position: relative; bottom: -7px"/>-plane, then 
+we need to plot the pattern as a function of <img src="images/mathmpl/math-24cb0a6803.png" style="position: relative; bottom: -8px"/>. In order to accomplish
+this task, one can use the function <tt class="xref docutils literal"><span class="pre">pattern_uv()</span></tt>. A simple example to plot
+radiation pattern of a planar uniform array is shown below:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">import</span> <span class="nn">arraytool.planar</span> <span class="kn">as</span> <span class="nn">planar</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
+
+<span class="n">a</span> <span class="o">=</span> <span class="mf">0.6</span> <span class="c"># separation between the elements along x-axis (normalized WRS wavelength)</span>
+<span class="n">b</span> <span class="o">=</span> <span class="mf">0.5</span> <span class="c"># separation between the elements along y-axis (normalized WRS wavelength)</span>
+<span class="n">M</span> <span class="o">=</span> <span class="mi">10</span> <span class="c"># no. of elements along x-axis</span>
+<span class="n">N</span> <span class="o">=</span> <span class="mi">11</span> <span class="c"># no. of elements along y-axis</span>
+
+<span class="n">A</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">((</span><span class="n">N</span><span class="p">,</span> <span class="n">M</span><span class="p">))</span> <span class="c"># Uniform planar excitation</span>
+
+<span class="c"># Converting the &#39;excitation &amp; position&#39; information into Arraytool input format</span>
+<span class="n">array_ip</span> <span class="o">=</span> <span class="n">planar</span><span class="o">.</span><span class="n">ip_format</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">A</span><span class="p">)</span>
+
+<span class="c"># Calling the &#39;pattern_uv&#39; function to evaluate and plot 3D AF/GF/NF</span>
+<span class="n">planar</span><span class="o">.</span><span class="n">pattern_uv</span><span class="p">(</span><span class="n">array_ip</span><span class="p">,</span> <span class="n">u_scan</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">v_scan</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">u_min</span><span class="o">=</span> <span class="o">-</span><span class="mi">2</span><span class="p">,</span> <span class="n">u_max</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">u_num</span><span class="o">=</span><span class="mi">300</span><span class="p">,</span>
+           <span class="n">v_min</span><span class="o">=</span> <span class="o">-</span><span class="mi">2</span><span class="p">,</span> <span class="n">v_max</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">v_num</span><span class="o">=</span><span class="mi">300</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="s">&quot;dB&quot;</span><span class="p">,</span> <span class="n">dB_limit</span><span class="o">=-</span><span class="mi">40</span><span class="p">,</span>
+           <span class="n">factor</span><span class="o">=</span><span class="s">&quot;NF&quot;</span><span class="p">,</span> <span class="n">plot_type</span><span class="o">=</span><span class="s">&quot;rect&quot;</span><span class="p">,</span> <span class="n">mayavi_app</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>If a contour plot is needed, then the following command can be used:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="c"># Calling the &#39;pattern_uv&#39; function to evaluate and plot 3D AF/GF/NF</span>
+<span class="n">planar</span><span class="o">.</span><span class="n">pattern_uv</span><span class="p">(</span><span class="n">array_ip</span><span class="p">,</span> <span class="n">u_scan</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">v_scan</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">u_min</span><span class="o">=</span> <span class="o">-</span><span class="mi">2</span><span class="p">,</span> <span class="n">u_max</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">u_num</span><span class="o">=</span><span class="mi">300</span><span class="p">,</span>
+           <span class="n">v_min</span><span class="o">=</span> <span class="o">-</span><span class="mi">2</span><span class="p">,</span> <span class="n">v_max</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">v_num</span><span class="o">=</span><span class="mi">300</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="s">&quot;dB&quot;</span><span class="p">,</span> <span class="n">dB_limit</span><span class="o">=-</span><span class="mi">40</span><span class="p">,</span>
+           <span class="n">factor</span><span class="o">=</span><span class="s">&quot;NF&quot;</span><span class="p">,</span> <span class="n">plot_type</span><span class="o">=</span><span class="s">&quot;contour&quot;</span><span class="p">,</span> <span class="n">mayavi_app</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>              
+</pre></div>
+</div>
+</div>
+<div class="section" id="module-pattern_tp_ex">
+<h2>Evaluating 3D Array Factor of an arbitrary 3D Array in (tht, phi) - domain<a class="headerlink" href="#module-pattern_tp_ex" title="Permalink to this headline">¶</a></h2>
+<p>In the previous section, plotting in <img src="images/mathmpl/math-24cb0a6803.png" style="position: relative; bottom: -8px"/> is described. However, some times
+it may be necessary to plot in <img src="images/mathmpl/math-ba8e503d77.png" style="position: relative; bottom: -8px"/> domain too. In such cases,
+one can use the function <tt class="xref docutils literal"><span class="pre">pattern_tp()</span></tt>. A simple example to plot
+radiation pattern of a planar uniform array in <img src="images/mathmpl/math-ba8e503d77.png" style="position: relative; bottom: -8px"/> domain is 
+shown below:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">import</span> <span class="nn">arraytool.planar</span> <span class="kn">as</span> <span class="nn">planar</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
+
+<span class="n">a</span> <span class="o">=</span> <span class="mf">0.6</span> <span class="c"># separation between the elements along x-axis (normalized WRS wavelength)</span>
+<span class="n">b</span> <span class="o">=</span> <span class="mf">0.5</span> <span class="c"># separation between the elements along y-axis (normalized WRS wavelength)</span>
+<span class="n">M</span> <span class="o">=</span> <span class="mi">10</span> <span class="c"># no. of elements along x-axis</span>
+<span class="n">N</span> <span class="o">=</span> <span class="mi">11</span> <span class="c"># no. of elements along y-axis</span>
+
+<span class="n">A</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">((</span><span class="n">N</span><span class="p">,</span> <span class="n">M</span><span class="p">))</span> <span class="c"># Uniform planar excitation</span>
+
+<span class="c"># Converting the &#39;excitation &amp; position&#39; information into Arraytool input format</span>
+<span class="n">array_ip</span> <span class="o">=</span> <span class="n">planar</span><span class="o">.</span><span class="n">ip_format</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">A</span><span class="p">)</span>
+
+<span class="c"># Calling the &#39;pattern_tp&#39; function to evaluate and plot 3D AF/GF/NF    </span>
+<span class="n">planar</span><span class="o">.</span><span class="n">pattern_tp</span><span class="p">(</span><span class="n">array_ip</span><span class="p">,</span> <span class="n">tht_scan</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">,</span> <span class="n">phi_scan</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">,</span> <span class="n">tht_min</span><span class="o">=</span> <span class="mi">0</span><span class="p">,</span>
+                  <span class="n">tht_max</span><span class="o">=</span><span class="mf">0.5</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">,</span> <span class="n">tht_num</span><span class="o">=</span><span class="mi">200</span><span class="p">,</span> <span class="n">phi_min</span><span class="o">=</span> <span class="mi">0</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">,</span> <span class="n">phi_max</span><span class="o">=</span><span class="mi">2</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">,</span>
+                  <span class="n">phi_num</span><span class="o">=</span><span class="mi">200</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="s">&quot;dB&quot;</span><span class="p">,</span> <span class="n">dB_limit</span><span class="o">=</span> <span class="o">-</span><span class="mi">40</span><span class="p">,</span> <span class="n">factor</span><span class="o">=</span><span class="s">&quot;GF&quot;</span><span class="p">,</span> <span class="n">plot_type</span><span class="o">=</span><span class="s">&quot;polar&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>If a rectangular surf plot is needed, then the following command can be used:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="c"># Calling the &#39;pattern_tp&#39; function to evaluate and plot 3D AF/GF/NF    </span>
+<span class="n">planar</span><span class="o">.</span><span class="n">pattern_tp</span><span class="p">(</span><span class="n">array_ip</span><span class="p">,</span> <span class="n">tht_scan</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">,</span> <span class="n">phi_scan</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">,</span> <span class="n">tht_min</span><span class="o">=</span> <span class="mi">0</span><span class="p">,</span>
+                  <span class="n">tht_max</span><span class="o">=</span><span class="mf">0.5</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">,</span> <span class="n">tht_num</span><span class="o">=</span><span class="mi">200</span><span class="p">,</span> <span class="n">phi_min</span><span class="o">=</span> <span class="mi">0</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">,</span> <span class="n">phi_max</span><span class="o">=</span><span class="mi">2</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">,</span>
+                  <span class="n">phi_num</span><span class="o">=</span><span class="mi">200</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="s">&quot;dB&quot;</span><span class="p">,</span> <span class="n">dB_limit</span><span class="o">=</span> <span class="o">-</span><span class="mi">40</span><span class="p">,</span> <span class="n">factor</span><span class="o">=</span><span class="s">&quot;GF&quot;</span><span class="p">,</span> <span class="n">plot_type</span><span class="o">=</span><span class="s">&quot;rect&quot;</span><span class="p">)</span>                       
+</pre></div>
+</div>
+<p>If a contour plot is needed, then the following command can be used:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="c"># Calling the &#39;pattern_tp&#39; function to evaluate and plot 3D AF/GF/NF    </span>
+<span class="n">planar</span><span class="o">.</span><span class="n">pattern_tp</span><span class="p">(</span><span class="n">array_ip</span><span class="p">,</span> <span class="n">tht_scan</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">,</span> <span class="n">phi_scan</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">,</span> <span class="n">tht_min</span><span class="o">=</span> <span class="mi">0</span><span class="p">,</span>
+                  <span class="n">tht_max</span><span class="o">=</span><span class="mf">0.5</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">,</span> <span class="n">tht_num</span><span class="o">=</span><span class="mi">200</span><span class="p">,</span> <span class="n">phi_min</span><span class="o">=</span> <span class="mi">0</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">,</span> <span class="n">phi_max</span><span class="o">=</span><span class="mi">2</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">,</span>
+                  <span class="n">phi_num</span><span class="o">=</span><span class="mi">200</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="s">&quot;dB&quot;</span><span class="p">,</span> <span class="n">dB_limit</span><span class="o">=</span> <span class="o">-</span><span class="mi">40</span><span class="p">,</span> <span class="n">factor</span><span class="o">=</span><span class="s">&quot;GF&quot;</span><span class="p">,</span> <span class="n">plot_type</span><span class="o">=</span><span class="s">&quot;contour&quot;</span><span class="p">)</span>            
+</pre></div>
+</div>
 </div>
 <div class="section" id="usage-of-zolotarev-polynomial-module">
-<h1>Usage of Zolotarev Polynomial Module<a class="headerlink" href="#usage-of-zolotarev-polynomial-module" title="Permalink to this headline">¶</a></h1>
+<h2>Usage of Zolotarev Polynomial Module<a class="headerlink" href="#usage-of-zolotarev-polynomial-module" title="Permalink to this headline">¶</a></h2>
+<p>TBD</p>
+</div>
 </div>
 
 
@@ -87,16 +336,18 @@
         <div class="sphinxsidebarwrapper">
             <h3><a href="index.html">Table Of Contents</a></h3>
             <ul>
-<li><a class="reference external" href="#">Arraytool Import and Export</a></li>
-<li><a class="reference external" href="#arraytool-input-format-i">Arraytool Input Format - I</a></li>
-<li><a class="reference external" href="#arraytool-input-format-ii">Arraytool Input Format - II</a></li>
-<li><a class="reference external" href="#array-factor-zeros">Array Factor Zeros</a></li>
-<li><a class="reference external" href="#excitation-from-af-zeros">Excitation from AF Zeros</a></li>
-<li><a class="reference external" href="#generating-various-types-of-array-excitations">Generating Various Types of Array Excitations</a></li>
-<li><a class="reference external" href="#evaluating-2d-array-factor-of-a-linear-array-in-u-domain">Evaluating 2D Array Factor of a Linear Array in u - domain</a></li>
-<li><a class="reference external" href="#evaluating-3d-array-factor-of-a-planar-array-in-uv-domain">Evaluating 3D Array Factor of a planar Array in uv - domain</a></li>
-<li><a class="reference external" href="#evaluating-3d-array-factor-of-an-arbitrary-3d-array-in-tht-phi-domain">Evaluating 3D Array Factor of an arbitrary 3D Array in (tht, phi) - domain</a></li>
+<li><a class="reference external" href="#">A Few Examples</a><ul>
+<li><a class="reference external" href="#module-at_import_ex">Import and Export</a></li>
+<li><a class="reference external" href="#module-ip_format_ex">Input Format</a></li>
+<li><a class="reference external" href="#module-AF_zeros_ex">Array Factor Zeros</a></li>
+<li><a class="reference external" href="#module-A_frm_zeros_ex">Excitation from AF Zeros</a></li>
+<li><a class="reference external" href="#module-dist_ex">Generating Various Types of Array Excitations</a></li>
+<li><a class="reference external" href="#module-pattern_u_ex">Evaluating 2D Array Factor of a Linear Array in u - domain</a></li>
+<li><a class="reference external" href="#module-pattern_uv_ex">Evaluating 3D Array Factor of a planar Array in uv - domain</a></li>
+<li><a class="reference external" href="#module-pattern_tp_ex">Evaluating 3D Array Factor of an arbitrary 3D Array in (tht, phi) - domain</a></li>
 <li><a class="reference external" href="#usage-of-zolotarev-polynomial-module">Usage of Zolotarev Polynomial Module</a></li>
+</ul>
+</li>
 </ul>
 
             <h4>Previous topic</h4>
@@ -147,6 +398,7 @@
     </div>
     <div class="footer">
       &copy; Copyright 2011, Srinivas Zinka.
+      Last updated on Jun 25, 2011.
       Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 0.6.6.
     </div>
   </body>

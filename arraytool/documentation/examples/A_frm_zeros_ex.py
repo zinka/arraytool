@@ -20,7 +20,7 @@ shown below::
     U0 = planar.AF_zeros(a, M, R, dist_type="Dolph-Chebyshev")
     
     A = planar.A_frm_zeros(U0, a, M, symmetry="even").T # finding excitation coefficients
-    print 'array coefficients:', '\n', A.T
+    print 'array coefficients:', '\\n', A.T
     
 The output is as shown below::    
     

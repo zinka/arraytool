@@ -41,8 +41,8 @@ The output is as shown below::
 .. note::
            
     However, the function :func:`dist` will not provide any information regarding the
-    array factor zeros. If this information is necessary, then there is no other option 
-    but to use the function :func:`AF_zeros`
+    array factor zeros. If this information is necessary, for the time being, there
+    is no other option but to use the function :func:`AF_zeros`
 """
 
 #import arraytool.planar as planar

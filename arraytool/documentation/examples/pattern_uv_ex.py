@@ -28,12 +28,17 @@ radiation pattern of a planar uniform array is shown below::
                v_min= -2, v_max=2, v_num=300, scale="dB", dB_limit=-40,
                factor="NF", plot_type="rect", mayavi_app=False)
                
+.. image:: _static/pattern_uv_1.png
+               
 If a contour plot is needed, then the following command can be used::
 
     # Calling the 'pattern_uv' function to evaluate and plot 3D AF/GF/NF
     planar.pattern_uv(array_ip, u_scan=0, v_scan=0, u_min= -2, u_max=2, u_num=300,
                v_min= -2, v_max=2, v_num=300, scale="dB", dB_limit=-40,
-               factor="NF", plot_type="contour", mayavi_app=False)              
+               factor="NF", plot_type="contour", mayavi_app=False)
+               
+.. image:: _static/pattern_uv_2.png
+
 """
 
 #import arraytool.planar as planar
@@ -50,6 +55,11 @@ If a contour plot is needed, then the following command can be used::
 #array_ip = planar.ip_format(a, b, A)
 #
 ## Calling the 'pattern_uv' function to evaluate and plot 3D AF/GF/NF
-#planar.pattern_uv(array_ip, u_scan=0, v_scan=0, u_min= -2, u_max=2, u_num=300,
-#           v_min= -2, v_max=2, v_num=300, scale="dB", dB_limit=-40,
-#           factor="NF", plot_type="rect", mayavi_app=False)
+#planar.pattern_uv(array_ip, u_scan=0, v_scan=0, u_min= -2, u_max=2, u_num=300, 
+#                  v_min= -2, v_max=2, v_num=300, scale="dB", dB_limit=-40,
+#                  factor="NF", plot_type="rect", mayavi_app=False)
+#
+### Calling the 'pattern_uv' function to evaluate and plot 3D AF/GF/NF
+##planar.pattern_uv(array_ip, u_scan=0, v_scan=0, u_min= -2, u_max=2, u_num=300,
+##           v_min= -2, v_max=2, v_num=300, scale="dB", dB_limit=-40,
+##           factor="NF", plot_type="contour", mayavi_app=False)

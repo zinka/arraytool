@@ -27,12 +27,16 @@ A simple example to plot a Dolph-Chebyshev pattern is shown below::
                               scale="dB", dB_limit= -40, factor="NF", 
                               plot_type="rect", lattice=True)
                               
+.. image:: _static/pattern_u_1.png                              
+                              
 If a polar plot is needed, then the following command can be used::
 
     # Calling the 'pattern_u' function to evaluate and plot 2D AF/GF/NF
     [u,AF] = planar.pattern_u(array_ip, u_scan=0, u_min= -1, u_max=1, u_num=300,
                               scale="dB", dB_limit= -40, factor="NF", 
                               plot_type="polar", lattice=True)
+                              
+.. image:: _static/pattern_u_2.png
 """
 
 #import arraytool.planar as planar

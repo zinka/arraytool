@@ -28,14 +28,14 @@ One way to generate Arraytool's input format is to use the function :func:`ip_fo
 In the above coding, matrix A represents the planar array arrangement which is
 shown below.
 
-TBD
+To be done!
 
 Also, if needed, one can plot the array excitation using the option ``plot`` of
 :func:`ip_format`. If the array is linear (either along x or y axis), a 2D plot
 is generated using `Matplotlib`. If the given array is planar, a 3D stem plot is
 generated using `Mayavi`. Two such simple plots are shown below.
 
-TBD
+To be done!
 
 Another way is, to simply make a CSV file in the below format and and import it 
 using the function :func:`at_import`.

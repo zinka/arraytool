@@ -12,19 +12,21 @@ is defined as
 
   AF(u) = \sum_{m=1}^{M}\ [A_{m}\exp(jk_{0}ux_{m}].
 
-Some of the array factor properties are given as:
+Some of the array factor properties, assuming that the array elements are `uniformly
+placed`, are given as:
 
-- If all the elements in the array are placed uniformly, then :math:`AF\left(u\\right)`
-  is a periodic function in the :math:`u` - domain with a period of :math:`\lambda/a`,
-  where :math:`a` is the separation between elements.
+- Array factor :math:`AF\left(u\\right)` is a periodic function in the 
+  :math:`u` - domain with a period of :math:`\lambda/a`, where :math:`a` is the
+  separation between elements.
   
-- Since :math:`AF\left(u\\right)` is a polynomial of the order :math:`M-1` in :math:`u`,
-  if we know :math:`M-1` zeros of the array factor (with in a period), we can easily evaluate all 
-  array coefficients :math:`A_m`. Fortunately, in most of the cases (except 
-  shaped beam synthesis), these zeros are symmetrically located on the :math:`u`
-  axis. So, in symmetric cases, we need only :math:`\mathrm{ceil}\left[(M-1)/2\\right)]`
-  zeros. If the pattern is a difference pattern, then zero at the origin also should be
-  taken into consideration.
+- Since :math:`AF\left(u\\right)` is a polynomial of the order :math:`M-1` in 
+  :math:`\exp(jk_{0}ua)`, if we know :math:`M-1` zeros of the array factor 
+  (with in a period), we can easily evaluate all the array coefficients :math:`A_m`.
+  In addition, in most of the cases (except shaped beam synthesis, etc), these 
+  zeros are symmetrically located on the :math:`u` axis. So, in symmetric cases,
+  we need only :math:`\mathrm{ceil}\left[(M-1)/2\\right)]` zeros. If the pattern
+  is a difference pattern, then zero at the origin also should be taken into 
+  consideration.
   
 In Arraytool, the function :func:`AF_zeros` provides these :math:`\mathrm{ceil}\left[(M-1)/2\\right)]`
 zeros. So, let us get the array factor zeros for some simple array excitations::

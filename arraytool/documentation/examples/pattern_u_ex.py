@@ -27,7 +27,8 @@ A simple example to plot a Dolph-Chebyshev pattern is shown below::
                               scale="dB", dB_limit= -40, factor="NF", 
                               plot_type="rect", lattice=True)
                               
-.. image:: _static/pattern_u_1.png                              
+.. image:: _static/pattern_u_1.png
+   :align: center
                               
 If a polar plot is needed, then the following command can be used::
 
@@ -37,6 +38,7 @@ If a polar plot is needed, then the following command can be used::
                               plot_type="polar", lattice=True)
                               
 .. image:: _static/pattern_u_2.png
+   :align: center
 """
 
 #import arraytool.planar as planar

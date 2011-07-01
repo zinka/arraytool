@@ -26,7 +26,7 @@ example to obtain Taylor n-bar (also known as `Villeneuve`) distribution is show
     
 The output is as shown below::    
     
-    >>> arrayfactor zeros: 
+    >>> array coefficients: 
     array([[ 0.52917308],
            [ 0.61909302],
            [ 0.76458654],

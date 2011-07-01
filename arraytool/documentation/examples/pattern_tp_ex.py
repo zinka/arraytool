@@ -25,30 +25,32 @@ shown below::
     array_ip = planar.ip_format(a, b, A)
     
     # Calling the 'pattern_tp' function to evaluate and plot 3D AF/GF/NF    
-    planar.pattern_tp(array_ip, tht_scan=(0)*np.pi, phi_scan=(0)*np.pi, tht_min= 0,
+    [tht, phi, AF] = planar.pattern_tp(array_ip, tht_scan=(0)*np.pi, phi_scan=(0)*np.pi, tht_min= 0,
                       tht_max=0.5*np.pi, tht_num=200, phi_min= 0*np.pi, phi_max=2*np.pi,
                       phi_num=200, scale="dB", dB_limit= -40, factor="GF", plot_type="polar")
                       
-.. image:: _static/pattern_tp_1.png                      
+.. image:: _static/pattern_tp_1.png
+   :align: center                      
                       
 If a rectangular surf plot is needed, then the following command can be used::
 
     # Calling the 'pattern_tp' function to evaluate and plot 3D AF/GF/NF    
-    planar.pattern_tp(array_ip, tht_scan=(0)*np.pi, phi_scan=(0)*np.pi, tht_min= 0,
+    [tht, phi, AF] = planar.pattern_tp(array_ip, tht_scan=(0)*np.pi, phi_scan=(0)*np.pi, tht_min= 0,
                       tht_max=0.5*np.pi, tht_num=200, phi_min= 0*np.pi, phi_max=2*np.pi,
                       phi_num=200, scale="dB", dB_limit= -40, factor="GF", plot_type="rect")
 
-.. image:: _static/pattern_tp_2.png   
+.. image:: _static/pattern_tp_2.png
+   :align: center   
                
 If a contour plot is needed, then the following command can be used::
 
     # Calling the 'pattern_tp' function to evaluate and plot 3D AF/GF/NF    
-    planar.pattern_tp(array_ip, tht_scan=(0)*np.pi, phi_scan=(0)*np.pi, tht_min= 0,
+    [tht, phi, AF] = planar.pattern_tp(array_ip, tht_scan=(0)*np.pi, phi_scan=(0)*np.pi, tht_min= 0,
                       tht_max=0.5*np.pi, tht_num=200, phi_min= 0*np.pi, phi_max=2*np.pi,
                       phi_num=200, scale="dB", dB_limit= -40, factor="GF", plot_type="contour")
                       
 .. image:: _static/pattern_tp_3.png
-
+   :align: center   
 """
 
 #import arraytool.planar as planar
@@ -65,16 +67,16 @@ If a contour plot is needed, then the following command can be used::
 #array_ip = planar.ip_format(a, b, A)
 #
 ## Calling the 'pattern_tp' function to evaluate and plot 3D AF/GF/NF    
-#planar.pattern_tp(array_ip, tht_scan=(0)*np.pi, phi_scan=(0)*np.pi, tht_min= 0,
+#[tht, phi, AF] = planar.pattern_tp(array_ip, tht_scan=(0)*np.pi, phi_scan=(0)*np.pi, tht_min= 0,
 #                  tht_max=0.5*np.pi, tht_num=200, phi_min= 0*np.pi, phi_max=2*np.pi,
 #                  phi_num=200, scale="dB", dB_limit= -40, factor="GF", plot_type="polar")
 #
 ### Calling the 'pattern_tp' function to evaluate and plot 3D AF/GF/NF    
-##planar.pattern_tp(array_ip, tht_scan=(0)*np.pi, phi_scan=(0)*np.pi, tht_min= 0,
+##[tht, phi, AF] = planar.pattern_tp(array_ip, tht_scan=(0)*np.pi, phi_scan=(0)*np.pi, tht_min= 0,
 ##                  tht_max=0.5*np.pi, tht_num=200, phi_min= 0*np.pi, phi_max=2*np.pi,
 ##                  phi_num=200, scale="dB", dB_limit= -40, factor="GF", plot_type="rect")
 #
 ### Calling the 'pattern_tp' function to evaluate and plot 3D AF/GF/NF    
-##planar.pattern_tp(array_ip, tht_scan=(0)*np.pi, phi_scan=(0)*np.pi, tht_min= 0,
+##[tht, phi, AF] = planar.pattern_tp(array_ip, tht_scan=(0)*np.pi, phi_scan=(0)*np.pi, tht_min= 0,
 ##                  tht_max=0.5*np.pi, tht_num=200, phi_min= 0*np.pi, phi_max=2*np.pi,
 ##                  phi_num=200, scale="dB", dB_limit= -40, factor="GF", plot_type="contour")

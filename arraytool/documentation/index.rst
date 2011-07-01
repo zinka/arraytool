@@ -25,6 +25,7 @@ This is a brief `mathematical` introduction related to the `phased array antenna
    :maxdepth: 2
    
    basics.rst
+   arrays.rst
    
 For more comprehensive treatment, see the following books.
 

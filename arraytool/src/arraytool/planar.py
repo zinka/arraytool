@@ -767,3 +767,4 @@ if __name__ == '__main__':
 # implement show in pattern_** functions
 # "See also" doc string
 # in Sphinx docs, choose section, subsections, title etc carefully ...
+# function links in documentation .. also, put all example files in a single module

@@ -5,7 +5,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Think beyond the Visible Space! &mdash; Arraytool v0.0.0 documentation</title>
+    <title>Relation between Source Excitation and Far-Field Pattern &mdash; Arraytool v0.0.0 documentation</title>
     <link rel="stylesheet" href="static/default.css" type="text/css" />
     <link rel="stylesheet" href="static/pygments.css" type="text/css" />
     <script type="text/javascript">
@@ -20,7 +20,7 @@
     <script type="text/javascript" src="static/jquery.js"></script>
     <script type="text/javascript" src="static/doctools.js"></script>
     <link rel="top" title="Arraytool v0.0.0 documentation" href="index.html" />
-    <link rel="next" title="A Few Examples" href="tutorial.html" />
+    <link rel="next" title="Classification of Array Excitation Types" href="arrays.html" />
     <link rel="prev" title="Welcome to Arraytool’s Documentation!" href="index.html" /> 
   </head>
   <body>
@@ -34,7 +34,7 @@
           <a href="modindex.html" title="Global Module Index"
              accesskey="M">modules</a> |</li>
         <li class="right" >
-          <a href="tutorial.html" title="A Few Examples"
+          <a href="arrays.html" title="Classification of Array Excitation Types"
              accesskey="N">next</a> |</li>
         <li class="right" >
           <a href="index.html" title="Welcome to Arraytool’s Documentation!"
@@ -48,14 +48,117 @@
         <div class="bodywrapper">
           <div class="body">
             
-  <div class="section" id="think-beyond-the-visible-space">
-<h1>Think beyond the Visible Space!<a class="headerlink" href="#think-beyond-the-visible-space" title="Permalink to this headline">¶</a></h1>
-</div>
-<div class="section" id="relation-between-source-excitation-and-far-field-pattern">
+  <div class="section" id="relation-between-source-excitation-and-far-field-pattern">
 <h1>Relation between Source Excitation and Far-Field Pattern<a class="headerlink" href="#relation-between-source-excitation-and-far-field-pattern" title="Permalink to this headline">¶</a></h1>
+<p>Many students either dislike or afraid of Electromagnetic theory! Obviously, the
+reason is the mathematical complexity involved in the EM theory. At the same time,
+nobody has that much trouble with subjects such as signal processing, communication
+theory, etc. But, if observed closely, the fundamental theory behind all these
+subjects is nothing but the <a class="reference external" href="http://en.wikipedia.org/wiki/Fourier_analysis">Fourier analysis</a>.
+In fact, Fourier analysis plays crucial role in understanding many areas of science and
+engineering.</p>
+<p>So, it is the authors&#8217; opinion that if the books on antenna theory starts with a
+slightly different approach using <strong>Fourier analysis as the starting point</strong>, then
+the learning process becomes easier and more fun. In this brief introductory
+article, we use this approach to explain the antenna theory  (and of course,
+array antenna theory too).</p>
+<div class="section" id="symmetric-maxwell-s-equations">
+<h2>Symmetric Maxwell&#8217;s Equations<a class="headerlink" href="#symmetric-maxwell-s-equations" title="Permalink to this headline">¶</a></h2>
+<p>Symmetric Maxwell&#8217;s equations are given as</p>
+<div class="math">
+<p><img src="images/math/453285b22957462339468ee680f7fec11ab3a56e.png" alt="\nabla \cdot \mathbf{D} &amp;= \rho_e
+\\
+\nabla \cdot \mathbf{B} &amp;= \rho_m
+\\
+\nabla \times \mathbf{E} &amp;= -\mathbf{J}_m-\frac{\partial \mathbf{B}}{\partial t}
+\\
+\nabla \times \mathbf{H} &amp;= +\mathbf{J}_e+\frac{\partial \mathbf{D}}{\partial t}" /></p>
+</div><p>where <img class="math" src="images/math/1d9773dc666327e7c6669ae9299508ad8907e71e.png" alt="\mathbf{D}=\epsilon\mathbf{E}"/> and <img class="math" src="images/math/2a838153f916441f57122266497af8edba1ce032.png" alt="\mathbf{B}=\mu\mathbf{H}"/>.</p>
+</div>
+<div class="section" id="vector-potentials-and-helmholtz-wave-equations">
+<h2>Vector Potentials and Helmholtz Wave Equations<a class="headerlink" href="#vector-potentials-and-helmholtz-wave-equations" title="Permalink to this headline">¶</a></h2>
+<p>Assuming the entire system is <cite>linear</cite>, any source can be separated into
+electric and magnetic currents (sources). The vector potentials <img class="math" src="images/math/f3e830722dede854af533bfa96d549c68ed5997f.png" alt="\mathbf{A}"/>
+and <img class="math" src="images/math/a01b1c51e370cb2f12af2152cd3c9d61e9fec928.png" alt="\mathbf{F}"/> corresponding to these given electric and magnetic currents
+<img class="math" src="images/math/9569d65b591f3a867e7acf670ca972e9623d8c74.png" alt="\mathbf{J}_e"/> and <img class="math" src="images/math/ade985bcba7816cfe4f78ee8d17ff7cbfdc280da.png" alt="\mathbf{J}_m"/> are given as</p>
+<div class="math">
+<p><img src="images/math/4ecec1dff4a4c19465c59e7ab1ecb14a3f0b37d7.png" alt="\nabla^{2}\mathbf{A}+k^{2}\mathbf{A} &amp;= -\mu\mathbf{J}_{e}
+\\
+\nabla^{2}\mathbf{F}+k^{2}\mathbf{F} &amp;= -\epsilon\mathbf{J}_{m}." /></p>
+</div><p>The above equations are derived from the Maxwell&#8217;s equations. Solutions to the
+above <a class="reference external" href="http://en.wikipedia.org/wiki/Helmholtz_equation#Inhomogeneous_Helmholtz_equation">inhomogeneous Hemlholtz equations</a>, are given as</p>
+<div class="math">
+<p><img src="images/math/a412e13e6e238da1c69b071d7129e1eb64dc9e86.png" alt="\mathbf{A} &amp;= \frac{\mu}{4\pi}\int_\mathrm{volume}\mathbf{J}_e\frac{e^{-jk_0|\mathbf{r-r^\prime}|}}{|\mathbf{r-r^\prime}|}dv^\prime
+\\
+\mathbf{F} &amp;= \frac{\epsilon}{4\pi}\int_\mathrm{volume}\mathbf{J}_m\frac{e^{-jk_0|\mathbf{r-r^\prime}|}}{|\mathbf{r-r^\prime}|}dv^\prime." /></p>
+</div><p>And of course, the relation between vector potentials and electric and magnetic fields are
+given as</p>
+<div class="math">
+<p><img src="images/math/f04863968fe6f8c2733a31a0094630debd182903.png" alt="\mathbf{H}_A &amp;= \frac{1}{\mu}\left(\nabla\times\mathbf{A}\right)
+\\
+\mathbf{E}_A &amp;= \frac{1}{j\omega\epsilon\mu}\nabla\left(\nabla.\mathbf{A}\right)-j\omega\mathbf{A}
+\\
+\mathbf{E}_F &amp;= -\frac{1}{\epsilon}\left(\nabla\times\mathbf{F}\right)
+\\
+\mathbf{H}_F &amp;= \frac{1}{j\omega\epsilon\mu}\nabla\left(\nabla.\mathbf{F}\right)-j\omega\mathbf{F}" /></p>
+</div><p>where <img class="math" src="images/math/5ff351e24d1ee53d7809df5b6535f764836d7eae.png" alt="\mathbf{E}_{\mathrm{tot}}=\mathbf{E}_A+\mathbf{E}_F"/>  and
+<img class="math" src="images/math/21b0406d0d8839ebf18cd57ef482faa6270c75e7.png" alt="\mathbf{H}_{\mathrm{tot}}=\mathbf{H}_A+\mathbf{H}_F"/>. For further details,
+please refer to (page.135, [Balanis]).</p>
+</div>
+<div class="section" id="far-field-components">
+<h2>Far-field Components<a class="headerlink" href="#far-field-components" title="Permalink to this headline">¶</a></h2>
+<p>In rectangular co-ordinate system, when <img class="math" src="images/math/024a9b5917c9f11ab95ae569085f701bb26bf444.png" alt="r \gg r'"/>, the term <img class="math" src="images/math/f3e9bb0916bebc5ffefd7e94ae8cfca81e39d15e.png" alt="|\mathbf{r-r^\prime}|"/> can be approximated as</p>
+<div class="math">
+<p><img src="images/math/78701c7ab7e3cd69a454e3633fc9028191f6d704.png" alt="|\mathbf{r-r^{\prime}}| &amp;\approx \left(r-\hat{\mathbf{r}}\cdot\mathbf{r^{\prime}}\right)
+\\
+&amp;\approx r-\left(\sin\theta\cos\phi x'+\sin\theta\sin\phi y'+\cos\theta z'\right)
+\\
+&amp;\approx r-\left(ux'+vy'+wz'\right)." /></p>
+</div><p>So, far-field vector potentials are given as</p>
+<div class="math">
+<p><img src="images/math/30bea4c6e586df7e2b830a30b569d423024b0eec.png" alt="\mathbf{A} &amp;\approx \frac{\mu}{4\pi}\frac{e^{-jk_0r}}{r}\int_\mathrm{volume}\mathbf{J}_e{e^{+jk_0(ux'+vy'+wz')}}dv^\prime
+\\
+\mathbf{F} &amp;\approx \frac{\epsilon}{4\pi}\frac{e^{-jk_0r}}{r}\int_\mathrm{volume}\mathbf{J}_m{e^{+jk_0(ux'+vy'+wz')}}dv^\prime." /></p>
+</div><p>From the above equations, it is evident that <img class="math" src="images/math/b2157f1a5a1248fc32151de9998f0c5d9eb839ca.png" alt="\mathbf{A} \&amp; \mathbf{J}_e"/>
+and <img class="math" src="images/math/836ef6e0883cc5f346c58d2d8b2504b2a3a545c8.png" alt="\mathbf{F} \&amp; \mathbf{J}_m"/> forms <strong>Fourier transform pairs</strong>.
+In comparison to the signal processing terminology, <img class="math" src="images/math/c73ed093cc73a8d9a14185fa525e7067e5c3725d.png" alt="(x,y,z)"/> and
+<img class="math" src="images/math/6cae371bfd2071f02ea92c900fa514467e7d9755.png" alt="(u,v,w)"/> are analogous to time <img class="math" src="images/math/e0d2bf360290fd61d1c1557e763f2622363b3d35.png" alt="t"/> and frequency <img class="math" src="images/math/bb2c93730dbb48558bb3c4738c956c4e8f816437.png" alt="f"/>, respectively.</p>
+<p>Also, far-field electric and magnetic field components can be approximated as</p>
+<div class="math">
+<p><img src="images/math/223e5a1d52ed2950d8b0ed5d9e04b4499bfbb21f.png" alt="\mathbf{E}_A &amp;\simeq -j\omega\mathbf{A}
+\\
+\mathbf{H}_F &amp;\simeq -j\omega\mathbf{F}." /></p>
+</div><p>The far-field components <img class="math" src="images/math/675c47d0f1f682b343ca0cd40e6f1ebecefc966a.png" alt="\mathbf{H}_A"/> and <img class="math" src="images/math/f42c865c8baf21b8bb4efb987a251144b28210ac.png" alt="\mathbf{E}_F"/> are related
+to the above components as <img class="math" src="images/math/9c6b20ca12f05dbaec9db0d3bc07d2f54870415a.png" alt="\mathbf{H}_A\simeq\frac{1}{\eta}\left(\hat{\mathbf{a}}_r\times\mathbf{E}_A\right)"/>
+and <img class="math" src="images/math/2f0fa607e0befee796d527a5bc09a0c457a2f71d.png" alt="\mathbf{E}_F\simeq-\eta\left(\hat{\mathbf{a}}_r\times\mathbf{H}_F\right)"/>,
+where <img class="math" src="images/math/5f4cf30e8f4a24d2ddfd5813ec18cd236d0e1a78.png" alt="\eta=\sqrt{\mu / \epsilon}"/> is the free space wave impedance.</p>
+</div>
 <div class="section" id="far-field-greens-functions-of-infinitesimal-dipoles">
 <h2>Far-field Green’s Functions of Infinitesimal Dipoles<a class="headerlink" href="#far-field-greens-functions-of-infinitesimal-dipoles" title="Permalink to this headline">¶</a></h2>
+<p>Now, a simple example will be considered. This example deals with evaluation of
+the far-field components corresponding to a infinitesimal electric dipole placed
+at the origin and oriented along the <img class="math" src="images/math/b13f21416d84e13708696f34dea81026cda583c9.png" alt="z"/>-axis. The corresponding vector potential
+is given as</p>
+<div class="math">
+<p><img src="images/math/dbf2ad51aad5efb2210041c76f291d79ee06c7c1.png" alt="\mathbf{A} = \left(\frac{\mu}{4\pi}\frac{e^{-jk_0r}}{r}\right)\hat{\mathbf{z}}" /></p>
+</div><p>Converting the above equation into spherical co-ordinate system gives</p>
+<div class="math">
+<p><img src="images/math/d0bd4dd3f3528ed892ddf1d3b7478bf65aa01d84.png" alt="\mathbf{A} = \left(\frac{\mu}{4\pi}\frac{e^{-jk_0r}}{r}\sin\theta\right)\hat{\mathbf{\theta}}." /></p>
+</div><p>In deriving the above equation, radial component of the vector potential is neglected.
+Finally, far-field electric field is given as</p>
+<div class="math">
+<p><img src="images/math/ad9dcf7653bab768a2945aa697f728ac8fcf6d35.png" alt="\mathbf{E} = -j\omega\mathbf{A} = \left(-j\omega\frac{\mu}{4\pi}\frac{e^{-jk_0r}}{r}\sin\theta\right)\hat{\mathbf{\theta}}." /></p>
+</div><p>Similar far-field Green’s functions corresponding to infinitesimal dipoles oriented along various
+directions are given below.</p>
+<div align="center" class="align-center"><img alt="images/Green.png" class="align-center" src="images/Green.png" /></div>
 </div>
+</div>
+<div class="section" id="think-beyond-the-visible-space">
+<h1>Think beyond the Visible Space!<a class="headerlink" href="#think-beyond-the-visible-space" title="Permalink to this headline">¶</a></h1>
+<p>From a end user&#8217;s point of view, visible space is the only meaningful space. But,
+an antenna engineer must think beyond this visible space (this is especially true
+in the case of array design and analysis). Understanding the entire <img class="math" src="images/math/9ad99798ec4c38e165cf517cb9e02b1c9e824103.png" alt="u"/> -
+domain</p>
 </div>
 <div class="section" id="continuous-vs-discrete-sources">
 <h1>Continuous VS Discrete Sources<a class="headerlink" href="#continuous-vs-discrete-sources" title="Permalink to this headline">¶</a></h1>
@@ -66,45 +169,6 @@
 <div class="section" id="array-and-grating-lobe-lattices">
 <h1>Array and Grating-Lobe Lattices<a class="headerlink" href="#array-and-grating-lobe-lattices" title="Permalink to this headline">¶</a></h1>
 </div>
-<div class="section" id="classification-of-array-excitation-types">
-<h1>Classification of Array Excitation Types<a class="headerlink" href="#classification-of-array-excitation-types" title="Permalink to this headline">¶</a></h1>
-</div>
-<div class="section" id="various-parameters-of-array-antennas">
-<h1>Various Parameters of Array Antennas<a class="headerlink" href="#various-parameters-of-array-antennas" title="Permalink to this headline">¶</a></h1>
-<div class="section" id="array-pattern">
-<h2>Array Pattern<a class="headerlink" href="#array-pattern" title="Permalink to this headline">¶</a></h2>
-</div>
-<div class="section" id="array-gain">
-<h2>Array Gain<a class="headerlink" href="#array-gain" title="Permalink to this headline">¶</a></h2>
-</div>
-<div class="section" id="array-directivity">
-<h2>Array Directivity<a class="headerlink" href="#array-directivity" title="Permalink to this headline">¶</a></h2>
-</div>
-<div class="section" id="various-array-factor-definitions-used-in-arraytool">
-<h2>Various Array Factor Definitions used in Arraytool<a class="headerlink" href="#various-array-factor-definitions-used-in-arraytool" title="Permalink to this headline">¶</a></h2>
-</div>
-<div class="section" id="array-tapper-efficiency">
-<h2>Array Tapper Efficiency<a class="headerlink" href="#array-tapper-efficiency" title="Permalink to this headline">¶</a></h2>
-</div>
-<div class="section" id="normalized-bore-sight-slope">
-<h2>Normalized Bore-sight Slope<a class="headerlink" href="#normalized-bore-sight-slope" title="Permalink to this headline">¶</a></h2>
-</div>
-</div>
-<div class="section" id="mutual-coupling-in-array-antennas">
-<h1>Mutual Coupling in Array Antennas<a class="headerlink" href="#mutual-coupling-in-array-antennas" title="Permalink to this headline">¶</a></h1>
-</div>
-<div class="section" id="conformal-array-antennas">
-<h1>Conformal Array Antennas<a class="headerlink" href="#conformal-array-antennas" title="Permalink to this headline">¶</a></h1>
-<div class="section" id="circular-arrays">
-<h2>Circular Arrays<a class="headerlink" href="#circular-arrays" title="Permalink to this headline">¶</a></h2>
-</div>
-</div>
-<div class="section" id="shaped-beam-synthesis">
-<h1>Shaped Beam Synthesis<a class="headerlink" href="#shaped-beam-synthesis" title="Permalink to this headline">¶</a></h1>
-</div>
-<div class="section" id="array-feeding">
-<h1>Array Feeding<a class="headerlink" href="#array-feeding" title="Permalink to this headline">¶</a></h1>
-</div>
 
 
           </div>
@@ -114,41 +178,27 @@
         <div class="sphinxsidebarwrapper">
             <h3><a href="index.html">Table Of Contents</a></h3>
             <ul>
-<li><a class="reference external" href="#">Think beyond the Visible Space!</a></li>
-<li><a class="reference external" href="#relation-between-source-excitation-and-far-field-pattern">Relation between Source Excitation and Far-Field Pattern</a><ul>
+<li><a class="reference external" href="#">Relation between Source Excitation and Far-Field Pattern</a><ul>
+<li><a class="reference external" href="#symmetric-maxwell-s-equations">Symmetric Maxwell&#8217;s Equations</a></li>
+<li><a class="reference external" href="#vector-potentials-and-helmholtz-wave-equations">Vector Potentials and Helmholtz Wave Equations</a></li>
+<li><a class="reference external" href="#far-field-components">Far-field Components</a></li>
 <li><a class="reference external" href="#far-field-greens-functions-of-infinitesimal-dipoles">Far-field Green’s Functions of Infinitesimal Dipoles</a></li>
 </ul>
 </li>
+<li><a class="reference external" href="#think-beyond-the-visible-space">Think beyond the Visible Space!</a></li>
 <li><a class="reference external" href="#continuous-vs-discrete-sources">Continuous VS Discrete Sources</a><ul>
 <li><a class="reference external" href="#scanning-via-progressive-phase-shift">Scanning via Progressive Phase Shift</a></li>
 </ul>
 </li>
 <li><a class="reference external" href="#array-and-grating-lobe-lattices">Array and Grating-Lobe Lattices</a></li>
-<li><a class="reference external" href="#classification-of-array-excitation-types">Classification of Array Excitation Types</a></li>
-<li><a class="reference external" href="#various-parameters-of-array-antennas">Various Parameters of Array Antennas</a><ul>
-<li><a class="reference external" href="#array-pattern">Array Pattern</a></li>
-<li><a class="reference external" href="#array-gain">Array Gain</a></li>
-<li><a class="reference external" href="#array-directivity">Array Directivity</a></li>
-<li><a class="reference external" href="#various-array-factor-definitions-used-in-arraytool">Various Array Factor Definitions used in Arraytool</a></li>
-<li><a class="reference external" href="#array-tapper-efficiency">Array Tapper Efficiency</a></li>
-<li><a class="reference external" href="#normalized-bore-sight-slope">Normalized Bore-sight Slope</a></li>
-</ul>
-</li>
-<li><a class="reference external" href="#mutual-coupling-in-array-antennas">Mutual Coupling in Array Antennas</a></li>
-<li><a class="reference external" href="#conformal-array-antennas">Conformal Array Antennas</a><ul>
-<li><a class="reference external" href="#circular-arrays">Circular Arrays</a></li>
-</ul>
-</li>
-<li><a class="reference external" href="#shaped-beam-synthesis">Shaped Beam Synthesis</a></li>
-<li><a class="reference external" href="#array-feeding">Array Feeding</a></li>
 </ul>
 
             <h4>Previous topic</h4>
             <p class="topless"><a href="index.html"
                                   title="previous chapter">Welcome to Arraytool&#8217;s Documentation!</a></p>
             <h4>Next topic</h4>
-            <p class="topless"><a href="tutorial.html"
-                                  title="next chapter">A Few Examples</a></p>
+            <p class="topless"><a href="arrays.html"
+                                  title="next chapter">Classification of Array Excitation Types</a></p>
             <h3>This Page</h3>
             <ul class="this-page-menu">
               <li><a href="sources/basics.txt"
@@ -181,7 +231,7 @@
           <a href="modindex.html" title="Global Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="tutorial.html" title="A Few Examples"
+          <a href="arrays.html" title="Classification of Array Excitation Types"
              >next</a> |</li>
         <li class="right" >
           <a href="index.html" title="Welcome to Arraytool’s Documentation!"
@@ -191,7 +241,7 @@
     </div>
     <div class="footer">
       &copy; Copyright 2011, Srinivas Zinka.
-      Last updated on Jun 25, 2011.
+      Last updated on Jul 02, 2011.
       Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 0.6.6.
     </div>
   </body>

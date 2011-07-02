@@ -1,6 +1,9 @@
 Zolotarev Polynomial Related Routines
 =====================================
 
+:Release: |version|
+:Date: |today|
+
 .. automodule:: Zolotarev
 
 .. toctree::

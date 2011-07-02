@@ -1,6 +1,9 @@
 Mutual Coupling in Array Antennas
 =================================
 
+:Release: |version|
+:Date: |today|
+
 Conformal Array Antennas
 ========================
 

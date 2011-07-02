@@ -1,6 +1,9 @@
 A Few Examples
 ==============
 
+:Release: |version|
+:Date: |today|
+
 Intro - To be done!
 
 Import and Export

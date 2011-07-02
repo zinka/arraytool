@@ -2,7 +2,8 @@
 Relation between Source Excitation and Far-Field Pattern
 ========================================================
 
-.. LABELS FOR ALL DATABASES ....
+:Release: |version|
+:Date: |today|
 
 Many students either dislike or afraid of Electromagnetic theory! Obviously, the
 reason is the mathematical complexity involved in the EM theory. At the same time,
@@ -15,7 +16,7 @@ engineering.
 So, it is the authors' opinion that if the books on antenna theory starts with a
 slightly different approach using **Fourier analysis as the starting point**, then
 the learning process becomes easier and more fun. In this brief introductory 
-article, we use this approach to explain the antenna theory  (and of course, 
+article, authors use this approach to explain the antenna theory  (and of course, 
 array antenna theory too).
 
 Symmetric Maxwell's Equations
@@ -49,9 +50,11 @@ and :math:`\mathbf{F}` corresponding to these given electric and magnetic curren
         \\
         \nabla^{2}\mathbf{F}+k^{2}\mathbf{F} &= -\epsilon\mathbf{J}_{m}.
         
-The above equations are derived from the Maxwell's equations. Solutions to the 
-above `inhomogeneous Hemlholtz equations <http://en.wikipedia.org/wiki/Helmholtz
-_equation#Inhomogeneous_Helmholtz_equation>`_, are given as
+The above equations are derived from the Maxwell's equations using simple
+`vector identities <http://en.wikipedia.org/wiki/Vector_identities#Summary_of_all_identities>`_. 
+Using the `Sommerfeld radiation condition <http://en.wikipedia.org/wiki/Sommerfeld_radiation_condition>`_,
+solutions to the above `inhomogeneous Hemlholtz equations <http://en.wikipedia.org/wiki/Helmholtz
+_equation#Inhomogeneous_Helmholtz_equation>`_ are given as
 
 .. math::
 
@@ -59,8 +62,8 @@ _equation#Inhomogeneous_Helmholtz_equation>`_, are given as
         \\
         \mathbf{F} &= \frac{\epsilon}{4\pi}\int_\mathrm{volume}\mathbf{J}_m\frac{e^{-jk_0|\mathbf{r-r^\prime}|}}{|\mathbf{r-r^\prime}|}dv^\prime.
         
-And of course, the relation between vector potentials and electric and magnetic fields are 
-given as
+And of course, from the definitions, electric and magnetic fields can be written in terms of
+the vector potentials as
 
 .. math::
 
@@ -76,8 +79,8 @@ where :math:`\mathbf{E}_{\mathrm{tot}}=\mathbf{E}_A+\mathbf{E}_F`  and
 :math:`\mathbf{H}_{\mathrm{tot}}=\mathbf{H}_A+\mathbf{H}_F`. For further details, 
 please refer to (page.135, [Balanis]).
         
-Far-field Components
---------------------
+Far-field Approximations
+------------------------
 
 In rectangular co-ordinate system, when :math:`r \gg r'`, the term :math:`|\mathbf{r-r^\prime}|` can be approximated as
 
@@ -98,11 +101,12 @@ So, far-field vector potentials are given as
         \mathbf{F} &\approx \frac{\epsilon}{4\pi}\frac{e^{-jk_0r}}{r}\int_\mathrm{volume}\mathbf{J}_m{e^{+jk_0(ux'+vy'+wz')}}dv^\prime.
         
 From the above equations, it is evident that :math:`\mathbf{A} \& \mathbf{J}_e`
-and :math:`\mathbf{F} \& \mathbf{J}_m` forms **Fourier transform pairs**.
+and :math:`\mathbf{F} \& \mathbf{J}_m` form **Fourier transform pairs**.
 In comparison to the signal processing terminology, :math:`(x,y,z)` and 
 :math:`(u,v,w)` are analogous to time :math:`t` and frequency :math:`f`, respectively.
 
-Also, far-field electric and magnetic field components can be approximated as
+Also, far-field electric and magnetic field components can be approximated as (for the 
+:math:`\theta` and :math:`\phi` components only since :math:`E_r\simeq0` and :math:`H_r\simeq0`)
 
 .. math::
 
@@ -127,39 +131,22 @@ is given as
 
         \mathbf{A} = \left(\frac{\mu}{4\pi}\frac{e^{-jk_0r}}{r}\right)\hat{\mathbf{z}}
         
-Converting the above equation into spherical co-ordinate system gives
+`Converting <http://en.wikipedia.org/wiki/Vector_fields_in_cylindrical_and_spherical_coordinates#Spherical_coordinate_system>`_
+the above equation into spherical co-ordinate system gives
 
 .. math::
 
-        \mathbf{A} = \left(\frac{\mu}{4\pi}\frac{e^{-jk_0r}}{r}\sin\theta\right)\hat{\mathbf{\theta}}.
+        \mathbf{A} = \left(-\frac{\mu}{4\pi}\frac{e^{-jk_0r}}{r}\sin\theta\right)\hat{\mathbf{\theta}}.
         
 In deriving the above equation, radial component of the vector potential is neglected.
 Finally, far-field electric field is given as
 
 .. math::
 
-        \mathbf{E} = -j\omega\mathbf{A} = \left(-j\omega\frac{\mu}{4\pi}\frac{e^{-jk_0r}}{r}\sin\theta\right)\hat{\mathbf{\theta}}.
+        \mathbf{E} = -j\omega\mathbf{A} = \left(j\omega\frac{\mu}{4\pi}\frac{e^{-jk_0r}}{r}\sin\theta\right)\hat{\mathbf{\theta}}.
         
 Similar far-field Green’s functions corresponding to infinitesimal dipoles oriented along various
 directions are given below.
 
 .. image:: _static/Green.png
    :align: center
-
-
-Think beyond the Visible Space!
-===============================
-
-From a end user's point of view, visible space is the only meaningful space. But,
-an antenna engineer must think beyond this visible space (this is especially true
-in the case of array design and analysis). Understanding the entire :math:`u` -
-domain 
-
-Continuous VS Discrete Sources
-==============================
-
-Scanning via Progressive Phase Shift
-------------------------------------
-
-Array and Grating-Lobe Lattices
-===============================

@@ -1,8 +1,12 @@
+.. NOTES TO MYSELF
+.. LABELS FOR ALL DATABASES ....
+.. spherical coordiante system figure
+
 Welcome to Arraytool's Documentation!
 =====================================
 
-.. :Release: |version|
-.. :Date: |today|
+:Release: |version|
+:Date: |today|
 
 Arraytool is a Python library for analysis and design of phased array antennas.
 For general information about Arraytool, see the project `repository <https://github.com/zinka/arraytool>`_ and my `personal blog <http://zinka.wordpress.com/>`_.
@@ -12,9 +16,7 @@ These documentation pages include general information as well as docstring listi
 .. note::
 
    Arraytool project and its documentation are still ongoing. If anybody wants to contribute to this project,
-   please leave a message at the `blog <http://zinka.wordpress.com/arraytool/#respond/>`_. For the time 
-   being, please see some `screen shots <http://zinka.wordpress.com/2011/02/12/finally-i-was-able-to-finish-some-
-   basic-arraytool-routines/>`_ at my blog.
+   please leave a message at the `blog <http://zinka.wordpress.com/arraytool/#respond/>`_.
 
 Basic Theory
 ------------
@@ -25,6 +27,7 @@ This is a brief `mathematical` introduction related to the `phased array antenna
    :maxdepth: 2
    
    basics.rst
+   scanning.rst
    arrays.rst
    
 For more comprehensive treatment, see the following books.

@@ -1,6 +1,9 @@
 Planar Array Routines
 =====================
 
+:Release: |version|
+:Date: |today|
+
 .. automodule:: planar
 
 .. toctree::

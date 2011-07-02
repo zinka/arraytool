@@ -2,6 +2,9 @@
 Classification of Array Excitation Types
 ========================================
 
+:Release: |version|
+:Date: |today|
+
 Various Parameters of Array Antennas
 ======================================
 

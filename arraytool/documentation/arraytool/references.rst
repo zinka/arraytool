@@ -1,6 +1,9 @@
 References
 ==========
 
+:Release: |version|
+:Date: |today|
+
 This is a non-comprehensive list of works used in the development of Arraytool 
 or cited for examples or mathematical definitions used in this documentation.
 

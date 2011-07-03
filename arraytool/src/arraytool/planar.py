@@ -28,6 +28,42 @@ import tkFileDialog as tkdlg
 from matplotlib import rc
 rc('text', usetex=True)
 
+def at_import(dtype='complex'):
+    r"""
+    A simple function to import a CSV text file as a Numpy ndarray
+    
+    :param dtype: Data-type of the resulting array; default:complex. For further
+                  information, see numpy.loadtxt.
+                  
+    :rtype:       ip, a Numpy ndarray
+    """
+    master = ti.Tk(); master.withdraw() #hiding tkinter window 
+    file_path = tkdlg.askopenfilename(title="Open file", filetypes=[("txt file",
+                ".csv"), ("All files", ".*")]); master.quit()
+    ip = np.loadtxt(file_path, delimiter=',', dtype=dtype)
+    return ip
+
+def at_export(data=np.ones((0,0)), data_ID=False, fmt='%.4e', mode='a'):
+    r"""
+    A simple function to export a Numpy ndarray as a CSV text file.
+    
+    :param data:        Numpy ndarray
+    :param data_ID:     a string to represent the data being exported
+    :param fmt:         str or sequence of strs. For more information, see
+                        numpy.savetxt.
+    :param mode:        file opening mode, e.g., 'w', 'a', etc
+    
+    :rtype:             A CSV text file 
+    """
+    master = ti.Tk(); master.withdraw() #hiding tkinter window 
+    file_path = tkdlg.asksaveasfile(mode, title="Save file", filetypes=[("txt file",
+                ".csv"), ("All files", ".*")]); master.quit()
+    if(data_ID):
+        file_path.write(data_ID + '\n' + '\n')
+    np.savetxt(file_path, data, delimiter=',', fmt=fmt)
+    file_path.write('\n')
+    return
+
 def ip_format(a, b, A, gamma=np.pi / 2, plot=False, color='b', linewidth=1,
               linestyle='-', alpha=1, show=True, stem=False, stemline='g--',
               stemmarker='ro', mayavi_app=False):
@@ -113,42 +149,6 @@ def ip_format(a, b, A, gamma=np.pi / 2, plot=False, color='b', linewidth=1,
             s1.scene.isometric_view()
             if(show): mlab.show()
     return array_ip
-
-def at_import(dtype='complex'):
-    r"""
-    A simple function to import a CSV text file as a Numpy ndarray
-    
-    :param dtype: Data-type of the resulting array; default:complex. For further
-                  information, see numpy.loadtxt.
-                  
-    :rtype:       ip, a Numpy ndarray
-    """
-    master = ti.Tk(); master.withdraw() #hiding tkinter window 
-    file_path = tkdlg.askopenfilename(title="Open file", filetypes=[("txt file",
-                ".csv"), ("All files", ".*")]); master.quit()
-    ip = np.loadtxt(file_path, delimiter=',', dtype=dtype)
-    return ip
-
-def at_export(data, data_ID=False, fmt='%.4e', mode='a'):
-    r"""
-    A simple function to export a Numpy ndarray as a CSV text file.
-    
-    :param data:        Numpy ndarray
-    :param data_ID:     a string to represent the data being exported
-    :param fmt:         str or sequence of strs. For more information, see
-                        numpy.savetxt.
-    :param mode:        file opening mode, e.g., 'w', 'a', etc
-    
-    :rtype:             A CSV text file 
-    """
-    master = ti.Tk(); master.withdraw() #hiding tkinter window 
-    file_path = tkdlg.asksaveasfile(mode, title="Save file", filetypes=[("txt file",
-                ".csv"), ("All files", ".*")]); master.quit()
-    if(data_ID):
-        file_path.write(data_ID + '\n' + '\n')
-    np.savetxt(file_path, data, delimiter=',', fmt=fmt)
-    file_path.write('\n')
-    return
 
 def ATE(array_ip):
     r"""

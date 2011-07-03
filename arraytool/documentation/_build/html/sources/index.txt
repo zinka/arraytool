@@ -1,6 +1,5 @@
 .. NOTES TO MYSELF
 .. LABELS FOR ALL DATABASES ....
-.. spherical coordiante system figure
 
 Welcome to Arraytool's Documentation!
 =====================================

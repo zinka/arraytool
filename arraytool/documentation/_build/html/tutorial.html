@@ -48,39 +48,52 @@
         <div class="bodywrapper">
           <div class="body">
             
-  <div class="section" id="a-few-examples">
-<h1>A Few Examples<a class="headerlink" href="#a-few-examples" title="Permalink to this headline">¶</a></h1>
+  <div class="section" id="module-examples">
+<h1>A Few Examples<a class="headerlink" href="#module-examples" title="Permalink to this headline">¶</a></h1>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field"><th class="field-name">Release:</th><td class="field-body">0.0.0</td>
 </tr>
-<tr class="field"><th class="field-name">Date:</th><td class="field-body">July 02, 2011</td>
+<tr class="field"><th class="field-name">Date:</th><td class="field-body">July 03, 2011</td>
 </tr>
 </tbody>
 </table>
 <p>Intro - To be done!</p>
-<div class="section" id="module-at_import_ex">
-<h2>Import and Export<a class="headerlink" href="#module-at_import_ex" title="Permalink to this headline">¶</a></h2>
-<p><tt class="xref docutils literal"><span class="pre">at_import()</span></tt> is a simple function to import CSV text files as Numpy ndarrays.
-This will open a simple GUI dialog box asking for the place where your CSV file
-is located:</p>
+<div class="section" id="import-and-export">
+<h2>Import and Export<a class="headerlink" href="#import-and-export" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="examples.at_import_ex">
+<tt class="descclassname">examples.</tt><tt class="descname">at_import_ex</tt><big>(</big><big>)</big><a class="headerlink" href="#examples.at_import_ex" title="Permalink to this definition">¶</a></dt>
+<dd><p><a title="planar.at_import" class="reference external" href="planar.html#planar.at_import"><tt class="xref docutils literal"><span class="pre">at_import()</span></tt></a> is a simple function to import CSV 
+text files as Numpy ndarrays. This will open a simple GUI dialog box asking
+for the place where your CSV file is located:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="kn">import</span> <span class="nn">arraytool.planar</span> <span class="kn">as</span> <span class="nn">planar</span>
 <span class="n">planar</span><span class="o">.</span><span class="n">at_import</span><span class="p">()</span>
 </pre></div>
 </div>
-<p>Similarly, <tt class="xref docutils literal"><span class="pre">at_export()</span></tt> can be used to export any Numpy ndarray data to a 
-CSV file. This will open a simple GUI dialog box asking for the location where
-the CSV file needs to be saved:</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="examples.at_export_ex">
+<tt class="descclassname">examples.</tt><tt class="descname">at_export_ex</tt><big>(</big><big>)</big><a class="headerlink" href="#examples.at_export_ex" title="Permalink to this definition">¶</a></dt>
+<dd><p>Similarly, <a title="planar.at_export" class="reference external" href="planar.html#planar.at_export"><tt class="xref docutils literal"><span class="pre">at_export()</span></tt></a> can be used to export any
+Numpy ndarray data to a CSV file. This will open a simple GUI dialog box 
+asking for the location where the CSV file needs to be saved:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="kn">import</span> <span class="nn">arraytool.planar</span> <span class="kn">as</span> <span class="nn">planar</span>
 <span class="n">planar</span><span class="o">.</span><span class="n">at_export</span><span class="p">()</span>
 </pre></div>
 </div>
+</dd></dl>
+
 </div>
-<div class="section" id="module-ip_format_ex">
-<h2>Input Format<a class="headerlink" href="#module-ip_format_ex" title="Permalink to this headline">¶</a></h2>
-<p>One way to generate Arraytool&#8217;s input format is to use the function <tt class="xref docutils literal"><span class="pre">ip_format()</span></tt>:</p>
+<div class="section" id="input-format">
+<h2>Input Format<a class="headerlink" href="#input-format" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="examples.ip_format_ex">
+<tt class="descclassname">examples.</tt><tt class="descname">ip_format_ex</tt><big>(</big><big>)</big><a class="headerlink" href="#examples.ip_format_ex" title="Permalink to this definition">¶</a></dt>
+<dd><p>One way to generate Arraytool&#8217;s input format is to use the function <a title="planar.ip_format" class="reference external" href="planar.html#planar.ip_format"><tt class="xref docutils literal"><span class="pre">ip_format()</span></tt></a>:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="kn">import</span> <span class="nn">arraytool.planar</span> <span class="kn">as</span> <span class="nn">planar</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
 
@@ -104,16 +117,21 @@ the CSV file needs to be saved:</p>
 shown below.</p>
 <p>To be done!</p>
 <p>Also, if needed, one can plot the array excitation using the option <tt class="docutils literal"><span class="pre">plot</span></tt> of
-<tt class="xref docutils literal"><span class="pre">ip_format()</span></tt>. If the array is linear (either along x or y axis), a 2D plot
+<a title="planar.ip_format" class="reference external" href="planar.html#planar.ip_format"><tt class="xref docutils literal"><span class="pre">ip_format()</span></tt></a>. If the array is linear (either along x or y axis), a 2D plot
 is generated using <cite>Matplotlib</cite>. If the given array is planar, a 3D stem plot is
 generated using <cite>Mayavi</cite>. Two such simple plots are shown below.</p>
 <p>To be done!</p>
 <p>Another way is, to simply make a CSV file in the below format and and import it 
-using the function <tt class="xref docutils literal"><span class="pre">at_import()</span></tt>.</p>
+using the function <a title="planar.at_import" class="reference external" href="planar.html#planar.at_import"><tt class="xref docutils literal"><span class="pre">at_import()</span></tt></a>.</p>
+</dd></dl>
+
 </div>
-<div class="section" id="module-AF_zeros_ex">
-<h2>Array Factor Zeros<a class="headerlink" href="#module-AF_zeros_ex" title="Permalink to this headline">¶</a></h2>
-<p>Array factor of a <cite>linear discrete</cite> array (neglecting any normalization factor)
+<div class="section" id="array-factor-zeros">
+<h2>Array Factor Zeros<a class="headerlink" href="#array-factor-zeros" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="examples.AF_zeros_ex">
+<tt class="descclassname">examples.</tt><tt class="descname">AF_zeros_ex</tt><big>(</big><big>)</big><a class="headerlink" href="#examples.AF_zeros_ex" title="Permalink to this definition">¶</a></dt>
+<dd><p>Array factor of a <cite>linear discrete</cite> array (neglecting any normalization factor)
 is defined as</p>
 <div class="math">
 <p><img src="images/math/11fbbd1f6063bc039e828466635f718e4099b500.png" alt="AF(u) = \sum_{m=1}^{M}\ [A_{m}\exp(jk_{0}ux_{m}]." /></p>
@@ -132,7 +150,7 @@ we need only <img class="math" src="images/math/c85831fb5959fcee2a6c77c0f75473e2
 is a difference pattern, then zero at the origin also should be taken into 
 consideration.</li>
 </ul>
-<p>In Arraytool, the function <tt class="xref docutils literal"><span class="pre">AF_zeros()</span></tt> provides these <img class="math" src="images/math/c85831fb5959fcee2a6c77c0f75473e26eef4c30.png" alt="\mathrm{ceil}\left[(M-1)/2\right)]"/>
+<p>In Arraytool, the function <a title="planar.AF_zeros" class="reference external" href="planar.html#planar.AF_zeros"><tt class="xref docutils literal"><span class="pre">AF_zeros()</span></tt></a> provides these <img class="math" src="images/math/c85831fb5959fcee2a6c77c0f75473e26eef4c30.png" alt="\mathrm{ceil}\left[(M-1)/2\right)]"/>
 zeros. So, let us get the array factor zeros for some simple array excitations:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="kn">import</span> <span class="nn">arraytool.planar</span> <span class="kn">as</span> <span class="nn">planar</span>
 
@@ -154,11 +172,16 @@ zeros. So, let us get the array factor zeros for some simple array excitations:<
 <span class="go">       [ 0.78998547]])</span>
 </pre></div>
 </div>
+</dd></dl>
+
 </div>
-<div class="section" id="module-A_frm_zeros_ex">
-<h2>Excitation from AF Zeros<a class="headerlink" href="#module-A_frm_zeros_ex" title="Permalink to this headline">¶</a></h2>
-<p>In the previous section we obtained the array factor zeros. Now, we can use those 
-zeros to obtain the array excitation using the function <tt class="xref docutils literal"><span class="pre">A_frm_zeros()</span></tt> as 
+<div class="section" id="excitation-from-af-zeros">
+<h2>Excitation from AF Zeros<a class="headerlink" href="#excitation-from-af-zeros" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="examples.A_frm_zeros_ex">
+<tt class="descclassname">examples.</tt><tt class="descname">A_frm_zeros_ex</tt><big>(</big><big>)</big><a class="headerlink" href="#examples.A_frm_zeros_ex" title="Permalink to this definition">¶</a></dt>
+<dd><p>In the previous section we obtained the array factor zeros. Now, we can use those 
+zeros to obtain the array excitation using the function <a title="planar.A_frm_zeros" class="reference external" href="planar.html#planar.A_frm_zeros"><tt class="xref docutils literal"><span class="pre">A_frm_zeros()</span></tt></a> as 
 shown below:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="kn">import</span> <span class="nn">arraytool.planar</span> <span class="kn">as</span> <span class="nn">planar</span>
 
@@ -189,12 +212,17 @@ shown below:</p>
 </pre></div>
 </div>
 <p>As can be seen above, array coefficients at the center are normalized to the value 1.</p>
+</dd></dl>
+
 </div>
-<div class="section" id="module-dist_ex">
-<h2>Generating Various Types of Array Excitations<a class="headerlink" href="#module-dist_ex" title="Permalink to this headline">¶</a></h2>
-<p>Most of the times, we don&#8217;t have to go through the process given in the last 
+<div class="section" id="generating-various-types-of-array-excitations">
+<h2>Generating Various Types of Array Excitations<a class="headerlink" href="#generating-various-types-of-array-excitations" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="examples.dist_ex">
+<tt class="descclassname">examples.</tt><tt class="descname">dist_ex</tt><big>(</big><big>)</big><a class="headerlink" href="#examples.dist_ex" title="Permalink to this definition">¶</a></dt>
+<dd><p>Most of the times, we don&#8217;t have to go through the process given in the last 
 two sections. Instead, we can get the excitation values in one single step using
-the function <tt class="xref docutils literal"><span class="pre">dist()</span></tt>. This function gives array excitation coefficients 
+the function <a title="planar.dist" class="reference external" href="planar.html#planar.dist"><tt class="xref docutils literal"><span class="pre">dist()</span></tt></a>. This function gives array excitation coefficients 
 corresponding to various array distribution types such as Dolph-Chebyshev, 
 McNamara-Zolotarev-sum, McNamara-Zolotarev-diff-f, McNamara-Zolotarev-diff-s, 
 Taylor, Bayliss, Pritchard-Chebyshev-be, Pritchard-Chebyshev-ue, etc. A simple
@@ -227,15 +255,20 @@ example to obtain Taylor n-bar (also known as <cite>Villeneuve</cite>) distribut
 </div>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
-<p class="last">However, the function <tt class="xref docutils literal"><span class="pre">dist()</span></tt> will not provide any information regarding the
+<p class="last">However, the function <a title="planar.dist" class="reference external" href="planar.html#planar.dist"><tt class="xref docutils literal"><span class="pre">dist()</span></tt></a> will not provide any information regarding the
 array factor zeros. If this information is necessary, for the time being, there
-is no other option but to use the function <tt class="xref docutils literal"><span class="pre">AF_zeros()</span></tt></p>
+is no other option but to use the function <a title="planar.AF_zeros" class="reference external" href="planar.html#planar.AF_zeros"><tt class="xref docutils literal"><span class="pre">AF_zeros()</span></tt></a></p>
 </div>
+</dd></dl>
+
 </div>
-<div class="section" id="module-pattern_u_ex">
-<h2>Evaluating 2D Array Factor of a Linear Array in u - domain<a class="headerlink" href="#module-pattern_u_ex" title="Permalink to this headline">¶</a></h2>
-<p>Obviously, the most important task in array analysis and design is to plot the actual
-array factor. In order to accomplish this task, one can use the function <tt class="xref docutils literal"><span class="pre">pattern_u()</span></tt>.
+<div class="section" id="evaluating-2d-array-factor-of-a-linear-array-in-u-domain">
+<h2>Evaluating 2D Array Factor of a Linear Array in u - domain<a class="headerlink" href="#evaluating-2d-array-factor-of-a-linear-array-in-u-domain" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="examples.pattern_u_ex">
+<tt class="descclassname">examples.</tt><tt class="descname">pattern_u_ex</tt><big>(</big><big>)</big><a class="headerlink" href="#examples.pattern_u_ex" title="Permalink to this definition">¶</a></dt>
+<dd><p>Obviously, the most important task in array analysis and design is to plot the actual
+array factor. In order to accomplish this task, one can use the function <a title="planar.pattern_u" class="reference external" href="planar.html#planar.pattern_u"><tt class="xref docutils literal"><span class="pre">pattern_u()</span></tt></a>.
 A simple example to plot a Dolph-Chebyshev pattern is shown below:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="kn">import</span> <span class="nn">arraytool.planar</span> <span class="kn">as</span> <span class="nn">planar</span>
 
@@ -265,12 +298,17 @@ A simple example to plot a Dolph-Chebyshev pattern is shown below:</p>
 </pre></div>
 </div>
 <div align="center" class="align-center"><img alt="images/pattern_u_2.png" class="align-center" src="images/pattern_u_2.png" /></div>
+</dd></dl>
+
 </div>
-<div class="section" id="module-pattern_uv_ex">
-<h2>Evaluating 3D Array Factor of a planar Array in uv - domain<a class="headerlink" href="#module-pattern_uv_ex" title="Permalink to this headline">¶</a></h2>
-<p>When the given array is planar, i.e., a 2D array in the <img class="math" src="images/math/3f79c3676b62fb47243e0d357c87115b6f3395e4.png" alt="xy"/>-plane, then 
+<div class="section" id="evaluating-3d-array-factor-of-a-planar-array-in-uv-domain">
+<h2>Evaluating 3D Array Factor of a planar Array in uv - domain<a class="headerlink" href="#evaluating-3d-array-factor-of-a-planar-array-in-uv-domain" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="examples.pattern_uv_ex">
+<tt class="descclassname">examples.</tt><tt class="descname">pattern_uv_ex</tt><big>(</big><big>)</big><a class="headerlink" href="#examples.pattern_uv_ex" title="Permalink to this definition">¶</a></dt>
+<dd><p>When the given array is planar, i.e., a 2D array in the <img class="math" src="images/math/3f79c3676b62fb47243e0d357c87115b6f3395e4.png" alt="xy"/>-plane, then 
 we need to plot the pattern as a function of <img class="math" src="images/math/0d7cc0aaa3c34fd4a50a506fb22de40dfff3ed09.png" alt="(u,v)"/>. In order to accomplish
-this task, one can use the function <tt class="xref docutils literal"><span class="pre">pattern_uv()</span></tt>. A simple example to plot
+this task, one can use the function <a title="planar.pattern_uv" class="reference external" href="planar.html#planar.pattern_uv"><tt class="xref docutils literal"><span class="pre">pattern_uv()</span></tt></a>. A simple example to plot
 radiation pattern of a planar uniform array is shown below:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="kn">import</span> <span class="nn">arraytool.planar</span> <span class="kn">as</span> <span class="nn">planar</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
@@ -300,12 +338,17 @@ radiation pattern of a planar uniform array is shown below:</p>
 </pre></div>
 </div>
 <div align="center" class="align-center"><img alt="images/pattern_uv_2.png" class="align-center" src="images/pattern_uv_2.png" /></div>
+</dd></dl>
+
 </div>
-<div class="section" id="module-pattern_tp_ex">
-<h2>Evaluating 3D Array Factor of an arbitrary 3D Array in (tht, phi) - domain<a class="headerlink" href="#module-pattern_tp_ex" title="Permalink to this headline">¶</a></h2>
-<p>In the previous section, plotting in <img class="math" src="images/math/0d7cc0aaa3c34fd4a50a506fb22de40dfff3ed09.png" alt="(u,v)"/> is described. However, some times
+<div class="section" id="evaluating-3d-array-factor-of-an-arbitrary-3d-array-in-tht-phi-domain">
+<h2>Evaluating 3D Array Factor of an arbitrary 3D Array in (tht, phi) - domain<a class="headerlink" href="#evaluating-3d-array-factor-of-an-arbitrary-3d-array-in-tht-phi-domain" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="examples.pattern_tp_ex">
+<tt class="descclassname">examples.</tt><tt class="descname">pattern_tp_ex</tt><big>(</big><big>)</big><a class="headerlink" href="#examples.pattern_tp_ex" title="Permalink to this definition">¶</a></dt>
+<dd><p>In the previous section, plotting in <img class="math" src="images/math/0d7cc0aaa3c34fd4a50a506fb22de40dfff3ed09.png" alt="(u,v)"/> is described. However, some times
 it may be necessary to plot in <img class="math" src="images/math/977460ae4c3a462a8f1ea3975e6d2d8b3218b20c.png" alt="(\theta,\phi)"/> domain too. In such cases,
-one can use the function <tt class="xref docutils literal"><span class="pre">pattern_tp()</span></tt>. A simple example to plot
+one can use the function <a title="planar.pattern_tp" class="reference external" href="planar.html#planar.pattern_tp"><tt class="xref docutils literal"><span class="pre">pattern_tp()</span></tt></a>. A simple example to plot
 radiation pattern of a planar uniform array in <img class="math" src="images/math/977460ae4c3a462a8f1ea3975e6d2d8b3218b20c.png" alt="(\theta,\phi)"/> domain is 
 shown below:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="kn">import</span> <span class="nn">arraytool.planar</span> <span class="kn">as</span> <span class="nn">planar</span>
@@ -344,6 +387,8 @@ shown below:</p>
 </pre></div>
 </div>
 <div align="center" class="align-center"><img alt="images/pattern_tp_3.png" class="align-center" src="images/pattern_tp_3.png" /></div>
+</dd></dl>
+
 </div>
 <div class="section" id="usage-of-zolotarev-polynomial-module">
 <h2>Usage of Zolotarev Polynomial Module<a class="headerlink" href="#usage-of-zolotarev-polynomial-module" title="Permalink to this headline">¶</a></h2>
@@ -360,14 +405,14 @@ shown below:</p>
             <h3><a href="index.html">Table Of Contents</a></h3>
             <ul>
 <li><a class="reference external" href="#">A Few Examples</a><ul>
-<li><a class="reference external" href="#module-at_import_ex">Import and Export</a></li>
-<li><a class="reference external" href="#module-ip_format_ex">Input Format</a></li>
-<li><a class="reference external" href="#module-AF_zeros_ex">Array Factor Zeros</a></li>
-<li><a class="reference external" href="#module-A_frm_zeros_ex">Excitation from AF Zeros</a></li>
-<li><a class="reference external" href="#module-dist_ex">Generating Various Types of Array Excitations</a></li>
-<li><a class="reference external" href="#module-pattern_u_ex">Evaluating 2D Array Factor of a Linear Array in u - domain</a></li>
-<li><a class="reference external" href="#module-pattern_uv_ex">Evaluating 3D Array Factor of a planar Array in uv - domain</a></li>
-<li><a class="reference external" href="#module-pattern_tp_ex">Evaluating 3D Array Factor of an arbitrary 3D Array in (tht, phi) - domain</a></li>
+<li><a class="reference external" href="#import-and-export">Import and Export</a></li>
+<li><a class="reference external" href="#input-format">Input Format</a></li>
+<li><a class="reference external" href="#array-factor-zeros">Array Factor Zeros</a></li>
+<li><a class="reference external" href="#excitation-from-af-zeros">Excitation from AF Zeros</a></li>
+<li><a class="reference external" href="#generating-various-types-of-array-excitations">Generating Various Types of Array Excitations</a></li>
+<li><a class="reference external" href="#evaluating-2d-array-factor-of-a-linear-array-in-u-domain">Evaluating 2D Array Factor of a Linear Array in u - domain</a></li>
+<li><a class="reference external" href="#evaluating-3d-array-factor-of-a-planar-array-in-uv-domain">Evaluating 3D Array Factor of a planar Array in uv - domain</a></li>
+<li><a class="reference external" href="#evaluating-3d-array-factor-of-an-arbitrary-3d-array-in-tht-phi-domain">Evaluating 3D Array Factor of an arbitrary 3D Array in (tht, phi) - domain</a></li>
 <li><a class="reference external" href="#usage-of-zolotarev-polynomial-module">Usage of Zolotarev Polynomial Module</a></li>
 </ul>
 </li>
@@ -421,7 +466,7 @@ shown below:</p>
     </div>
     <div class="footer">
       &copy; Copyright 2011, Srinivas Zinka.
-      Last updated on Jul 02, 2011.
+      Last updated on Jul 03, 2011.
       Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 0.6.6.
     </div>
   </body>

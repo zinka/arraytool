@@ -1,15 +1,8 @@
 # Sphinx inventory version 1
 # Project: Arraytool
 # Version: 0.0.0
-AF_zeros_ex mod tutorial.html
 planar mod planar.html
-pattern_uv_ex mod tutorial.html
-pattern_u_ex mod tutorial.html
-at_import_ex mod tutorial.html
-A_frm_zeros_ex mod tutorial.html
-ip_format_ex mod tutorial.html
-pattern_tp_ex mod tutorial.html
-dist_ex mod tutorial.html
+examples mod tutorial.html
 Zolotarev mod Zolotarev.html
 planar.dist function planar.html
 Zolotarev.z_str2num function Zolotarev.html
@@ -18,6 +11,7 @@ planar.pattern_uv function planar.html
 planar.K_norm function planar.html
 Zolotarev.z_eta function Zolotarev.html
 planar.A_frm_zeros function planar.html
+examples.at_import_ex function tutorial.html
 planar.at_export function planar.html
 Zolotarev.Zolotarev2 function Zolotarev.html
 planar.ip_format function planar.html
@@ -29,8 +23,16 @@ Zolotarev.z_x123_frm_m function Zolotarev.html
 planar.ATE function planar.html
 planar.pattern_u function planar.html
 Zolotarev.z_Zolotarev_x2 function Zolotarev.html
+examples.ip_format_ex function tutorial.html
+examples.pattern_tp_ex function tutorial.html
 planar.pattern_tp function planar.html
+examples.dist_ex function tutorial.html
+examples.AF_zeros_ex function tutorial.html
+examples.pattern_u_ex function tutorial.html
+examples.at_export_ex function tutorial.html
 planar.cutoff function planar.html
 Zolotarev.z_zn function Zolotarev.html
+examples.pattern_uv_ex function tutorial.html
 Zolotarev.z_theta function Zolotarev.html
+examples.A_frm_zeros_ex function tutorial.html
 planar.AF_zeros function planar.html

@@ -6,6 +6,7 @@
 
 import numpy as np
 import sympy as sp
+import scipy.signal as signal
 import matplotlib.pyplot as plt
 
 # adjusting "matplotlib" label fonts ... can't save .svz files using this option
@@ -67,6 +68,17 @@ def plot_rational(Num, Den, x_min= -1, x_max=1, x_num=100):
     plt.xlabel('x'); plt.ylabel('y'); plt.show()
     return x, y
 
+def Gramm_Schmidt(A):
+    """Function to implement the modified Gram-Schmidt orthonormalization."""
+    A = A.T; m, n = A.shape
+    q = np.zeros((m, n)); r = np.zeros((n, n))
+    for k in range(n):
+        r[k, k] = np.linalg.norm(A[:, k])
+        q[:, k] = A[:, k] / r[k, k]
+        r[k, k + 1:n] = np.dot(q[:, k], A[:, k + 1:n])
+        A[:, k + 1:n] = A[:, k + 1:n] - np.outer(q[:, k], r[k, k + 1:n])
+    return q.T
+
 def Chebyshev_gen(N, poles):
     """Function to evaluate the numerator and denominator polynomials of the 
        generalized Chebyshev (i.e., with/without poles) filtering function."""
@@ -113,14 +125,14 @@ def poly_E(eps, eps_R, F, P):
     return poly_E, roots_E
 
 def plot_mag(eps, eps_R, F, P, E, w_min= -2, w_max=2, w_num=500, dB=True,
-             dB_limit=-40, show=True):
+             dB_limit= -40, show=True):
     """Function to plot magnitudes of S11 and S21 in either linear or dB scale."""
     w = np.linspace(w_min, w_max, w_num)
     F = s_to_w(F); P = s_to_w(P); E = s_to_w(E)
     F_val = np.polyval(F, w); P_val = np.polyval(P, w); E_val = np.polyval(E, w)
     S11 = (1 / eps_R) * (F_val / E_val); S21 = (1 / eps) * (P_val / E_val)
     if(dB):
-        S11_plt = 20*np.log10(abs(S11)); S21_plt = 20*np.log10(abs(S21))
+        S11_plt = 20 * np.log10(abs(S11)); S21_plt = 20 * np.log10(abs(S21))
         S11_plt = cutoff(S11_plt, dB_limit); S21_plt = cutoff(S21_plt, dB_limit)
         y_labl = r'$\ \mathrm{(dB)}$'
     else:
@@ -130,7 +142,7 @@ def plot_mag(eps, eps_R, F, P, E, w_min= -2, w_max=2, w_num=500, dB=True,
     plt.plot(w, S11_plt, 'r-', label=r"$S_{11}$")
     plt.axis('tight'); plt.grid(True); plt.legend()
     plt.xlabel(r'$\Omega\ \mathrm{(rad/s)}$', fontsize=14)
-    plt.ylabel(r'$\mathrm{Magnitude}$'+y_labl, fontsize=14)    
+    plt.ylabel(r'$\mathrm{Magnitude}$' + y_labl, fontsize=14)    
     if(show): plt.show()    
     return S11, S21
 
@@ -141,13 +153,49 @@ def plot_delay(roots_E, w_min= -2, w_max=2, w_num=500, show=True):
     for i in range(len(w)):
         tmp = 0
         for j in range(len(roots_E)):
-            tmp += -roots_E[j].real/(roots_E[j].real**2+(w[i]-roots_E[j].imag)**2)
+            tmp += -roots_E[j].real / (roots_E[j].real ** 2 + (w[i] - roots_E[j].imag) ** 2)
         tau[i] = tmp
     plt.plot(w, tau)
     plt.axis('tight'); plt.grid(True)
     plt.xlabel(r'$\Omega\ \mathrm{(rad/s)}$', fontsize=14)
     plt.ylabel(r'$\mathrm{Group}\ \mathrm{delay} \mathrm{\ (s)}$', fontsize=14)    
     if(show): plt.show()        
+    return
+
+def coupling_N(F, P, E, eps, eps_R):
+    """Function to evaluate the (N,N) coupling matrix."""
+    F = s_to_w(F); P = s_to_w(P); E = s_to_w(E)
+    nfz = len(P) - 1
+    const_mult = np.conjugate(eps) / eps * (-1) ** nfz
+    EF_plus = E + F / eps_R
+    EF_plus_conj = const_mult * EF_plus.conj()
+    EF_minus = E - F / eps_R
+    EF_minus_conj = const_mult * EF_minus.conj()
+    y11_Num = 1j * (EF_minus + EF_minus_conj)
+    y21_Num = 2j * P / eps
+    y_Den = EF_plus - EF_plus_conj
+    # The function "signal.residue" takes only 1D arrays!
+    resid11, poles11, const11 = signal.residue(y11_Num[:, 0], y_Den[:, 0])
+    resid21, poles21, const21 = signal.residue(y21_Num[:, 0], y_Den[:, 0])
+    # Gramm_Schmidt orthonormalization
+    T1k = np.sqrt(resid11); lambdk = -poles11; TNk = resid21 / T1k
+    RS_L1 = sum(T1k ** 2); RL_LN = sum(TNk ** 2)    
+    T = np.eye(len(T1k), len(T1k))
+    T[0, :] = T1k; T[2, :] = TNk
+    np.set_printoptions(precision=6, suppress=True)
+    T = Gramm_Schmidt(T) # "normalizing of T1k, TNk" is done in this step
+    # swapping the second and last rows after normalization is finished
+    temp = np.copy(T[1, :]); T[1, :] = T[-1, :]; T[-1, :] = temp
+    Lamb = np.diag(lambdk) # diagonal eigenvalue matrix
+    M = np.dot(T, np.dot(Lamb, T.T)) # (N,N) coupling matrix
+    return M, RS_L1, RL_LN
+
+def M_to_Sparam(M, Rs=1, Rl=1, L1=1, LN=1):
+    """Function to plot S parameters from a given (N,N) coupling matrix."""
+    return
+
+def coupling_N2(F, P, E, eps, eps_R):
+    """Function to evaluate the (N+2,N+2) coupling matrix."""
     return
 
 if __name__ == '__main__':
@@ -167,9 +215,16 @@ if __name__ == '__main__':
     print 'F:', '\n', F; print 'P:', '\n', P
     [E, roots_E] = poly_E(eps, eps_R, F, P)
     print 'E:', '\n', E
-    plot_mag(eps, eps_R, F, P, E)
+#    plot_mag(eps, eps_R, F, P, E)
 #    plot_delay(roots_E)
     
+    # From now onwards, unlike the Cameron's example, this is doubly terminated
+    M = coupling_N(F, P, E, eps, eps_R)[0]
+    print 'M:', '\n', M
+    
+#    # Checking the obtained coupling matrix by plotting the S-parameters
+#    M_to_Sparam(M, Rs=1, Rl=1, L1=1, LN=1)
+
 #==============================================================================
 # 4th order example (P. 228, Sec. 6.3.2, R. J. Cameron et al.)
 #==============================================================================
@@ -199,6 +254,23 @@ if __name__ == '__main__':
 #    P = w_to_s(P, coef_norm=True)    
 #    print 'F:', '\n', F; print 'P:', '\n', P
 #    print 'E:', '\n', poly_E(eps, eps_R, F, P)[0]    
+
+#==============================================================================
+# 4th order example (P. 312, Sec. 8.4.2, R. J. Cameron et al.)
+#==============================================================================
+
+#    N = 4
+#    poles = np.array([-3.7431, -1.8051, 1.5699, 6.1910])
+#    eps = 33.140652j; eps_R = +1.000456
+##    poles = np.array([])
+#    F, P = Chebyshev_gen(N, poles)
+##    plot_rational(F, P, x_min= -1, x_max=1, x_num=1000)
+#    F = w_to_s(F, coef_norm=True)
+#    P = w_to_s(P, coef_norm=True)    
+#    print 'F:', '\n', F; print 'P:', '\n', P
+#    [E, roots_E] = poly_E(eps, eps_R, F, P)
+#    print 'E:', '\n', E
+#    coupling_N(F, P, E, eps, eps_R)   
   
 #==============================================================================
 # Notes to myself

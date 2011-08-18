@@ -14,9 +14,6 @@ import matplotlib.pyplot as plt
 from matplotlib import rc
 rc('text', usetex=True)
 
-# Numpy printing options
-np.set_printoptions(precision=6, suppress=True)
-
 def cutoff(F, dB_limit= -40):
     r"""
     When magnitude of S11 or S21 is 0, their dB value is '-infinity'. So, this 
@@ -148,7 +145,7 @@ def plot_mag(eps, eps_R, F, P, E, w_min= -2, w_max=2, w_num=500, dB=True,
     plt.xlabel(r'$\Omega\ \mathrm{(rad/s)}$', fontsize=14)
     plt.ylabel(r'$\mathrm{Magnitude}$' + y_labl, fontsize=14)    
     if(show): plt.show()
-    return S11, S21
+    return w, S11, S21
 
 def plot_delay(roots_E, w_min= -2, w_max=2, w_num=500, show=True):
     """Function to plot the group delay."""
@@ -164,7 +161,7 @@ def plot_delay(roots_E, w_min= -2, w_max=2, w_num=500, show=True):
     plt.xlabel(r'$\Omega\ \mathrm{(rad/s)}$', fontsize=14)
     plt.ylabel(r'$\mathrm{Group}\ \mathrm{delay} \mathrm{\ (s)}$', fontsize=14)    
     if(show): plt.show()        
-    return
+    return w, tau
 
 def coupling_N(F, P, E, eps, eps_R):
     """Function to evaluate the (N,N) coupling matrix.
@@ -196,7 +193,7 @@ def coupling_N(F, P, E, eps, eps_R):
     return M, RS_L1, RL_LN
 
 def MN_to_Sparam(M, Rs, Rl, w_min= -2, w_max=2, w_num=500, dB=True,
-                dB_limit= -40, plot=True, show=True):
+                 dB_limit= -40, plot=True, show=True):
     """Function to plot S parameters from a given (N,N) coupling matrix."""
     w = np.linspace(w_min, w_max, w_num)
     R = np.zeros_like(M); R[0, 0] = Rs; R[-1, -1] = Rl
@@ -224,59 +221,112 @@ def MN_to_Sparam(M, Rs, Rl, w_min= -2, w_max=2, w_num=500, dB=True,
         plt.xlabel(r'$\Omega\ \mathrm{(rad/s)}$', fontsize=14)
         plt.ylabel(r'$\mathrm{Magnitude}$' + y_labl, fontsize=14)
         if(show): plt.show()        
-    return S11, S21
+    return w, S11, S21
 
 def coupling_N2(F, P, E, eps, eps_R):
     """Function to evaluate the (N+2,N+2) coupling matrix."""
-    return
+    F = s_to_w(F); P = s_to_w(P); E = s_to_w(E)
+    nfz = len(P) - 1; N = len(E) - 1
+    const_mult = np.conjugate(eps) / eps * (-1) ** nfz
+    EF_plus = E + F / eps_R
+    EF_plus_conj = const_mult * EF_plus.conj()
+    EF_minus = E - F / eps_R
+    EF_minus_conj = const_mult * EF_minus.conj()
+    y11_Num = 1j * (EF_minus + EF_minus_conj)
+    y21_Num = -2j * P / eps
+    y_Den = EF_plus - EF_plus_conj
+    # The function "signal.residue" takes only 1D arrays!
+    resid11, poles11, const11 = signal.residue(y11_Num[:, 0], y_Den[:, 0])
+    resid21, poles21, const21 = signal.residue(y21_Num[:, 0], y_Den[:, 0])
+    MSk = np.sqrt(resid11); lambdk = -poles11; MLk = resid21 / MSk
+    JSL = -const21
+    M = np.zeros((N + 2, N + 2), dtype=complex)
+    M[0, 1:N + 1] = np.reshape(MSk, (-1, N))
+    M[-1, 1:N + 1] = np.reshape(MLk, (-1, N))
+    M[:, 0] = M[0, :]; M[:, -1] = M[-1, :]
+    M[0, -1] = JSL[0]; M[-1, 0] = JSL[0]
+    diag1 = np.diag(lambdk); M[1:N + 1, 1:N + 1] = diag1
+    return M
+
+def MN2_to_Sparam(M, Rs=1, Rl=1, w_min= -2, w_max=2, w_num=500, dB=True,
+                 dB_limit= -40, plot=True, show=True):
+    """Function to plot S parameters from a given (N,N) coupling matrix."""
+    w = np.linspace(w_min, w_max, w_num)
+    R = np.zeros_like(M); R[0, 0] = Rs; R[-1, -1] = Rl
+    MR = M - 1j * R ; I = np.eye(M.shape[0], M.shape[1])
+    I[0, 0] = 0; I[-1, -1] = 0
+    # Calculating S parameters
+    S11 = np.zeros((len(w), 1), dtype=complex)
+    S21 = np.zeros((len(w), 1), dtype=complex) # 'dtype' is important
+    for i in range(len(w)):
+        A = MR + w[i] * I
+        A_inv = np.linalg.inv(A)
+        S11[i] = 1 + 2j * Rs * A_inv[0, 0]
+        S21[i] = -2j * np.sqrt(Rs * Rl) * A_inv[-1, 0]
+    if(plot): # Plotting     
+        # Converting the S parameters into either linear or dB scale
+        if(dB):
+            S11_plt = 20 * np.log10(abs(S11)); S21_plt = 20 * np.log10(abs(S21))
+            S11_plt = cutoff(S11_plt, dB_limit); S21_plt = cutoff(S21_plt, dB_limit)
+            y_labl = r'$\ \mathrm{(dB)}$'
+        else:
+            S11_plt = abs(S11); S21_plt = abs(S21)
+            y_labl = r'$\ \mathrm{(linear)}$'
+        plt.plot(w, S21_plt, 'b-', label=r"$S_{21}$")
+        plt.plot(w, S11_plt, 'r-', label=r"$S_{11}$")
+        plt.axis('tight'); plt.grid(True); plt.legend()
+        plt.xlabel(r'$\Omega\ \mathrm{(rad/s)}$', fontsize=14)
+        plt.ylabel(r'$\mathrm{Magnitude}$' + y_labl, fontsize=14)
+        if(show): plt.show()        
+    return w, S11, S21
 
 if __name__ == '__main__':
-    
+        
 #==============================================================================
 # 7th order example (P. 300, Sec. 8.3.1, R. J. Cameron et al.)
 #==============================================================================    
     
-    N = 7
-    poles = np.array([1.2576, -0.1546 - 0.9218j, -0.1546 + 0.9218j])
-    eps = 6.0251j; eps_R = 1
-#    poles = np.array([])
-    F, P = Chebyshev_gen(N, poles)
-#    plot_rational(F, P, x_min= -1, x_max=1, x_num=1000)    
-    F = w_to_s(F, coef_norm=True)
-    P = w_to_s(P, coef_norm=True)      
-    print 'F:', '\n', F; print 'P:', '\n', P
-    [E, roots_E] = poly_E(eps, eps_R, F, P)
-    print 'E:', '\n', E
-#    plot_mag(eps, eps_R, F, P, E)
-#    plot_delay(roots_E)
-    
-    # testing M_to_Sparam function
-    Rs = 1.0442; Rl = 1.0442
-    M = np.array([[0, 0.8577, 0, -0.2174],
-                  [0.8577, 0, 0.7856, 0],
-                  [0, 0.7856, 0, 0.8577],
-                  [-0.2174, 0, 0.8577, 0]]) # a test matrix from a journal paper
-    print 'M:', '\n', M
-
-#    # testing M_to_Sparam function
-#    Rs = 1.025; Rl = 1.025
-#    M = np.array([[0,-0.863,0,0.02,0],
-#                  [-0.863,0,-0.647,0,0],
-#                  [0,-0.647,0,-0.632,0],
-#                  [0.02,0,-0.632,0,-0.863],
-#                  [0,0,0,-0.863,0]]) # another testing coupling matrix
-#    print 'M:', '\n', M
-
+#    N = 7
+#    poles = np.array([1.2576, -0.1546 - 0.9218j, -0.1546 + 0.9218j])
+#    eps = 6.0251j; eps_R = 1
+##    poles = np.array([])
+#    F, P = Chebyshev_gen(N, poles)
+##    plot_rational(F, P, x_min= -1, x_max=1, x_num=1000)    
+#    F = w_to_s(F, coef_norm=True)
+#    P = w_to_s(P, coef_norm=True)      
+#    print 'F:', '\n', F; print 'P:', '\n', P
+#    [E, roots_E] = poly_E(eps, eps_R, F, P)
+#    print 'E:', '\n', E
+##    plot_mag(eps, eps_R, F, P, E)
+##    plot_delay(roots_E)
+#    
+##    # testing M_to_Sparam function
+##    Rs = 1.0442; Rl = 1.0442
+##    M = np.array([[0, 0.8577, 0, -0.2174],
+##                  [0.8577, 0, 0.7856, 0],
+##                  [0, 0.7856, 0, 0.8577],
+##                  [-0.2174, 0, 0.8577, 0]]) # a test matrix from a journal paper
+##    print 'M:', '\n', M
+#
+##    # testing M_to_Sparam function
+##    Rs = 1.025; Rl = 1.025
+##    M = np.array([[0,-0.863,0,0.02,0],
+##                  [-0.863,0,-0.647,0,0],
+##                  [0,-0.647,0,-0.632,0],
+##                  [0.02,0,-0.632,0,-0.863],
+##                  [0,0,0,-0.863,0]]) # another testing coupling matrix
+##    print 'M:', '\n', M
+#
 #    # From now onwards, unlike the Cameron's example, the filter is doubly terminated
 #    M, Rs, Rl = coupling_N(F, P, E, eps, eps_R)
 #    print 'M:', '\n', M
 #    print 'Rs:', Rs
 #    print 'Rl:', Rl
-   
-    MN_to_Sparam(M, Rs, Rl, w_min= -2, w_max=2, w_num=500, dB=True, dB_limit= -100)
-    
-#    # Checking the obtained coupling matrix by plotting the S-parameters
-#    M_to_Sparam(M, Rs=1, Rl=1, L1=1, LN=1)
+#   
+#    MN_to_Sparam(M, Rs, Rl, w_min= -2, w_max=2, w_num=500, dB=True, dB_limit= -100)
+#    
+##    # Checking the obtained coupling matrix by plotting the S-parameters
+##    M_to_Sparam(M, Rs=1, Rl=1, L1=1, LN=1)
 
 #==============================================================================
 # 4th order example (P. 228, Sec. 6.3.2, R. J. Cameron et al.)
@@ -312,20 +362,25 @@ if __name__ == '__main__':
 # 4th order example (P. 312, Sec. 8.4.2, R. J. Cameron et al.)
 #==============================================================================
 
-#    N = 4
-#    poles = np.array([-3.7431, -1.8051, 1.5699, 6.1910])
-#    eps = 33.140652j; eps_R = +1.000456
-##    poles = np.array([])
-#    F, P = Chebyshev_gen(N, poles)
-##    plot_rational(F, P, x_min= -1, x_max=1, x_num=1000)
-#    F = w_to_s(F, coef_norm=True)
-#    P = w_to_s(P, coef_norm=True)    
-#    print 'F:', '\n', F; print 'P:', '\n', P
-#    [E, roots_E] = poly_E(eps, eps_R, F, P)
-#    print 'E:', '\n', E
-#    coupling_N(F, P, E, eps, eps_R)   
+    N = 4
+    poles = np.array([-3.7431, -1.8051, 1.5699, 6.1910])
+    eps = 33.140652j; eps_R = +1.000456
+#    poles = np.array([])
+    F, P = Chebyshev_gen(N, poles)
+#    plot_rational(F, P, x_min= -1, x_max=1, x_num=1000)
+    F = w_to_s(F, coef_norm=True)
+    P = w_to_s(P, coef_norm=True)    
+    print 'F:', '\n', F; print 'P:', '\n', P
+    [E, roots_E] = poly_E(eps, eps_R, F, P)
+    print 'E:', '\n', E
+    
+    np.set_printoptions(precision=4, suppress=True)    
+    M = coupling_N2(F, P, E, eps, eps_R)
+    print 'M:', '\n', M.real
+    MN2_to_Sparam(M, Rs=1, Rl=1, w_min= -8, w_max=8, w_num=500, dB=True, dB_limit= -50)
   
 #==============================================================================
 # Notes to myself
 #==============================================================================
 # use new "polynomial" class of Numpy in future ...
+

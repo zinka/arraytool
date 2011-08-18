@@ -4,6 +4,7 @@
 # Copyright (c) 2011 Srinivasa Rao Zinka
 # License: New BSD License.
 
+from __future__ import division
 import numpy as np
 import sympy as sp
 import scipy.signal as signal
@@ -12,6 +13,9 @@ import matplotlib.pyplot as plt
 # adjusting "matplotlib" label fonts ... can't save .svz files using this option
 from matplotlib import rc
 rc('text', usetex=True)
+
+# Numpy printing options
+np.set_printoptions(precision=6, suppress=True)
 
 def cutoff(F, dB_limit= -40):
     r"""
@@ -143,7 +147,7 @@ def plot_mag(eps, eps_R, F, P, E, w_min= -2, w_max=2, w_num=500, dB=True,
     plt.axis('tight'); plt.grid(True); plt.legend()
     plt.xlabel(r'$\Omega\ \mathrm{(rad/s)}$', fontsize=14)
     plt.ylabel(r'$\mathrm{Magnitude}$' + y_labl, fontsize=14)    
-    if(show): plt.show()    
+    if(show): plt.show()
     return S11, S21
 
 def plot_delay(roots_E, w_min= -2, w_max=2, w_num=500, show=True):
@@ -163,7 +167,8 @@ def plot_delay(roots_E, w_min= -2, w_max=2, w_num=500, show=True):
     return
 
 def coupling_N(F, P, E, eps, eps_R):
-    """Function to evaluate the (N,N) coupling matrix."""
+    """Function to evaluate the (N,N) coupling matrix.
+       Not done yet... needs to be tested"""
     F = s_to_w(F); P = s_to_w(P); E = s_to_w(E)
     nfz = len(P) - 1
     const_mult = np.conjugate(eps) / eps * (-1) ** nfz
@@ -190,9 +195,36 @@ def coupling_N(F, P, E, eps, eps_R):
     M = np.dot(T, np.dot(Lamb, T.T)) # (N,N) coupling matrix
     return M, RS_L1, RL_LN
 
-def M_to_Sparam(M, Rs=1, Rl=1, L1=1, LN=1):
+def MN_to_Sparam(M, Rs, Rl, w_min= -2, w_max=2, w_num=500, dB=True,
+                dB_limit= -40, plot=True, show=True):
     """Function to plot S parameters from a given (N,N) coupling matrix."""
-    return
+    w = np.linspace(w_min, w_max, w_num)
+    R = np.zeros_like(M); R[0, 0] = Rs; R[-1, -1] = Rl
+    MR = M - 1j * R ; I = np.eye(M.shape[0], M.shape[1])
+    # Calculating S parameters
+    S11 = np.zeros((len(w), 1), dtype=complex)
+    S21 = np.zeros((len(w), 1), dtype=complex) # 'dtype' is important
+    for i in range(len(w)):
+        A = MR + w[i] * I
+        A_inv = np.linalg.inv(A)
+        S11[i] = 1 + 2j * Rs * A_inv[0, 0]
+        S21[i] = -2j * np.sqrt(Rs * Rl) * A_inv[-1, 0]
+    if(plot): # Plotting     
+        # Converting the S parameters into either linear or dB scale
+        if(dB):
+            S11_plt = 20 * np.log10(abs(S11)); S21_plt = 20 * np.log10(abs(S21))
+            S11_plt = cutoff(S11_plt, dB_limit); S21_plt = cutoff(S21_plt, dB_limit)
+            y_labl = r'$\ \mathrm{(dB)}$'
+        else:
+            S11_plt = abs(S11); S21_plt = abs(S21)
+            y_labl = r'$\ \mathrm{(linear)}$'
+        plt.plot(w, S21_plt, 'b-', label=r"$S_{21}$")
+        plt.plot(w, S11_plt, 'r-', label=r"$S_{11}$")
+        plt.axis('tight'); plt.grid(True); plt.legend()
+        plt.xlabel(r'$\Omega\ \mathrm{(rad/s)}$', fontsize=14)
+        plt.ylabel(r'$\mathrm{Magnitude}$' + y_labl, fontsize=14)
+        if(show): plt.show()        
+    return S11, S21
 
 def coupling_N2(F, P, E, eps, eps_R):
     """Function to evaluate the (N+2,N+2) coupling matrix."""
@@ -218,9 +250,30 @@ if __name__ == '__main__':
 #    plot_mag(eps, eps_R, F, P, E)
 #    plot_delay(roots_E)
     
-    # From now onwards, unlike the Cameron's example, this is doubly terminated
-    M = coupling_N(F, P, E, eps, eps_R)[0]
+    # testing M_to_Sparam function
+    Rs = 1.0442; Rl = 1.0442
+    M = np.array([[0, 0.8577, 0, -0.2174],
+                  [0.8577, 0, 0.7856, 0],
+                  [0, 0.7856, 0, 0.8577],
+                  [-0.2174, 0, 0.8577, 0]]) # a test matrix from a journal paper
     print 'M:', '\n', M
+
+#    # testing M_to_Sparam function
+#    Rs = 1.025; Rl = 1.025
+#    M = np.array([[0,-0.863,0,0.02,0],
+#                  [-0.863,0,-0.647,0,0],
+#                  [0,-0.647,0,-0.632,0],
+#                  [0.02,0,-0.632,0,-0.863],
+#                  [0,0,0,-0.863,0]]) # another testing coupling matrix
+#    print 'M:', '\n', M
+
+#    # From now onwards, unlike the Cameron's example, the filter is doubly terminated
+#    M, Rs, Rl = coupling_N(F, P, E, eps, eps_R)
+#    print 'M:', '\n', M
+#    print 'Rs:', Rs
+#    print 'Rl:', Rl
+   
+    MN_to_Sparam(M, Rs, Rl, w_min= -2, w_max=2, w_num=500, dB=True, dB_limit= -100)
     
 #    # Checking the obtained coupling matrix by plotting the S-parameters
 #    M_to_Sparam(M, Rs=1, Rl=1, L1=1, LN=1)

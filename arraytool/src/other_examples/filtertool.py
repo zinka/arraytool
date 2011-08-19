@@ -183,7 +183,7 @@ def coupling_N(F, P, E, eps, eps_R):
     T1k = np.sqrt(resid11); lambdk = -poles11; TNk = resid21 / T1k
     RS_L1 = sum(T1k ** 2); RL_LN = sum(TNk ** 2)    
     T = np.eye(len(T1k), len(T1k))
-    T[0, :] = T1k; T[2, :] = TNk
+    T[0, :] = T1k; T[1, :] = TNk
     np.set_printoptions(precision=6, suppress=True)
     T = Gramm_Schmidt(T) # "normalizing of T1k, TNk" is done in this step
     # swapping the second and last rows after normalization is finished
@@ -286,47 +286,47 @@ if __name__ == '__main__':
 # 7th order example (P. 300, Sec. 8.3.1, R. J. Cameron et al.)
 #==============================================================================    
     
-#    N = 7
-#    poles = np.array([1.2576, -0.1546 - 0.9218j, -0.1546 + 0.9218j])
-#    eps = 6.0251j; eps_R = 1
-##    poles = np.array([])
-#    F, P = Chebyshev_gen(N, poles)
-##    plot_rational(F, P, x_min= -1, x_max=1, x_num=1000)    
-#    F = w_to_s(F, coef_norm=True)
-#    P = w_to_s(P, coef_norm=True)      
-#    print 'F:', '\n', F; print 'P:', '\n', P
-#    [E, roots_E] = poly_E(eps, eps_R, F, P)
-#    print 'E:', '\n', E
-##    plot_mag(eps, eps_R, F, P, E)
-##    plot_delay(roots_E)
-#    
-##    # testing M_to_Sparam function
-##    Rs = 1.0442; Rl = 1.0442
-##    M = np.array([[0, 0.8577, 0, -0.2174],
-##                  [0.8577, 0, 0.7856, 0],
-##                  [0, 0.7856, 0, 0.8577],
-##                  [-0.2174, 0, 0.8577, 0]]) # a test matrix from a journal paper
-##    print 'M:', '\n', M
-#
-##    # testing M_to_Sparam function
-##    Rs = 1.025; Rl = 1.025
-##    M = np.array([[0,-0.863,0,0.02,0],
-##                  [-0.863,0,-0.647,0,0],
-##                  [0,-0.647,0,-0.632,0],
-##                  [0.02,0,-0.632,0,-0.863],
-##                  [0,0,0,-0.863,0]]) # another testing coupling matrix
-##    print 'M:', '\n', M
-#
-#    # From now onwards, unlike the Cameron's example, the filter is doubly terminated
-#    M, Rs, Rl = coupling_N(F, P, E, eps, eps_R)
+    N = 7
+    poles = np.array([1.2576, -0.1546 - 0.9218j, -0.1546 + 0.9218j])
+    eps = 6.0251j; eps_R = 1
+#    poles = np.array([])
+    F, P = Chebyshev_gen(N, poles)
+#    plot_rational(F, P, x_min= -1, x_max=1, x_num=1000)    
+    F = w_to_s(F, coef_norm=True)
+    P = w_to_s(P, coef_norm=True)      
+    print 'F:', '\n', F; print 'P:', '\n', P
+    [E, roots_E] = poly_E(eps, eps_R, F, P)
+    print 'E:', '\n', E
+#    plot_mag(eps, eps_R, F, P, E)
+#    plot_delay(roots_E)
+    
+#    # testing M_to_Sparam function
+#    Rs = 1.0442; Rl = 1.0442
+#    M = np.array([[0, 0.8577, 0, -0.2174],
+#                  [0.8577, 0, 0.7856, 0],
+#                  [0, 0.7856, 0, 0.8577],
+#                  [-0.2174, 0, 0.8577, 0]]) # a test matrix from a journal paper
 #    print 'M:', '\n', M
-#    print 'Rs:', Rs
-#    print 'Rl:', Rl
-#   
-#    MN_to_Sparam(M, Rs, Rl, w_min= -2, w_max=2, w_num=500, dB=True, dB_limit= -100)
-#    
-##    # Checking the obtained coupling matrix by plotting the S-parameters
-##    M_to_Sparam(M, Rs=1, Rl=1, L1=1, LN=1)
+
+#    # testing M_to_Sparam function
+#    Rs = 1.025; Rl = 1.025
+#    M = np.array([[0,-0.863,0,0.02,0],
+#                  [-0.863,0,-0.647,0,0],
+#                  [0,-0.647,0,-0.632,0],
+#                  [0.02,0,-0.632,0,-0.863],
+#                  [0,0,0,-0.863,0]]) # another testing coupling matrix
+#    print 'M:', '\n', M
+
+    # From now onwards, unlike the Cameron's example, the filter is doubly terminated
+    M, Rs, Rl = coupling_N(F, P, E, eps, eps_R)
+    print 'M:', '\n', M
+    print 'Rs:', Rs
+    print 'Rl:', Rl
+   
+    MN_to_Sparam(M, Rs, Rl, w_min= -2, w_max=2, w_num=500, dB=True, dB_limit= -100)
+    
+#    # Checking the obtained coupling matrix by plotting the S-parameters
+#    M_to_Sparam(M, Rs=1, Rl=1, L1=1, LN=1)
 
 #==============================================================================
 # 4th order example (P. 228, Sec. 6.3.2, R. J. Cameron et al.)
@@ -336,7 +336,7 @@ if __name__ == '__main__':
 #    poles = np.array([1.3217, 1.8082])
 #    eps = 1.1548j; eps_R = 1
 ##    poles = np.array([])
-#    F, P = Chebyshev_gen(N, poles, coef_norm=True)
+#    F, P = Chebyshev_gen(N, poles)
 ##    plot_rational(F, P, x_min= -1, x_max=1, x_num=1000)
 #    F = w_to_s(F, coef_norm=True)
 #    P = w_to_s(P, coef_norm=True)    
@@ -349,38 +349,22 @@ if __name__ == '__main__':
 
 #    N = 4
 #    poles = np.array([-3.7431, -1.8051, 1.5699, 6.1910])
-#    eps = 33.140652j; eps_R = 1.000456
+#    eps = 33.140652j; eps_R = +1.000456
 ##    poles = np.array([])
-#    F, P = Chebyshev_gen(N, poles, coef_norm=True)
+#    F, P = Chebyshev_gen(N, poles)
 ##    plot_rational(F, P, x_min= -1, x_max=1, x_num=1000)
 #    F = w_to_s(F, coef_norm=True)
 #    P = w_to_s(P, coef_norm=True)    
 #    print 'F:', '\n', F; print 'P:', '\n', P
-#    print 'E:', '\n', poly_E(eps, eps_R, F, P)[0]    
-
-#==============================================================================
-# 4th order example (P. 312, Sec. 8.4.2, R. J. Cameron et al.)
-#==============================================================================
-
-    N = 4
-    poles = np.array([-3.7431, -1.8051, 1.5699, 6.1910])
-    eps = 33.140652j; eps_R = +1.000456
-#    poles = np.array([])
-    F, P = Chebyshev_gen(N, poles)
-#    plot_rational(F, P, x_min= -1, x_max=1, x_num=1000)
-    F = w_to_s(F, coef_norm=True)
-    P = w_to_s(P, coef_norm=True)    
-    print 'F:', '\n', F; print 'P:', '\n', P
-    [E, roots_E] = poly_E(eps, eps_R, F, P)
-    print 'E:', '\n', E
-    
-    np.set_printoptions(precision=4, suppress=True)    
-    M = coupling_N2(F, P, E, eps, eps_R)
-    print 'M:', '\n', M.real
-    MN2_to_Sparam(M, Rs=1, Rl=1, w_min= -8, w_max=8, w_num=500, dB=True, dB_limit= -50)
+#    [E, roots_E] = poly_E(eps, eps_R, F, P)
+#    print 'E:', '\n', E
+#    
+#    np.set_printoptions(precision=4, suppress=True)    
+#    M = coupling_N2(F, P, E, eps, eps_R)
+#    print 'M:', '\n', M.real
+#    MN2_to_Sparam(M, Rs=1, Rl=1, w_min= -8, w_max=8, w_num=500, dB=True, dB_limit= -50)
   
 #==============================================================================
 # Notes to myself
 #==============================================================================
 # use new "polynomial" class of Numpy in future ...
-

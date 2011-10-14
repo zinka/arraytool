@@ -15,10 +15,8 @@ from matplotlib import rc
 rc('text', usetex=True)
 
 def cutoff(F, dB_limit= -40):
-    r"""
-    When magnitude of S11 or S21 is 0, their dB value is '-infinity'. So, this 
-    function will be used to cut-off all the value below some 'dB_limit'.
-    """
+    """When magnitude of S11 or S21 is 0, their dB value is '-infinity'. So, 
+       this function will be used to cut-off all the value below some 'dB_limit'."""
     msk1 = F < dB_limit
     fill = msk1 * dB_limit
     msk2 = F >= dB_limit
@@ -164,8 +162,7 @@ def plot_delay(roots_E, w_min= -2, w_max=2, w_num=500, show=True):
     return w, tau
 
 def coupling_N(F, P, E, eps, eps_R):
-    """Function to evaluate the (N,N) coupling matrix.
-       Not done yet... needs to be tested"""
+    """Function to evaluate the (N,N) coupling matrix."""
     F = s_to_w(F); P = s_to_w(P); E = s_to_w(E)
     nfz = len(P) - 1
     const_mult = np.conjugate(eps) / eps * (-1) ** nfz
@@ -250,7 +247,7 @@ def coupling_N2(F, P, E, eps, eps_R):
 
 def MN2_to_Sparam(M, Rs=1, Rl=1, w_min= -2, w_max=2, w_num=500, dB=True,
                  dB_limit= -40, plot=True, show=True):
-    """Function to plot S parameters from a given (N,N) coupling matrix."""
+    """Function to plot S parameters from a given (N+2,N+2) coupling matrix."""
     w = np.linspace(w_min, w_max, w_num)
     R = np.zeros_like(M); R[0, 0] = Rs; R[-1, -1] = Rl
     MR = M - 1j * R ; I = np.eye(M.shape[0], M.shape[1])
@@ -300,24 +297,7 @@ if __name__ == '__main__':
 #    plot_mag(eps, eps_R, F, P, E)
 #    plot_delay(roots_E)
     
-#    # testing M_to_Sparam function
-#    Rs = 1.0442; Rl = 1.0442
-#    M = np.array([[0, 0.8577, 0, -0.2174],
-#                  [0.8577, 0, 0.7856, 0],
-#                  [0, 0.7856, 0, 0.8577],
-#                  [-0.2174, 0, 0.8577, 0]]) # a test matrix from a journal paper
-#    print 'M:', '\n', M
-
-#    # testing M_to_Sparam function
-#    Rs = 1.025; Rl = 1.025
-#    M = np.array([[0,-0.863,0,0.02,0],
-#                  [-0.863,0,-0.647,0,0],
-#                  [0,-0.647,0,-0.632,0],
-#                  [0.02,0,-0.632,0,-0.863],
-#                  [0,0,0,-0.863,0]]) # another testing coupling matrix
-#    print 'M:', '\n', M
-
-    # From now onwards, unlike the Cameron's example, the filter is doubly terminated
+    # From now onwards, unlike the Cameron's example, this filter is doubly terminated
     M, Rs, Rl = coupling_N(F, P, E, eps, eps_R)
     print 'M:', '\n', M
     print 'Rs:', Rs
@@ -325,9 +305,6 @@ if __name__ == '__main__':
    
     MN_to_Sparam(M, Rs, Rl, w_min= -2, w_max=2, w_num=500, dB=True, dB_limit= -100)
     
-#    # Checking the obtained coupling matrix by plotting the S-parameters
-#    M_to_Sparam(M, Rs=1, Rl=1, L1=1, LN=1)
-
 #==============================================================================
 # 4th order example (P. 228, Sec. 6.3.2, R. J. Cameron et al.)
 #==============================================================================

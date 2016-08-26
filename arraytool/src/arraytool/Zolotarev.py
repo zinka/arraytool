@@ -1,7 +1,7 @@
 #! /usr/bin/env python
 
 # Author: Srinivasa Rao Zinka (srinivas . zinka [at] gmail . com)
-# Copyright (c) 2011 Srinivasa Rao Zinka
+# Copyright (c) 2014 Srinivasa Rao Zinka
 # License: New BSD License.
 
 """ 
@@ -31,7 +31,13 @@ mpl.rcParams['xtick.labelsize'] = 'large'
 mpl.rcParams['ytick.labelsize'] = 'large'
 
 def z_str2num(s):
-    """Convert a string to either int or float."""
+    r"""
+    A simple function to convert a given string to either int or float.
+    
+    :param s:    Input string
+                  
+    :rtype:      Returns an integer or float
+    """    
     try:
         ret = int(s)
     except ValueError:
@@ -40,7 +46,14 @@ def z_str2num(s):
     return ret
 
 def z_theta(u, m):
-    """Jacobi theta function (eq 16.31.1, [Abramowitz]_)."""
+    r"""
+    A function evaluate Jacobi theta function (eq 16.31.1, [Abramowitz]_).
+    
+    :param u:    Argument u
+    :param m:    m is the elliptic parameter (not the modulus k and not the nome q)
+                  
+    :rtype:      Returns a float, Jacobi theta function evaluated for the argument `u` and parameter `m`
+    """
     q = qfrom(m=m)
     DM = ellipk(m)
     z = mp.pi * u / (2 * DM)
@@ -48,7 +61,14 @@ def z_theta(u, m):
     return theta
 
 def z_eta(u, m):
-    """Jacobi eta function (eq 16.31.3, [Abramowitz]_)."""
+    r"""
+    A function evaluate Jacobi eta function (eq 16.31.3, [Abramowitz]_).
+
+    :param u:    Argument u
+    :param m:    m is the elliptic parameter (not the modulus k and not the nome q)
+                  
+    :rtype:      Returns a float, Jacobi eta function evaluated for the argument `u` and parameter `m`
+    """
     q = qfrom(m=m)
     DM = ellipk(m)
     z = mp.pi * u / (2 * DM)
@@ -56,7 +76,14 @@ def z_eta(u, m):
     return eta
 
 def z_am(u, m):
-    """Jacobi amplitude function (eq 16.1.5, [Abramowitz]_)."""
+    r"""
+    A function evaluate Jacobi amplitude function (eq 16.1.5, [Abramowitz]_).
+    
+    :param u:    Argument u
+    :param m:    m is the elliptic parameter (not the modulus k and not the nome q)
+                  
+    :rtype:      Returns a float,  Jacobi amplitude function evaluated for the argument `u` and parameter `m`
+    """
     snM = ellipfun('sn', u=u, m=m)
     cnM = ellipfun('cn', u=u, m=m)
     if (0 <= cnM <= 1):
@@ -71,13 +98,27 @@ def z_am(u, m):
     return phi
 
 def z_zn(u, m):
-    """Jacobi Zeta (zn(u,m)) function (eq 16.26.12, [Abramowitz]_)."""
+    r"""
+    A function evaluate Jacobi Zeta (zn(u,m)) function (eq 16.26.12, [Abramowitz]_).
+    
+    :param u:    Argument u
+    :param m:    m is the elliptic parameter (not the modulus k and not the nome q)
+                  
+    :rtype:      Returns a float, Jacobi Zeta function evaluated for the argument `u` and parameter `m`
+    """
     phi = z_am(u, m)
     zn = ellipe(phi, m) - ellipe(m) * u / ellipk(m)
     return zn
 
 def z_x123_frm_m(N, m):
-    """Function to get x1, x2 and x3 (eq 3, 5 and 6, [McNamara93]_)."""
+    r"""
+    Function to get x1, x2 and x3 (eq 3, 5 and 6, [McNamara93]_).
+    
+    :param N:    Order of the Zolotarev polynomial
+    :param m:    m is the elliptic parameter (not the modulus k and not the nome q)
+                  
+    :rtype:      Returns [x1,x2,x3] ... where x1, x2, and x3 are defined in Fig. 1, [McNamara93]_
+    """
     M = -ellipk(m) / N
     snMM = ellipfun('sn', u= -M, m=m)
     snM = ellipfun('sn', u=M, m=m)
@@ -90,7 +131,15 @@ def z_x123_frm_m(N, m):
     return x1, x2, x3
 
 def z_Zolotarev(N, x, m):
-    """Function to evaluate the Zolotarev polynomial (eq 1, [McNamara93]_)."""
+    r"""
+    Function to evaluate the Zolotarev polynomial (eq 1, [McNamara93]_).
+    
+    :param N:    Order of the Zolotarev polynomial
+    :param x:    The argument at which one would like to evaluate the Zolotarev polynomial
+    :param m:    m is the elliptic parameter (not the modulus k and not the nome q)
+                  
+    :rtype:      Returns a float, the value of Zolotarev polynomial at x
+    """
     M = -ellipk(m) / N
     x3 = ellipfun('sn', u= -M, m=m)  
     xbar = x3 * mp.sqrt((x ** 2 - 1) / (x ** 2 - x3 ** 2)) # rearranged eq 21, [Levy70]_
@@ -107,29 +156,49 @@ def z_Zolotarev(N, x, m):
     return f
 
 def z_Zolotarev_x2(N, m):
-    """
+    r"""
     This function evaluates the Zolotarev polynomial at x2 for given 'N' and 'm'.
+    
+    :param N:    Order of the Zolotarev polynomial
+    :param m:    m is the elliptic parameter (not the modulus k and not the nome q)
+                  
+    :rtype:      Returns a float, the value of Zolotarev polynomial at x2
     """    
     x = z_x123_frm_m(N, m)
     ret = z_Zolotarev(N, x[1], m)
     return ret
 
 def z_m_frm_R(N, R, a=0.1, b=0.9999999999999):
-    """
+    r"""
     Function to obtain the parameter 'm' for a given 'SLR' and order of the 
-    polynomial 'N'.
+    polynomial 'N'. We have to choose a and b such that the value of m should be in the domain [a,b].
+    
+    :param N:    Order of the Zolotarev polynomial
+    :param R:    the value of Zolotarev polynomial at x2 (in our case, it is nothing but SLR in linear scale)
+    :param a:    One end of the bracketing interval [a,b]
+    :param b:    The other end of the bracketing interval [a,b]
+                  
+    :rtype:      Returns the value of elliptic parameter m   
     """
     fun = lambda m: abs(z_Zolotarev_x2(N, m)) - abs(R)
     m = optimize.brentq(fun, a, b)
     return m
 
 def z_Zolotarev_poly(N, m, interp_num=100, full=False):
-    """
-    Function to evaluate the polynomial coefficients of  the Zolotarev
-    polynomial.
+    r"""
+    Function to evaluate the polynomial coefficients of the Zolotarev polynomial.
+    
+    :param N:    Order of the Zolotarev polynomial
+    :param m:    m is the elliptic parameter (not the modulus k and not the nome q)
+    :param interp_num:    Number of points for interpolation
+    :param full:    Switch determining nature of return value. When it is False (the default)
+                    just the coefficients are returned, when True diagnostic information from 
+                    the singular value decomposition is also returned.
+                  
+    :rtype:      Returns [polynomial_coef, polynomial_roots]
     """
     m = mpf(m)
-    # Evaluating the polynomial at some discrete points    
+    # Evaluating the polynomial at some discrete points (for polynomial fitting)   
     x = np.linspace(-1.04, 1.04, interp_num)
     y = []
     for i in range(len(x)):
@@ -142,7 +211,15 @@ def z_Zolotarev_poly(N, m, interp_num=100, full=False):
     return coef, roots
 
 def Zolotarev2(p, q, m):
-    """Another way to generate Zolotarev polynomial. It is not done yet."""    
+    r"""
+    Another way to generate Zolotarev polynomial. It is not done yet.
+    
+    :param p:
+    :param q:
+    :param m:
+                  
+    :rtype:      Returns     
+    """    
     n = p + q
     u0 = (p / (p + q)) * ellipk(m)
     wp = 2 * (ellipfun('cd', u0, m)) ** 2 - 1
@@ -178,12 +255,14 @@ def Zolotarev2(p, q, m):
 if __name__ == '__main__':        
     
     # parameters of the 'Zolotarev' polynomial
-    n = 4; N = 2 * n + 1 # 'N' is the order of the polynomial
+    n = 9; N = 2 * n + 1 # 'N' is the order of the polynomial
+#    N = 10
     R = 10 # 'R' is the value of the peak within [-1,+1] 
     
     # Getting the value of the parameter 'm' from a given 'R' (remember!, m=k^2)
     m = z_m_frm_R(N, R)
     print 'm =', m
+    print type(m)
     
     # Testing the side-lobe ratio (i.e., SLR in linear scale)
     R = z_Zolotarev_x2(N, m)

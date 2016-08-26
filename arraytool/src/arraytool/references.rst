@@ -20,4 +20,6 @@ or cited for examples or mathematical definitions used in this documentation.
                    
 .. [Hansen] Hansen, R. C., "Phased Array Antennas", John Willey, 1998
 
+.. [zinka2] Zinka, S. R., "ewefwjel ljsfjdj", efegerg, 2012
+
 .. [Mailloux] Mailloux, R. J., "Phased Array Antenna Handbook", Artech House Publishers, 2005

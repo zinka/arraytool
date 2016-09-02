@@ -789,7 +789,7 @@ def pattern_t(array_ip, tht_scan=0, phi_scan=0, tht=0.5 * np.pi,
                      linestyle=linestyle, alpha=alpha)
             plt.axis('tight'); plt.grid(True)
             plt.xlabel(r'$\phi$', fontsize=16)
-            plt.ylabel(r'$AF$', fontsize=16)
+            plt.ylabel(ff+ss, fontsize=16)
         if(plot_type == "polar"):  # polar plot
             if(scale == "linear"):
                 plt.polar(phi[0], F_plt[0], color=color, linewidth=linewidth,
@@ -797,7 +797,6 @@ def pattern_t(array_ip, tht_scan=0, phi_scan=0, tht=0.5 * np.pi,
             if(scale == "dB"):
                 plt.polar(phi[0], F_plt[0] - dB_limit, color=color,
                           linewidth=linewidth, linestyle=linestyle, alpha=alpha)
-        plt.title(ff + ss, fontsize=18)
         if(show): plt.show()
     return phi[0], F[0], AF[0]
 
@@ -857,8 +856,8 @@ def pattern_p(array_ip, tht_scan=0, phi_scan=0, phi=0 * np.pi,
             plt.plot(tht[:, 0], F_plt, color=color, linewidth=linewidth,
                      linestyle=linestyle, alpha=alpha)
             plt.axis('tight'); plt.grid(True)
-            plt.xlabel(r'$\phi$', fontsize=16)
-            plt.ylabel(r'$AF$', fontsize=16)
+            plt.xlabel(r'$\theta$', fontsize=16)
+            plt.ylabel(ff+ss, fontsize=16)
         if(plot_type == "polar"):  # polar plot
 
             # the below code is to make sure that tht=0 starts in the 'North'
@@ -874,7 +873,6 @@ def pattern_p(array_ip, tht_scan=0, phi_scan=0, phi=0 * np.pi,
             if(scale == "dB"):
                 plt.polar(tht[:, 0], F_plt - dB_limit, color=color,
                           linewidth=linewidth, linestyle=linestyle, alpha=alpha)
-        plt.title(ff + ss, fontsize=18)
         if(show): plt.show()
     return tht[:, 0], F[:, 0], AF[:, 0]
 
@@ -927,30 +925,27 @@ if __name__ == '__main__':
                # factor="NF0", plot_type="rect", mayavi_app=False)
 
     # Calling the 'pattern_tp' function to evaluate and plot 3D AF/GF/NF/NF0
-    # pattern_tp(array_ip, tht_scan=(0)*np.pi, phi_scan=(0)*np.pi, tht_min= 0, tht_max=1*np.pi, tht_num=100,
-            # phi_min= 0*np.pi, phi_max=2*np.pi, phi_num=100, scale="dB", dB_limit= -40,
-            # factor="NF0", plot_type="polar", mayavi_app=False)
+    pattern_tp(array_ip, tht_scan=(0)*np.pi, phi_scan=(0)*np.pi, tht_min= 0, tht_max=1*np.pi, tht_num=100,
+            phi_min= 0*np.pi, phi_max=2*np.pi, phi_num=100, scale="dB", dB_limit= -40,
+            factor="NF0", plot_type="polar", mayavi_app=False)
 
     # Calling the 'pattern_t' function to evaluate and plot 2D AF/GF/NF/NF0
     # pattern_t(array_ip, tht_scan=0, phi_scan=0, tht=0.5 * np.pi,
                    # phi_min=0, phi_max=2 * np.pi, phi_num=200, scale="dB",
-                   # dB_limit=-40, factor="NF0", plot_type="polar", color='b',
+                   # dB_limit=-40, factor="NF0", plot_type="rect", color='b',
                    # linewidth=1, linestyle='-', alpha=1, show=True)
 
     # Calling the 'pattern_p' function to evaluate and plot 2D AF/GF/NF/NF0
-    pattern_p(array_ip, tht_scan=0, phi_scan=0, phi=0 * np.pi,
-                   tht_min=0, tht_max=2 * np.pi, tht_num=200, scale="dB",
-                   dB_limit=-40, factor="NF0", plot_type="rect", color='b',
-                   linewidth=1, linestyle='-', alpha=1, show=True)
+    # pattern_p(array_ip, tht_scan=0, phi_scan=0, phi=0 * np.pi,
+                   # tht_min=0, tht_max=2 * np.pi, tht_num=200, scale="dB",
+                   # dB_limit=-40, factor="NF0", plot_type="rect", color='b',
+                   # linewidth=1, linestyle='-', alpha=1, show=True)
 
 #==============================================================================
 # Programming tasks (NOTES to myself)
 #==============================================================================
 
-# odd symmetry ... optimize A_from_zeros
-# also A_from_zeros and dist are not fully done ... implement a few other important patterns
-# use same names in AF_zeros and dist
-
-# use backslah instead of inverse
-
-# pattern_p and pattern_t check the xaxis label
+# TODO odd symmetry ... optimize A_from_zeros
+# TODO also A_from_zeros and dist are not fully done ... implement a few other important patterns
+# TODO use same names in AF_zeros and dist
+# TODO use backslah instead of inverse ... linalg.solve(a,b) if a is square
